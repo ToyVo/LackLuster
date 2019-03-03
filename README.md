@@ -1,3 +1,11 @@
+# Cross dimensional passifist exploration untitled game
+
+# Credits
+Collin Diekvoss
+Andrew Frideres
+Joshua Haakana
+Lex Klusman
+
 # GDD 325: 2D Web Game Base LITE
 #### A light-weight code base for student games developed in GDD 325 at UW Stout
 

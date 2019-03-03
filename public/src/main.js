@@ -5,7 +5,7 @@ let scenePlugins = [{
   key: 'updatePlugin',
   plugin: Phaser.Plugins.UpdatePlugin,
   mapping: 'updates'
-}]
+}];
 
 // Add the debugDraw plugin if in DEV mode
 if (__DEV__) {
@@ -13,7 +13,7 @@ if (__DEV__) {
     key: 'DebugDrawPlugin',
     plugin: PhaserDebugDrawPlugin,
     mapping: 'debugDraw'
-  })
+  });
 }
 
 // Phaser base configuration
@@ -38,11 +38,11 @@ let config = {
       gravity: { y: 200 }
     }
   }
-}
+};
 
 // Create the primary game object and attach to the global 'window' object
-window.game = new Phaser.Game(config)
+window.game = new Phaser.Game(config);
 
 // Register and start the main scene
-window.game.scene.add('MainScene', GameScene, false)
-window.game.scene.start('MainScene')
+window.game.scene.add('MainScene', GameScene, false);
+window.game.scene.start('MainScene');

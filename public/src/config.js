@@ -14,4 +14,4 @@ window.CONFIG = {
   // Sound and music settings
   MUSIC_VOLUME: 0.5,
   SFX_VOLUME: 0.8
-}
+};

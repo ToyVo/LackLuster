@@ -40,7 +40,7 @@
     "no-tabs": "warn",
     "no-trailing-spaces": "warn",
     "padded-blocks": "warn",
-    "semi": [ "warn", "never" ],
+    "semi": [ "warn", "always" ],
     "semi-spacing": "warn",
     "space-before-blocks": "warn",
     "space-in-parens": "warn",
