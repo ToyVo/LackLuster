@@ -27,23 +27,17 @@ class GameScene extends Phaser.Scene {
     sky.setOrigin(0.0, 0.0);
     sky.setScale(window.CONFIG.gameWidth / sky.width, window.CONFIG.gameHeight / sky.height);
 
-    // Particle emitter
-    let particles = this.add.particles('red');
-    let emitter = particles.createEmitter({
-      speed: 100,
-      scale: { start: 1, end: 0 },
-      blendMode: 'ADD'
-    });
-
-    // Bouncing phaser 3 logo
-    let logo = this.physics.add.image(400, 100, 'logo');
-    logo.setVelocity(100, 200);
-    logo.setBounce(1, 1);
-    logo.setCollideWorldBounds(true);
-    logo.setScale(0.5);
-
-    // Make the emitter follow the logo
-    emitter.startFollow(logo);
+    // key inputs
+    this.keys = {
+      up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
+      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+      left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
+      right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
+      w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+      a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+      s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+      d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+    };
 
     // Bring the debug draw layer to the top
     if (__DEV__) {
