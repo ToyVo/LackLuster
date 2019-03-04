@@ -22,10 +22,21 @@ class GameScene extends Phaser.Scene {
     // Delete loading text
     this.loadingText.destroy();
 
-    // Background image
-    let sky = this.add.image(0, 0, 'sky');
-    sky.setOrigin(0.0, 0.0);
-    sky.setScale(window.CONFIG.gameWidth / sky.width, window.CONFIG.gameHeight / sky.height);
+    // Camera
+    this.gameCamera = this.cameras.main;
+    this.gameCamera.setBackgroundColor('#FF8');
+    this.gameCamera.setViewport(0,0,1920,1080);
+    this.cameras.main.setBounds(0,0,4800,2700,true);
+
+    // Physics
+    this.physics.world.setBounds(0,0,4800,2700, true, true,true,true);
+
+    // other objects
+    this.physics.add.sprite(50,50,'');
+
+    // Player
+    this.player = new Player(this, 0, 0, '');
+    this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
 
     // key inputs
     this.keys = {
@@ -36,13 +47,19 @@ class GameScene extends Phaser.Scene {
       w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
       a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
       s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-      d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+      d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+      space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
     };
 
     // Bring the debug draw layer to the top
     if (__DEV__) {
       this.debugDraw.bringToTop();
     }
+  }
+
+  update(time, delta)
+  {
+    this.player.update(this.keys, time, delta);
   }
 }
 

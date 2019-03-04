@@ -8,8 +8,8 @@
  */
 
 window.CONFIG = {
-  gameWidth: 1000, // The width of the game viewport in the browser
-  gameHeight: 666, // The height of the game viewport in the browser
+  gameWidth: 1920, // The width of the game viewport in the browser
+  gameHeight: 1080, // The height of the game viewport in the browser
 
   // Sound and music settings
   MUSIC_VOLUME: 0.5,
