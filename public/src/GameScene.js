@@ -24,7 +24,7 @@ class GameScene extends Phaser.Scene {
 
     // Camera
     this.gameCamera = this.cameras.main;
-    this.gameCamera.setBackgroundColor('#FF8');
+    this.gameCamera.setBackgroundColor('#434343');
     this.gameCamera.setViewport(0,0,1920,1080);
     this.cameras.main.setBounds(0,0,4800,2700,true);
 
@@ -60,6 +60,8 @@ class GameScene extends Phaser.Scene {
   update(time, delta)
   {
     this.player.update(this.keys, time, delta);
+    //console.log(this.player.rollCooldown);
+    console.log(this.player.body.acceleration);
   }
 }
 

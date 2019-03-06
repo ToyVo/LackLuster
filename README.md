@@ -1,10 +1,16 @@
-# Cross dimensional passifist exploration untitled game
-
-# Credits
-Collin Diekvoss
-Andrew Frideres
-Joshua Haakana
-Lex Klusman
+# Lack Luster
+### Description
+A Phaser 3 game about passifism running away from an enemy. You must explore each area and activate all the colors.
+### Controls
+- WASD or arrow keys to move
+- Space to dash
+## Credits
+- Collin Diekvoss, Programmer
+- Andrew Frideres, Programmer
+- Joshua Haakana, Artist
+- Lex Klusman, Artist
+- UW-Stout, 2019
+### Resources
 
 # GDD 325: 2D Web Game Base LITE
 #### A light-weight code base for student games developed in GDD 325 at UW Stout

@@ -18,6 +18,9 @@ class Player extends Phaser.GameObjects.Sprite {
     this.body.setCollideWorldBounds(true);
     // this.body.onWorldBounds = true;
 
+    this.damaged = false;
+    this.health = 3;
+
     this.rollCooldown = 0;
   }
 
@@ -48,9 +51,20 @@ class Player extends Phaser.GameObjects.Sprite {
     this.rollCooldown -= delta;
 
     if (input.space && this.rollCooldown <= 0) {
-      this.body.setAcceleration(10000);
+      this.body.setAcceleration(this.body.acceleration.x * 100, this.body.acceleration.y * 100);
       this.body.setDrag(1500, 1500);
       this.rollCooldown = 300;
     }
+  }
+
+  takeDamage () {
+    if(!this.damaged) {
+      this.scene.gameCamera.shake(50, 0.005);
+      this.damaged = true;
+      this.health--;
+    }
+    this.scene.gameCamera.on('camerashakecomplete', function(camera, effect) {
+        this.damaged = false;
+    }, this);
   }
 }
