@@ -46,5 +46,6 @@ window.game = new Phaser.Game(config);
 // Register and start the main scene
 window.game.scene.add('GameOver', GameOver, false);
 window.game.scene.add('PauseScene', PauseScene, false);
-window.game.scene.add('MainScene', GameScene, false);
+window.game.scene.add('GameScene', GameScene, false);
+window.game.scene.add('MainScene', MainScene, false);
 window.game.scene.start('MainScene');
