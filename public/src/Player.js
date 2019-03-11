@@ -62,6 +62,7 @@ class Player extends Phaser.GameObjects.Sprite {
       this.scene.gameCamera.shake(50, 0.005);
       this.damaged = true;
       this.health--;
+      this.body.setAcceleration(this.body.acceleration.x * -100, this.body.acceleration.y*100);
     }
     this.scene.gameCamera.on('camerashakecomplete', function (camera, effect) {
       this.damaged = false;

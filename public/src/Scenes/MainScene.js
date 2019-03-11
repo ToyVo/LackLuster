@@ -10,6 +10,15 @@ class MainScene extends Phaser.Scene {
 
   preload () {
     this.load.image('sky', 'assets/skies/space3.png');
+    //this.load.image('player', 'assets/pics/LL_char.png');
+	  //this.load.image('pFront', 'assets/pics/LL_front_tester.png');
+	  //this.load.image('pBack', 'assets/pics/LL_back_tester.png');
+	  //this.load.image('pLeft', 'assets/pics/LL_left_tester.png');
+	  //this.load.image('pRight', 'assets/pics/LL_right_tester.png');
+	 
+	  /*Spritesheets Below*/
+	  //this.load.spritesheet('frameTest','assets/pics/LL_4frame_tester.png',
+		//{ frameWidth: 32, frameHeight: 32 });
   }
 
   create () {
@@ -19,7 +28,6 @@ class MainScene extends Phaser.Scene {
     this.bg = this.add.sprite(0, 0, 'sky').setInteractive();
     this.bg.setOrigin(0, 0);
 
-    let gameWidth = this.sys.game.config.width;
     let gameHeight = this.sys.game.config.height;
     let text = this.add.text(gameWidth / 2, gameHeight / 2, 'Lack Luster', {
       font: '40px Arial',
