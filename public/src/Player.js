@@ -22,7 +22,7 @@ class Player extends Phaser.GameObjects.Sprite {
   }
 
   update (keys, time, delta) {
-    this.body.setAcceleration(0,0);
+    this.body.setAcceleration(0, 0);
     this.body.setDrag(350, 350);
 
     let input = {

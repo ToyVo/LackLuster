@@ -37,7 +37,7 @@
     "no-floating-decimal": "warn",
     "no-mixed-spaces-and-tabs": "warn",
     "no-multi-spaces": "warn",
-    "no-tabs": "warn",
+    "no-tabs": ["warn", { "allowIndentationTabs": true }],
     "no-trailing-spaces": "warn",
     "padded-blocks": "warn",
     "semi": [ "warn", "always" ],

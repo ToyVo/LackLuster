@@ -1,4 +1,4 @@
-/* global centerX, centerY, centerGameObjects */
+/* global centerX, centerY, centerGameObjects, Player */
 
 class GameScene extends Phaser.Scene {
   // Run when the scene is first loaded
@@ -25,14 +25,14 @@ class GameScene extends Phaser.Scene {
     // Camera
     this.gameCamera = this.cameras.main;
     this.gameCamera.setBackgroundColor('#FF8');
-    this.gameCamera.setViewport(0,0,1920,1080);
-    this.cameras.main.setBounds(0,0,4800,2700,true);
+    this.gameCamera.setViewport(0, 0, 1920, 1080);
+    this.cameras.main.setBounds(0, 0, 4800, 2700, true);
 
     // Physics
-    this.physics.world.setBounds(0,0,4800,2700, true, true,true,true);
+    this.physics.world.setBounds(0, 0, 4800, 2700, true, true, true, true);
 
     // other objects
-    this.physics.add.sprite(50,50,'');
+    this.physics.add.sprite(50, 50, '');
 
     // Player
     this.player = new Player(this, 0, 0, '');
@@ -57,8 +57,7 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-  update(time, delta)
-  {
+  update (time, delta) {
     this.player.update(this.keys, time, delta);
   }
 }
