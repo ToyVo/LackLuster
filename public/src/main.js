@@ -1,4 +1,4 @@
-/* global GameScene */
+/* global GameScene, GameOver, PauseScene, MainScene */
 
 // Configure any plugins
 let scenePlugins = [{

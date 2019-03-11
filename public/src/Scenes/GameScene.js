@@ -1,4 +1,4 @@
-/* global centerX, centerY, centerGameObjects, Player */
+/* global Player */
 
 class GameScene extends Phaser.Scene {
   // Pre-load function: queues all needed assets for downloading

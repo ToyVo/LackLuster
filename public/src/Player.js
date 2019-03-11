@@ -58,13 +58,13 @@ class Player extends Phaser.GameObjects.Sprite {
   }
 
   takeDamage () {
-    if(!this.damaged) {
+    if (!this.damaged) {
       this.scene.gameCamera.shake(50, 0.005);
       this.damaged = true;
       this.health--;
     }
-    this.scene.gameCamera.on('camerashakecomplete', function(camera, effect) {
-        this.damaged = false;
+    this.scene.gameCamera.on('camerashakecomplete', function (camera, effect) {
+      this.damaged = false;
     }, this);
   }
 }
