@@ -1,30 +1,17 @@
 /* global centerX, centerY, centerGameObjects, Player */
 
 class GameScene extends Phaser.Scene {
-  // Run when the scene is first loaded
-  init () {
-    // Show message that the assets are loading
-    this.loadingText = this.add.text(centerX(this), centerY(this),
-      'Loading ...', { font: '16px Arial', fill: '#dddddd', align: 'center' });
-    centerGameObjects([this.loadingText]);
-  }
-
   // Pre-load function: queues all needed assets for downloading
   // (they are actually downloaded asynchronously, prior to 'create')
   preload () {
-    this.load.image('sky', 'assets/skies/space3.png');
-    this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-    this.load.image('red', 'assets/particles/red.png');
+    this.load.image('player', 'assets/characters/LL_maincharacter_01.png');
   }
 
   // Run after all loading (queued in preload) is finished
   create () {
-    // Delete loading text
-    this.loadingText.destroy();
-
     // Camera
     this.gameCamera = this.cameras.main;
-    this.gameCamera.setBackgroundColor('#FF8');
+    this.gameCamera.setBackgroundColor('#434343');
     this.gameCamera.setViewport(0, 0, 1920, 1080);
     this.cameras.main.setBounds(0, 0, 4800, 2700, true);
 
@@ -35,11 +22,13 @@ class GameScene extends Phaser.Scene {
     this.physics.add.sprite(50, 50, '');
 
     // Player
-    this.player = new Player(this, 0, 0, '');
+    this.player = new Player(this, 0, 0, 'player');
+    this.player.setScale(5, 5);
     this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
 
     // key inputs
     this.keys = {
+      esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
       up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
       down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
       left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
@@ -58,7 +47,15 @@ class GameScene extends Phaser.Scene {
   }
 
   update (time, delta) {
+    if (this.keys.esc.isDown) {
+      this.scene.run('PauseScene');
+      this.scene.bringToTop('PauseScene');
+      this.scene.pause('GameScene');
+    }
+
     this.player.update(this.keys, time, delta);
+    // console.log(this.player.rollCooldown);
+    console.log(this.player.body.acceleration);
   }
 }
 

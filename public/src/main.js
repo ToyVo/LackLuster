@@ -26,8 +26,8 @@ let config = {
     width: window.CONFIG.gameWidth,
     height: window.CONFIG.gameHeight
   },
-  title: 'UWStout GDD325 Phaser Lite',
-  backgroundColor: '#7f7f7f',
+  title: 'Lack Luster',
+  backgroundColor: '#434343',
   plugins: {
     scene: scenePlugins
   },
@@ -44,5 +44,8 @@ let config = {
 window.game = new Phaser.Game(config);
 
 // Register and start the main scene
-window.game.scene.add('MainScene', GameScene, false);
+window.game.scene.add('GameOver', GameOver, false);
+window.game.scene.add('PauseScene', PauseScene, false);
+window.game.scene.add('GameScene', GameScene, false);
+window.game.scene.add('MainScene', MainScene, false);
 window.game.scene.start('MainScene');

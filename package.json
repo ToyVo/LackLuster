@@ -1,10 +1,10 @@
 {
-  "name": "uwstout-gdd325-gamebase-lite",
+  "name": "lack_luster",
   "version": "1.0.0",
-  "description": "A simplified Phaser game base for making 2D web games used in GDD 325 at UW Stout",
-  "author": "Seth Berrier <berriers@uwstout.edu>",
+  "description": "a passifist game made in gdd 325 at uw stout",
+  "author": "Collin Diekvoss <diekvossc4994@my.uwstout.edu>, Andrew Frideres <frideresa6522@my.uwstout.edu>, Joshua Haakana <haakanaj8066@my.uwstout.edu>, Lex Klusman <klusmana1346@my.uwstout.edu>",
   "main": "public/index.html",
-  "repository": "UWStout/gdd325-web-base-lite",
+  "repository": "UWStout/GDD325pm_001",
   "scripts": {
     "start": "npm-run-all -s buildindex server",
     "dev": "npm-run-all -s cpdevindex server",
