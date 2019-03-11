@@ -3,9 +3,7 @@
 class GameScene extends Phaser.Scene {
   // Pre-load function: queues all needed assets for downloading
   // (they are actually downloaded asynchronously, prior to 'create')
-  preload () {
-    this.load.image('player', 'assets/characters/LL_maincharacter_01.png');
-  }
+  preload () {}
 
   // Run after all loading (queued in preload) is finished
   create () {
@@ -28,7 +26,6 @@ class GameScene extends Phaser.Scene {
 
     // key inputs
     this.keys = {
-      esc: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
       up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
       down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
       left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
@@ -40,6 +37,13 @@ class GameScene extends Phaser.Scene {
       space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
     };
 
+    // Pause Game
+    this.input.keyboard.on('keyup_ESC', function (event) {
+      this.scene.run('PauseScene');
+      this.scene.bringToTop('PauseScene');
+      this.scene.pause('GameScene');
+    }, this);
+
     // Bring the debug draw layer to the top
     if (__DEV__) {
       this.debugDraw.bringToTop();
@@ -47,12 +51,6 @@ class GameScene extends Phaser.Scene {
   }
 
   update (time, delta) {
-    if (this.keys.esc.isDown) {
-      this.scene.run('PauseScene');
-      this.scene.bringToTop('PauseScene');
-      this.scene.pause('GameScene');
-    }
-
     this.player.update(this.keys, time, delta);
     // console.log(this.player.rollCooldown);
     console.log(this.player.body.acceleration);

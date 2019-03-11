@@ -1,5 +1,5 @@
 /* global centerX, centerY, centerGameObjects */
-class MainScene extends Phaser.Scene {
+class StartScene extends Phaser.Scene {
   // Run when the scene is first loaded
   init () {
     // Show message that the assets are loading
@@ -10,6 +10,8 @@ class MainScene extends Phaser.Scene {
 
   preload () {
     this.load.image('sky', 'assets/skies/space3.png');
+    this.load.image('player', 'assets/characters/LL_maincharacter_01');
+    this.load.image('player_outlined', 'assets/characters/LL_maincharacter_01_outlined');
   }
 
   create () {
@@ -32,7 +34,7 @@ class MainScene extends Phaser.Scene {
     textBg.fillStyle(0x000000, 0.7);
     textBg.fillRect(gameWidth / 2 - text.width / 2 - 10, gameHeight / 2 - text.height / 2 - 10, text.width + 20, text.height + 20);
 
-    this.bg.on('pointerdown', function () {
+    this.bg.on('pointerup', function () {
       this.scene.start('GameScene');
     }, this);
   }
