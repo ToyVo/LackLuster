@@ -18,7 +18,7 @@ class Player extends Phaser.GameObjects.Sprite {
     this.body.setCollideWorldBounds(true);
     // this.body.onWorldBounds = true;
 
-    this.damaged = false;
+    this.damaged = 0;
     this.health = 3;
 
     this.rollCooldown = 50;
@@ -55,21 +55,20 @@ class Player extends Phaser.GameObjects.Sprite {
       this.body.setDrag(1500, 1500);
       this.rollCooldown = 300;
     }
+
+    this.damaged -= delta;
   }
 
   takeDamage () {
-    if (!this.damaged) {
-      this.gameCamera.shake(50, 0.005);
-      this.player.damaged = true;
-      this.player.health--;//We need to do this.player.body as the context of this changes below
-      this.player.body.setAcceleration(this.player.body.acceleration.x * -100, this.player.body.acceleration.y*100);
+    this.body.setAcceleration(this.body.acceleration.x * -100, this.body.acceleration.y*-100);
+    if (this.damaged < 0) {
+      this.scene.gameCamera.shake(50, 0.005);
+      this.health--;//We need to do this.player.body as the context of this changes below
+      this.damaged = 1000;
     }
-    this.gameCamera.on('camerashakecomplete', function (camera, effect) {
-      this.player.damaged = false;
-    }, this);
 
-    if (this.player.health <= 0) { //In here load a game over scene/play player death/reset?
-      this.player.tint = Math.random() * 0xffffff;//Proof we get in here, cool effect too
+    if (this.health <= 0) { //In here load a game over scene/play player death/reset?
+      this.tint = Math.random() * 0xffffff;//Proof we get in here, cool effect too
       //this.scene.start('GameOver');
     }
   }
