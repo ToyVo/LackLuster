@@ -21,7 +21,7 @@ class Player extends Phaser.GameObjects.Sprite {
     this.damaged = false;
     this.health = 3;
 
-    this.rollCooldown = 0;
+    this.rollCooldown = 50;
   }
 
   update (keys, time, delta) {
@@ -59,13 +59,18 @@ class Player extends Phaser.GameObjects.Sprite {
 
   takeDamage () {
     if (!this.damaged) {
-      this.scene.gameCamera.shake(50, 0.005);
-      this.damaged = true;
-      this.health--;
-      this.body.setAcceleration(this.body.acceleration.x * -100, this.body.acceleration.y*100);
+      this.gameCamera.shake(50, 0.005);
+      this.player.damaged = true;
+      this.player.health--;//We need to do this.player.body as the context of this changes below
+      this.player.body.setAcceleration(this.player.body.acceleration.x * -100, this.player.body.acceleration.y*100);
     }
-    this.scene.gameCamera.on('camerashakecomplete', function (camera, effect) {
-      this.damaged = false;
+    this.gameCamera.on('camerashakecomplete', function (camera, effect) {
+      this.player.damaged = false;
     }, this);
+
+    if (this.player.health <= 0) { //In here load a game over scene/play player death/reset?
+      this.player.tint = Math.random() * 0xffffff;//Proof we get in here, cool effect too
+      //this.scene.start('GameOver');
+    }
   }
 }

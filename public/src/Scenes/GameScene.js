@@ -17,7 +17,7 @@ class GameScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, 4800, 2700, true, true, true, true);
 
     // other objects
-    this.physics.add.sprite(50, 50, '');
+    //this.physics.add.sprite(50, 50, '');
 
     // Player
     this.player = new Player(this, 0, 0, 'player');
@@ -37,8 +37,6 @@ class GameScene extends Phaser.Scene {
       space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
     };
 
-
-    
     let pillarGroup = this.physics.add.group({key: 'pillarCollide', frameQuantity: 350});
     pillarGroup.children.iterate(function (child) {
       child.setImmovable(true);
@@ -47,15 +45,15 @@ class GameScene extends Phaser.Scene {
     let circle = new Phaser.Geom.Circle( 4800, 2600, 4800);
     Phaser.Actions.RandomCircle(pillarGroup.getChildren(), circle);
     
-    let dashAnimTest = this.physics.add.sprite(100, 100, 'frameTest').setScale(2);
-    /*this.dashAnim = game.anims.create({
+    this.dashAnimTest = this.physics.add.sprite(100, 100, 'frameTest').setScale(2);
+    this.dashAnim = game.anims.create({
       key: 'dash',
-      frames: game.anims.generateFrameNumbers('frameTest', {start:0, end:5}),
+      frames: game.anims.generateFrameNumbers('frameTest', {start:0, end:4}),
       frameRate:5,
       repeat:-1,
     });
-    this.dashAnimTest.anims.play('dash');*/
-    this.physics.add.collider(pillarGroup.getChildren(), this.player);
+    this.dashAnimTest.anims.play('dash'); //Context of this changes in the callback below, Beware!
+    this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this);
 	
     // Pause Game
     this.input.keyboard.on('keyup_ESC', function (event) {
@@ -73,7 +71,7 @@ class GameScene extends Phaser.Scene {
   update (time, delta) {
     this.player.update(this.keys, time, delta);
     // console.log(this.player.rollCooldown);
-    console.log(this.player.body.acceleration);
+    //console.log(this.player.body.acceleration);
   }
 }
 

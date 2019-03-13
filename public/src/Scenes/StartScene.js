@@ -14,13 +14,13 @@ class StartScene extends Phaser.Scene {
 	  //this.load.image('pFront', 'assets/pics/LL_front_tester.png');
 	  //this.load.image('pBack', 'assets/pics/LL_back_tester.png');
 	  //this.load.image('pLeft', 'assets/pics/LL_left_tester.png');
-	  //this.load.image('pRight', 'assets/pics/LL_right_tester.png');
-	 
+	  this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
+    
 	  /*Spritesheets Below*/
-	  //this.load.spritesheet('frameTest','assets/pics/LL_4frame_tester.png',
-		//{ frameWidth: 32, frameHeight: 32 });
-    this.load.image('player', 'assets/characters/LL_maincharacter_01');
-    this.load.image('player_outlined', 'assets/characters/LL_maincharacter_01_outlined');
+	  this.load.spritesheet('frameTest','assets/spritesheets/LL_4frame_tester.png',
+		{ frameWidth: 32, frameHeight: 32 });
+    this.load.image('player', 'assets/characters/LL_maincharacter_01.png');
+    this.load.image('player_outlined', 'assets/characters/LL_maincharacter_01_outlined.png');
   }
 
   create () {
