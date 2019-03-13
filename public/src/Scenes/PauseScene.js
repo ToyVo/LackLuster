@@ -2,16 +2,26 @@ class PauseScene extends Phaser.Scene {
   init () {}
 
   preload () {
-    this.load.image('sky', 'assets/skies/space3.png');
   }
 
   create () {
     this.esc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-    this.resume = this.add.sprite(0, 0, 'sky').setInteractive();
-    this.resume.setOrigin(0, 0);
+    
+    let gameHeight = this.sys.game.config.height;
+    let gameWidth = this.sys.game.config.width;
+    let text = this.add.text(gameWidth / 2, gameHeight / 4, 'Resumedsdsdsdsds', {
+      font: '40px Arial',
+      fill: '#FFFFFF'
+    }).setInteractive();
+    text.setOrigin(0.5, 0.5);
+    text.setDepth(1);
+
+    let textBg = this.add.graphics();
+    textBg.fillStyle(0x000000, 0.7);
+    textBg.fillRect(gameWidth / 2 - text.width / 2 - 10, gameHeight / 4 - text.height / 2 - 10, text.width + 20, text.height + 20);
 
     //resume game
-    this.resume.on('pointerup', function () {
+    text.on('pointerup', function () {
       this.scene.resume('GameScene');
       this.scene.stop('PauseScene');
     }, this);

@@ -29,22 +29,20 @@ class StartScene extends Phaser.Scene {
     // Delete loading text
     this.loadingText.destroy();
 
-    this.bg = this.add.sprite(0, 0, 'sky').setInteractive();
-    this.bg.setOrigin(0, 0);
-
     let gameHeight = this.sys.game.config.height;
-    let text = this.add.text(gameWidth / 2, gameHeight / 2, 'Lack Luster', {
+    let gameWidth = this.sys.game.config.width;
+    let text = this.add.text(gameWidth / 2, gameHeight / 4, 'Lack Luster', {
       font: '40px Arial',
       fill: '#FFFFFF'
-    });
+    }).setInteractive();
     text.setOrigin(0.5, 0.5);
-    text.depth = 1;
+    text.setDepth(1);
 
     let textBg = this.add.graphics();
     textBg.fillStyle(0x000000, 0.7);
-    textBg.fillRect(gameWidth / 2 - text.width / 2 - 10, gameHeight / 2 - text.height / 2 - 10, text.width + 20, text.height + 20);
+    textBg.fillRect(gameWidth / 2 - text.width / 2 - 10, gameHeight / 4 - text.height / 2 - 10, text.width + 20, text.height + 20);
 
-    this.bg.on('pointerup', function () {
+    text.on('pointerup', function () {
       this.scene.start('GameScene');
     }, this);
   }

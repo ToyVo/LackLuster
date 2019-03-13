@@ -52,7 +52,7 @@ class GameScene extends Phaser.Scene {
       frameRate:5,
       repeat:-1,
     });
-    this.dashAnimTest.anims.play('dash'); //Context of this changes in the callback below, Beware!
+    this.dashAnimTest.anims.play('dash');
     this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
 	
     // Pause Game
