@@ -57,15 +57,13 @@ class Player extends Phaser.GameObjects.Sprite {
     }
 
     this.damageCooldown -= delta;
-    console.log(this.body.velocity);
   }
 
   takeDamage () {
     this.knockBack();
-    if (this.damageCooldown <= 0) {
+    if (this.damageCooldown < 0) {
       this.scene.gameCamera.shake(50, 0.005);
       this.health--;//We need to do this.player.body as the context of this changes below
-      
       this.damageCooldown = 1000;
     }
 
