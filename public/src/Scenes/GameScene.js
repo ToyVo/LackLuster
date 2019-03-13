@@ -53,7 +53,7 @@ class GameScene extends Phaser.Scene {
       repeat:-1,
     });
     this.dashAnimTest.anims.play('dash'); //Context of this changes in the callback below, Beware!
-    this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this);
+    this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
 	
     // Pause Game
     this.input.keyboard.on('keyup_ESC', function (event) {
@@ -70,8 +70,6 @@ class GameScene extends Phaser.Scene {
 
   update (time, delta) {
     this.player.update(this.keys, time, delta);
-    // console.log(this.player.rollCooldown);
-    //console.log(this.player.body.acceleration);
   }
 }
 
