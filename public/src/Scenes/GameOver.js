@@ -1,9 +1,9 @@
 class GameOver extends Phaser.Scene {
-  init () {}
+	init () {}
 
-  preload () {}
+	preload () {}
 
-  create () {}
+	create () {}
 
-  update () {}
+	update () {}
 }

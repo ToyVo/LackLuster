@@ -1,37 +1,52 @@
 class PauseScene extends Phaser.Scene {
-  init () {}
+	init () {}
 
-  preload () {
-  }
+	preload () {
+	}
 
-  create () {
-    this.esc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-    
-    let gameHeight = this.sys.game.config.height;
-    let gameWidth = this.sys.game.config.width;
-    let text = this.add.text(gameWidth / 2, gameHeight / 4, 'Resumedsdsdsdsds', {
-      font: '40px Arial',
-      fill: '#FFFFFF'
-    }).setInteractive();
-    text.setOrigin(0.5, 0.5);
-    text.setDepth(1);
+	create () {
+		this.esc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
-    let textBg = this.add.graphics();
-    textBg.fillStyle(0x000000, 0.7);
-    textBg.fillRect(gameWidth / 2 - text.width / 2 - 10, gameHeight / 4 - text.height / 2 - 10, text.width + 20, text.height + 20);
+		let gameHeight = this.sys.game.config.height;
+		let gameWidth = this.sys.game.config.width;
+		let resume = this.add.text(gameWidth / 3, 3 * gameHeight / 4, 'Resume', {
+			font: '40px Arial',
+			fill: '#FFFFFF'
+		}).setInteractive();
+		resume.setOrigin(0.5, 0.5);
+		resume.setDepth(1);
 
-    //resume game
-    text.on('pointerup', function () {
-      this.scene.resume('GameScene');
-      this.scene.stop('PauseScene');
-    }, this);
+		let resumeBg = this.add.graphics();
+		resumeBg.fillStyle(0x000000, 0.7);
+		resumeBg.fillRect(gameWidth / 3 - resume.width / 2 - 10, 3 * gameHeight / 4 - resume.height / 2 - 10, resume.width + 20, resume.height + 20);
 
-    this.input.keyboard.on('keyup_ESC', function (event) {
-      this.scene.resume('GameScene');
-      this.scene.stop('PauseScene');
-    }, this);
-  }
+		let quit = this.add.text(2 * gameWidth / 3, 3 * gameHeight / 4, 'Quit', {
+			font: '40px Arial',
+			fill: '#FFFFFF'
+		}).setInteractive();
+		quit.setOrigin(0.5, 0.5);
+		quit.setDepth(1);
 
-  update () {
-  }
+		let quitBg = this.add.graphics();
+		quitBg.fillStyle(0x000000, 0.7);
+		quitBg.fillRect(2 * gameWidth / 3 - quit.width / 2 - 10, 3 * gameHeight / 4 - quit.height / 2 - 10, quit.width + 20, quit.height + 20);
+
+		// resume game
+		resume.on('pointerup', function () {
+			this.scene.resume('GameScene');
+			this.scene.stop('PauseScene');
+		}, this);
+
+		quit.on('pointerup', function () {
+			this.scene.start('StartScene');
+		}, this);
+
+		this.input.keyboard.on('keyup_ESC', function (event) {
+			this.scene.resume('GameScene');
+			this.scene.stop('PauseScene');
+		}, this);
+	}
+
+	update () {
+	}
 }

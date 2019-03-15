@@ -10,9 +10,9 @@
  * @param {array} objects An array of GameObjects objects to be centered.
  */
 const centerGameObjects = (objects) => {
-  objects.forEach(function (object) {
-    object.setOrigin(0.5, 0.5);
-  });
+	objects.forEach(function (object) {
+		object.setOrigin(0.5, 0.5);
+	});
 };
 
 /**
@@ -20,7 +20,7 @@ const centerGameObjects = (objects) => {
  * @param {Phaser.Scene} scene Scene object to use to retrieve the game config width
  */
 const gameWidth = (scene) => {
-  return scene.sys.game.config.width;
+	return scene.sys.game.config.width;
 };
 
 /**
@@ -28,7 +28,7 @@ const gameWidth = (scene) => {
  * @param {Phaser.Scene} scene Scene object to use to retrieve the game config height
  */
 const gameHeight = (scene) => {
-  return scene.sys.game.config.height;
+	return scene.sys.game.config.height;
 };
 
 /**
@@ -38,11 +38,11 @@ const gameHeight = (scene) => {
  * @param {Phaser.Scene} scene Scene object to use to get horizontal center
  */
 const centerX = (scene) => {
-  if (scene.cameras.main.useBounds) {
-    return scene.cameras.main._bounds.width / 2;
-  } else {
-    return gameWidth(scene) / 2;
-  }
+	if (scene.cameras.main.useBounds) {
+		return scene.cameras.main._bounds.width / 2;
+	} else {
+		return gameWidth(scene) / 2;
+	}
 };
 
 /**
@@ -52,11 +52,11 @@ const centerX = (scene) => {
  * @param {Phaser.Scene} scene Scene object to use to get vertical center
  */
 const centerY = (scene) => {
-  if (scene.cameras.main.useBounds) {
-    return scene.cameras.main._bounds.height / 2;
-  } else {
-    return gameHeight(scene) / 2;
-  }
+	if (scene.cameras.main.useBounds) {
+		return scene.cameras.main._bounds.height / 2;
+	} else {
+		return gameHeight(scene) / 2;
+	}
 };
 
 // Export all functions to the global context

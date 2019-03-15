@@ -1,49 +1,60 @@
 /* global centerX, centerY, centerGameObjects */
 class StartScene extends Phaser.Scene {
-  // Run when the scene is first loaded
-  init () {
-    // Show message that the assets are loading
-    this.loadingText = this.add.text(centerX(this), centerY(this),
-      'Loading ...', { font: '16px Arial', fill: '#dddddd', align: 'center' });
-    centerGameObjects([this.loadingText]);
-  }
+	// Run when the scene is first loaded
+	init () {
+		// Show message that the assets are loading
+		this.loadingText = this.add.text(centerX(this), centerY(this),
+			'Loading ...', { font: '16px Arial', fill: '#dddddd', align: 'center' });
+		centerGameObjects([this.loadingText]);
+	}
 
-  preload () {
-    this.load.image('sky', 'assets/skies/space3.png');
-    //this.load.image('player', 'assets/pics/LL_char.png');
-	  //this.load.image('pFront', 'assets/pics/LL_front_tester.png');
-	  //this.load.image('pBack', 'assets/pics/LL_back_tester.png');
-	  //this.load.image('pLeft', 'assets/pics/LL_left_tester.png');
-    this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
-    
-    /* Player */
-    this.load.image('player', 'assets/characters/LL_maincharacter_01.png');
-    this.load.image('player_outlined', 'assets/characters/LL_maincharacter_01_outlined.png');
+	preload () {
+		this.load.image('sky', 'assets/skies/space3.png');
+		// this.load.image('player', 'assets/pics/LL_char.png');
+		// this.load.image('pFront', 'assets/pics/LL_front_tester.png');
+		// this.load.image('pBack', 'assets/pics/LL_back_tester.png');
+		// this.load.image('pLeft', 'assets/pics/LL_left_tester.png');
+		this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
 
-	  /*Spritesheets Below*/
-    this.load.spritesheet('frameTest','assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
-    //this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', 'assets/spritesheets/slime_walking_black.json');
-  }
+		/* Player */
+		this.load.image('player', 'assets/characters/LL_maincharacter_01.png');
+		this.load.image('player_outlined', 'assets/characters/LL_maincharacter_01_outlined.png');
 
-  create () {
-    // Delete loading text
-    this.loadingText.destroy();
+		/* Spritesheets Below */
+		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
+		// this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', 'assets/spritesheets/slime_walking_black.json');
+	}
 
-    let gameHeight = this.sys.game.config.height;
-    let gameWidth = this.sys.game.config.width;
-    let text = this.add.text(gameWidth / 2, gameHeight / 4, 'Lack Luster', {
-      font: '40px Arial',
-      fill: '#FFFFFF'
-    }).setInteractive();
-    text.setOrigin(0.5, 0.5);
-    text.setDepth(1);
+	create () {
+		// Delete loading text
+		this.loadingText.destroy();
 
-    let textBg = this.add.graphics();
-    textBg.fillStyle(0x000000, 0.7);
-    textBg.fillRect(gameWidth / 2 - text.width / 2 - 10, gameHeight / 4 - text.height / 2 - 10, text.width + 20, text.height + 20);
+		let gameHeight = this.sys.game.config.height;
+		let gameWidth = this.sys.game.config.width;
+		let title = this.add.text(gameWidth / 2, gameHeight / 4, 'Lack Luster', {
+			font: '40px Arial',
+			fill: '#FFFFFF'
+		});
+		title.setOrigin(0.5, 0.5);
+		title.setDepth(1);
 
-    text.on('pointerup', function () {
-      this.scene.start('GameScene');
-    }, this);
-  }
+		let titleBg = this.add.graphics();
+		titleBg.fillStyle(0x000000, 0.7);
+		titleBg.fillRect(gameWidth / 2 - title.width / 2 - 10, gameHeight / 4 - title.height / 2 - 10, title.width + 20, title.height + 20);
+
+		let start = this.add.text(gameWidth / 2, gameHeight / 2, 'Start', {
+			font: '40px Arial',
+			fill: '#FFFFFF'
+		}).setInteractive();
+		start.setOrigin(0.5, 0.5);
+		start.setDepth(1);
+
+		let startBg = this.add.graphics();
+		startBg.fillStyle(0x000000, 0.7);
+		startBg.fillRect(gameWidth / 2 - start.width / 2 - 10, gameHeight / 2 - start.height / 2 - 10, start.width + 20, start.height + 20);
+
+		start.on('pointerup', function () {
+			this.scene.start('GameScene');
+		}, this);
+	}
 }
