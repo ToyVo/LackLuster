@@ -1,9 +1,18 @@
 /* global Player */
 
 class GameScene extends Phaser.Scene {
+  init () {
+    this.map;
+    this.backgroundlayer;
+  }
   // Pre-load function: queues all needed assets for downloading
   // (they are actually downloaded asynchronously, prior to 'create')
-  preload () {}
+  preload () {
+    this.load.image('LL_tile_01_6x', 'assets/sprites/LL_tile_01_6x.png');
+    this.load.tilemapTiledJSON('Test3', 'assets/json/Test3.json');
+    
+  }
+  
 
   // Run after all loading (queued in preload) is finished
   create () {
@@ -12,7 +21,14 @@ class GameScene extends Phaser.Scene {
     this.gameCamera.setBackgroundColor('#434343');
     this.gameCamera.setViewport(0, 0, 1920, 1080);
     this.cameras.main.setBounds(0, 0, 4800, 2700, true);
+   
+    let map = this.make.tilemap({key: 'Test3'});
+    let tileSetImg = map.addTilesetImage('LL_tile_01_6x', 'LL_tile_01_6x');
+    //this.map.addTilesetImage('LL_pillar_01_6x', 'LL_pillar_01_6x');
 
+    let backgroundlayer = map.createStaticLayer(0, [tileSetImg],0,0);
+    //this.groundLayer = this.map.createLayer('Pillars');
+    //this.map.setCollisionBetween(1, 1000, true, 'Blocks');
     // Physics
     this.physics.world.setBounds(0, 0, 4800, 2700, true, true, true, true);
 
@@ -20,8 +36,8 @@ class GameScene extends Phaser.Scene {
     //this.physics.add.sprite(50, 50, '');
 
     // Player
-    this.player = new Player(this, 0, 0, 'player');
-    this.player.setScale(5, 5);
+    this.player = new Player(this, 150, 150, 'player');
+    //this.player.setScale(5, 5);
     this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
 
     // key inputs
@@ -53,8 +69,9 @@ class GameScene extends Phaser.Scene {
       repeat:-1,
     });
     this.dashAnimTest.anims.play('dash'); //Context of this changes in the callback below, Beware!
-    this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
-    //this.physics.add.collider(this.dashAnimTest, this.player, this.player.takeDamage, null, this);
+    this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this);
+    this.physics.add.collider(this.player, backgroundlayer);
+    backgroundlayer.setCollisionByProperty({collides:true});
 	
     // Pause Game
     this.input.keyboard.on('keyup_ESC', function (event) {

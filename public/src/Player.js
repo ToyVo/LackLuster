@@ -20,13 +20,14 @@ class Player extends Phaser.GameObjects.Sprite {
 
     this.damaged = 0;
     this.health = 3;
-
+   
     this.rollCooldown = 50;
   }
 
   update (keys, time, delta) {
     this.body.setAcceleration(0, 0);
     this.body.setDrag(350, 350);
+    this.body.setMaxSpeed(700);
 
     let input = {
       left: keys.left.isDown || keys.a.isDown,
@@ -52,7 +53,6 @@ class Player extends Phaser.GameObjects.Sprite {
 
     if (input.space && this.rollCooldown <= 0) {
       this.body.setAcceleration(this.body.acceleration.x * 100, this.body.acceleration.y * 100);
-      this.body.setDrag(1500, 1500);
       this.rollCooldown = 300;
     }
 
@@ -60,16 +60,22 @@ class Player extends Phaser.GameObjects.Sprite {
   }
 
   takeDamage () {
-    this.body.setAcceleration(this.body.acceleration.x * -100, this.body.acceleration.y*-100);
-    if (this.damaged < 0) {
-      this.scene.gameCamera.shake(50, 0.005);
-      this.health--;//We need to do this.player.body as the context of this changes below
-      this.damaged = 1000;
+    this.player.body.setAcceleration(this.player.body.acceleration.x * -100, this.player.body.acceleration.y*-100);
+    this.player.tint = Math.random() * 0xffffff;
+    this.player.tint = Math.random() * 0xffffff;
+    this.player.tint = Math.random() * 0xffffff;
+    this.player.tint = Math.random() * 0xffffff;
+    this.player.tint = Math.random() * 0xffffff;
+    //this.player.tint = 0xffffff;
+    if (this.player.damaged < 0) {
+      this.player.scene.gameCamera.shake(50, 0.005);
+      this.player.health--;//We need to do this.player.body as the context of this changes below
+      this.player.damaged = 1000;
     }
 
-    if (this.health <= 0) { //In here load a game over scene/play player death/reset?
-      this.tint = Math.random() * 0xffffff;//Proof we get in here, cool effect too
-      //this.scene.start('GameOver');
+    if (this.player.health <= 0) { //In here load a game over scene/play player death/reset?
+      //Proof we get in here, cool effect too
+      this.scene.start('GameOver');
     }
   }
 }
