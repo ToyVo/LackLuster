@@ -8,47 +8,56 @@ class StartScene extends Phaser.Scene {
     centerGameObjects([this.loadingText]);
   }
 
-  preload () {
+	preload () {
     this.load.tilemapTiledJSON('Test3', 'assets/json/Test3.json');
-
     this.load.image('LL_pillar_01_6x', 'assets/sprites/LL_pillar_01_6x.png');
-    
 
-    this.load.image('sky', 'assets/skies/space3.png');
-    //this.load.image('player', 'assets/pics/LL_char.png');
-	  //this.load.image('pFront', 'assets/pics/LL_front_tester.png');
-	  //this.load.image('pBack', 'assets/pics/LL_back_tester.png');
-	  //this.load.image('pLeft', 'assets/pics/LL_left_tester.png');
-	 
-	  /*Spritesheets Below*/
-    this.load.image('player', 'assets/characters/LL_maincharacter_02_6x.png');
-    this.load.image('player_outlined', 'assets/characters/LL_maincharacter_01_outlined.png');
-	  this.load.spritesheet('frameTest','assets/spritesheets/LL_4frame_tester.png',
-		{ frameWidth:32, frameHeight:32 });
-    //this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', 'assets/spritesheets/slime_walking_black.json');
-  }
+		this.load.image('sky', 'assets/skies/space3.png');
+		// this.load.image('player', 'assets/pics/LL_char.png');
+		// this.load.image('pFront', 'assets/pics/LL_front_tester.png');
+		// this.load.image('pBack', 'assets/pics/LL_back_tester.png');
+		// this.load.image('pLeft', 'assets/pics/LL_left_tester.png');
+		this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
 
-  create () {
-    // Delete loading text
-    this.loadingText.destroy();
+		/* Player */
+		this.load.image('player', 'assets/characters/LL_maincharacter_01.png');
+		this.load.image('player_outlined', 'assets/characters/LL_maincharacter_01_outlined.png');
 
-    this.bg = this.add.sprite(0, 0, 'sky').setInteractive();
-    this.bg.setOrigin(0, 0);
+		/* Spritesheets Below */
+		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
+		// this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', 'assets/spritesheets/slime_walking_black.json');
+	}
 
-    let gameHeight = this.sys.game.config.height;
-    let text = this.add.text(gameWidth / 2, gameHeight / 2, 'Lack Luster', {
-      font: '40px Arial',
-      fill: '#FFFFFF'
-    });
-    text.setOrigin(0.5, 0.5);
-    text.depth = 1;
+	create () {
+		// Delete loading text
+		this.loadingText.destroy();
 
-    let textBg = this.add.graphics();
-    textBg.fillStyle(0x000000, 0.7);
-    textBg.fillRect(gameWidth / 2 - text.width / 2 - 10, gameHeight / 2 - text.height / 2 - 10, text.width + 20, text.height + 20);
+		let gameHeight = this.sys.game.config.height;
+		let gameWidth = this.sys.game.config.width;
+		let title = this.add.text(gameWidth / 2, gameHeight / 4, 'Lack Luster', {
+			font: '40px Arial',
+			fill: '#FFFFFF'
+		});
+		title.setOrigin(0.5, 0.5);
+		title.setDepth(1);
 
-    this.bg.on('pointerup', function () {
-      this.scene.start('GameScene');
-    }, this);
-  }
+		let titleBg = this.add.graphics();
+		titleBg.fillStyle(0x000000, 0.7);
+		titleBg.fillRect(gameWidth / 2 - title.width / 2 - 10, gameHeight / 4 - title.height / 2 - 10, title.width + 20, title.height + 20);
+
+		let start = this.add.text(gameWidth / 2, gameHeight / 2, 'Start', {
+			font: '40px Arial',
+			fill: '#FFFFFF'
+		}).setInteractive();
+		start.setOrigin(0.5, 0.5);
+		start.setDepth(1);
+
+		let startBg = this.add.graphics();
+		startBg.fillStyle(0x000000, 0.7);
+		startBg.fillRect(gameWidth / 2 - start.width / 2 - 10, gameHeight / 2 - start.height / 2 - 10, start.width + 20, start.height + 20);
+
+		start.on('pointerup', function () {
+			this.scene.start('GameScene');
+		}, this);
+	}
 }
