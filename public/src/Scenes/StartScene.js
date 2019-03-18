@@ -9,6 +9,7 @@ class StartScene extends Phaser.Scene {
   }
 
 	preload () {
+    this.load.image('LL_tile_01_6x', 'assets/sprites/LL_tile_01_6x.png');
     this.load.tilemapTiledJSON('Test3', 'assets/json/Test3.json');
     this.load.image('LL_pillar_01_6x', 'assets/sprites/LL_pillar_01_6x.png');
 
@@ -20,7 +21,7 @@ class StartScene extends Phaser.Scene {
 		this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
 
 		/* Player */
-		this.load.image('player', 'assets/characters/LL_maincharacter_01.png');
+		this.load.image('player', 'assets/characters/LL_maincharacter_02_6x.png');
 		this.load.image('player_outlined', 'assets/characters/LL_maincharacter_01_outlined.png');
 
 		/* Spritesheets Below */

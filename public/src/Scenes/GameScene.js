@@ -3,13 +3,8 @@
 class GameScene extends Phaser.Scene {
   // Pre-load function: queues all needed assets for downloading
   // (they are actually downloaded asynchronously, prior to 'create')
-  preload () {
-    this.load.image('LL_tile_01_6x', 'assets/sprites/LL_tile_01_6x.png');
-    this.load.tilemapTiledJSON('Test3', 'assets/json/Test3.json');
-    
-  }
+  preload () {}
   
-
   // Run after all loading (queued in preload) is finished
   create () {
     // Camera
@@ -20,17 +15,14 @@ class GameScene extends Phaser.Scene {
    
     let map = this.make.tilemap({key: 'Test3'});
     let tileSetImg = map.addTilesetImage('LL_tile_01_6x', 'LL_tile_01_6x');
-    //this.map.addTilesetImage('LL_pillar_01_6x', 'LL_pillar_01_6x');
 
     let backgroundlayer = map.createStaticLayer(0, [tileSetImg],0,0);
     //this.groundLayer = this.map.createLayer('Pillars');
-    //this.map.setCollisionBetween(1, 1000, true, 'Blocks');
     // Physics
     this.physics.world.setBounds(0, 0, 4800, 2700, true, true, true, true);
 
     // Player
     this.player = new Player(this, 150, 150, 'player');
-    this.player.setScale(5, 5);
     this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
 
 		// key inputs
