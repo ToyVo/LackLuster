@@ -44,8 +44,8 @@ let config = {
 window.game = new Phaser.Game(config);
 
 // Register and start the main scene
-window.game.scene.add('GameOver', GameOver);
-window.game.scene.add('PauseScene', PauseScene);
-window.game.scene.add('GameScene', GameScene);
-window.game.scene.add('StartScene', StartScene);
+window.game.scene.add('GameOver', GameOver, false);
+window.game.scene.add('PauseScene', PauseScene, false);
+window.game.scene.add('GameScene', GameScene, false);
+window.game.scene.add('StartScene', StartScene, false);
 window.game.scene.start('StartScene');

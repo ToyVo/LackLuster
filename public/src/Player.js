@@ -22,6 +22,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.health = 3;
 
 		this.rollCooldown = 50;
+		this.setScale(6, 6);
 	}
 
 	update (keys, time, delta) {

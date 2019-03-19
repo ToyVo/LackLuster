@@ -30,5 +30,3 @@ class GameOver extends Phaser.Scene {
 
 	}
 }
-
-window.GameOver = GameOver;

@@ -50,5 +50,3 @@ class PauseScene extends Phaser.Scene {
 	update () {
 	}
 }
-
-window.PauseScene = PauseScene;

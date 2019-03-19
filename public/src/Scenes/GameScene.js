@@ -47,6 +47,12 @@ class GameScene extends Phaser.Scene {
 		Phaser.Actions.RandomCircle(pillarGroup.getChildren(), circle);
 
 		this.dashAnimTest = this.physics.add.sprite(100, 100, 'frameTest').setScale(2).setImmovable(true);
+		this.anims.create({
+			key: 'dash',
+			frames: this.anims.generateFrameNumbers('frameTest', { start: 0, end: 4 }),
+			frameRate: 5,
+			repeat: -1
+		});
 		this.dashAnimTest.anims.play('dash');
 
 		// Context of this changes in the callback below, Beware!

@@ -25,7 +25,7 @@ class StartScene extends Phaser.Scene {
 		this.load.image('player_right', 'assets/player/player_right.png');
 		this.load.image('player_back', 'assets/player/player_back.png');
 		this.load.image('player_left', 'assets/player/player_left.png');
-		this.load.spritesheet('player_walk_front_sheet', 'assets/player/player_walk_front', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
+		this.load.spritesheet('player_walk_front_sheet', 'assets/player/player_walk_front.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
 
 		/* Spritesheets Below */
 		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
@@ -36,12 +36,6 @@ class StartScene extends Phaser.Scene {
 			key: 'player_walk_front_anim',
 			frames: this.anims.generateFrameNumbers('player_walk_front_sheet', { start: 0, end: 12 }),
 			frameRate: 12,
-			repeat: -1
-		});
-		this.anims.create({
-			key: 'dash',
-			frames: this.anims.generateFrameNumbers('frameTest', { start: 0, end: 4 }),
-			frameRate: 5,
 			repeat: -1
 		});
 	}
@@ -75,9 +69,8 @@ class StartScene extends Phaser.Scene {
 		startBg.fillRect(gameWidth / 2 - start.width / 2 - 10, gameHeight / 2 - start.height / 2 - 10, start.width + 20, start.height + 20);
 
 		start.on('pointerup', function () {
+			console.log('start game');
 			this.scene.start('GameScene');
 		}, this);
 	}
 }
-
-window.StartScene = StartScene;
