@@ -1,29 +1,29 @@
-/* global Player */
+/* global Player game */
 
 class GameScene extends Phaser.Scene {
-  // Pre-load function: queues all needed assets for downloading
-  // (they are actually downloaded asynchronously, prior to 'create')
-  preload () {}
-  
-  // Run after all loading (queued in preload) is finished
-  create () {
-    // Camera
-    this.gameCamera = this.cameras.main;
-    this.gameCamera.setBackgroundColor('#434343');
-    this.gameCamera.setViewport(0, 0, 1920, 1080);
-    this.cameras.main.setBounds(0, 0, 4800, 2700, true);
-   
-    let map = this.make.tilemap({key: 'Test3'});
-    let tileSetImg = map.addTilesetImage('LL_tile_01_6x', 'LL_tile_01_6x');
+	// Pre-load function: queues all needed assets for downloading
+	// (they are actually downloaded asynchronously, prior to 'create')
+	preload () {}
 
-    let backgroundlayer = map.createStaticLayer(0, [tileSetImg],0,0);
-    //this.groundLayer = this.map.createLayer('Pillars');
-    // Physics
-    this.physics.world.setBounds(0, 0, 4800, 2700, true, true, true, true);
+	// Run after all loading (queued in preload) is finished
+	create () {
+		// Camera
+		this.gameCamera = this.cameras.main;
+		this.gameCamera.setBackgroundColor('#434343');
+		this.gameCamera.setViewport(0, 0, 1920, 1080);
+		this.cameras.main.setBounds(0, 0, 4800, 2700, true);
 
-    // Player
-    this.player = new Player(this, 150, 150, 'player');
-    this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
+		let map = this.make.tilemap({ key: 'Test3' });
+		let tileSetImg = map.addTilesetImage('LL_tile_01_6x', 'LL_tile_01_6x');
+
+		let backgroundlayer = map.createStaticLayer(0, [tileSetImg], 0, 0);
+		// this.groundLayer = this.map.createLayer('Pillars');
+		// Physics
+		this.physics.world.setBounds(0, 0, 4800, 2700, true, true, true, true);
+
+		// Player
+		this.player = new Player(this, 150, 150, 'player_front');
+		this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
 
 		// key inputs
 		this.keys = {
@@ -38,32 +38,28 @@ class GameScene extends Phaser.Scene {
 			space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 		};
 
-    let pillarGroup = this.physics.add.group({key: 'pillarCollide', frameQuantity: 350});
-    pillarGroup.children.iterate(function (child) {
-      child.setImmovable(true);
-      child.setScale(3)
-    });
-    let circle = new Phaser.Geom.Circle( 4800, 2600, 4800);
-    Phaser.Actions.RandomCircle(pillarGroup.getChildren(), circle);
-    
-    this.dashAnimTest = this.physics.add.sprite(100, 100, 'frameTest').setScale(2).setImmovable(true);
-    this.dashAnim = game.anims.create({
-      key: 'dash',
-      frames: game.anims.generateFrameNumbers('frameTest', {start:0, end:4}),
-      frameRate:5,
-      repeat:-1,
-    });
-    this.dashAnimTest.anims.play('dash'); //Context of this changes in the callback below, Beware!
-    this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this);
-    this.physics.add.collider(this.player, backgroundlayer);
-    backgroundlayer.setCollisionByProperty({collides:true});
-	
-    // Pause Game
-    this.input.keyboard.on('keyup_ESC', function (event) {
-      this.scene.run('PauseScene');
-      this.scene.bringToTop('PauseScene');
-      this.scene.pause('GameScene');
-    }, this);
+		let pillarGroup = this.physics.add.group({ key: 'pillarCollide', frameQuantity: 350 });
+		pillarGroup.children.iterate(function (child) {
+			child.setImmovable(true);
+			child.setScale(3);
+		});
+		let circle = new Phaser.Geom.Circle(4800, 2600, 4800);
+		Phaser.Actions.RandomCircle(pillarGroup.getChildren(), circle);
+
+		this.dashAnimTest = this.physics.add.sprite(100, 100, 'frameTest').setScale(2).setImmovable(true);
+		this.dashAnimTest.anims.play('dash');
+
+		// Context of this changes in the callback below, Beware!
+		this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this);
+		this.physics.add.collider(this.player, backgroundlayer);
+		backgroundlayer.setCollisionByProperty({ collides: true });
+
+		// Pause Game
+		this.input.keyboard.on('keyup_ESC', function (event) {
+			this.scene.run('PauseScene');
+			this.scene.bringToTop('PauseScene');
+			this.scene.pause('GameScene');
+		}, this);
 
 		this.dashAnimTest = this.physics.add.sprite(100, 100, 'frameTest').setScale(2).setImmovable(true);
 		this.dashAnim = game.anims.create({
