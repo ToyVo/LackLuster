@@ -18,16 +18,17 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.body.setCollideWorldBounds(true);
 		// this.body.onWorldBounds = true;
 
-    this.damaged = 0;
-    this.health = 3;
-   
-    this.rollCooldown = 50;
-  }
+		this.damaged = 0;
+		this.health = 3;
 
-  update (keys, time, delta) {
-    this.body.setAcceleration(0, 0);
-    this.body.setDrag(350, 350);
-    this.body.setMaxSpeed(700);
+		this.rollCooldown = 50;
+		this.setScale(6, 6);
+	}
+
+	update (keys, time, delta) {
+		this.body.setAcceleration(0, 0);
+		this.body.setDrag(350, 350);
+		this.body.setMaxSpeed(700);
 
 		let input = {
 			left: keys.left.isDown || keys.a.isDown,
@@ -39,14 +40,18 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		if (input.left) {
 			this.body.setAccelerationX(-200);
+			this.setTexture('player_left');
 		} else if (input.right) {
 			this.body.setAccelerationX(200);
+			this.setTexture('player_right');
 		}
 
 		if (input.up) {
 			this.body.setAccelerationY(-200);
+			this.setTexture('player_back');
 		} else if (input.down) {
 			this.body.setAccelerationY(200);
+			this.setTexture('player_front');
 		}
 
 		this.rollCooldown -= delta;
@@ -60,19 +65,19 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.damageCooldown -= delta;
 	}
 
-  takeDamage () {
-    this.player.body.setAcceleration(this.player.body.acceleration.x * -100, this.player.body.acceleration.y*-100);
-    this.player.tint = Math.random() * 0xffffff;
-    this.player.tint = Math.random() * 0xffffff;
-    this.player.tint = Math.random() * 0xffffff;
-    this.player.tint = Math.random() * 0xffffff;
-    this.player.tint = Math.random() * 0xffffff;
-    //this.player.tint = 0xffffff;
-    if (this.player.damaged < 0) {
-      this.player.scene.gameCamera.shake(50, 0.005);
-      this.player.health--;//We need to do this.player.body as the context of this changes below
-      this.player.damaged = 1000;
-    }
+	takeDamage () {
+		this.player.body.setAcceleration(this.player.body.acceleration.x * -100, this.player.body.acceleration.y * -100);
+		this.player.tint = Math.random() * 0xffffff;
+		this.player.tint = Math.random() * 0xffffff;
+		this.player.tint = Math.random() * 0xffffff;
+		this.player.tint = Math.random() * 0xffffff;
+		this.player.tint = Math.random() * 0xffffff;
+		// this.player.tint = 0xffffff;
+		if (this.player.damaged < 0) {
+			this.player.scene.gameCamera.shake(50, 0.005);
+			this.player.health--;// We need to do this.player.body as the context of this changes below
+			this.player.damaged = 1000;
+		}
 
     if (this.player.health <= 0) { //In here load a game over scene/play player death/reset?
       //Proof we get in here, cool effect too
@@ -96,5 +101,5 @@ class Player extends Phaser.GameObjects.Sprite {
 	knockBack () {
 		this.body.setAcceleration(this.body.acceleration.x * -100, this.body.acceleration.y * -100);
 		this.body.setDrag(1500, 1500);
-	}*/
+	} */
 }

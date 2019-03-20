@@ -40,7 +40,7 @@ class GameScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, 6500, 4400, true, true, true, true);
 
     // Player
-    this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player');
+    this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
     this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
 
 		// key inputs
