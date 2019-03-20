@@ -26,7 +26,7 @@ class StartScene extends Phaser.Scene {
 
 		/* Spritesheets Below */
 		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
-		// this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', 'assets/spritesheets/slime_walking_black.json');
+		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', {frameWidth: 32, frameHeight: 32 });
 	}
 
 	create () {

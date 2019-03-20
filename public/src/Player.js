@@ -76,7 +76,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
     if (this.player.health <= 0) { //In here load a game over scene/play player death/reset?
       //Proof we get in here, cool effect too
-      this.scene.start('GameOver');
+      this.scene.scene.start('GameOver');
     }
   }
 	/*takeDamage () {

@@ -1,9 +1,16 @@
 /* global Player */
-
 class GameScene extends Phaser.Scene {
   // Pre-load function: queues all needed assets for downloading
   // (they are actually downloaded asynchronously, prior to 'create')
-  preload () {}
+  preload () {
+    this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', {frameWidth: 32, frameHeight: 32 });
+    this.anims.create({
+      key: 'slimeAnim',
+      frames: this.anims.generateFrameNumbers('slime_black_walking', {start:0, end:4}),
+      frameRate:12,
+      repeat:-1,
+    });
+  }
   
   // Run after all loading (queued in preload) is finished
   create () {
@@ -16,13 +23,24 @@ class GameScene extends Phaser.Scene {
     let map = this.make.tilemap({key: 'Test3'});
     let tileSetImg = map.addTilesetImage('LL_tile_01_6x', 'LL_tile_01_6x');
 
-    let backgroundlayer = map.createStaticLayer(0, [tileSetImg],0,0);
+    let backgroundlayer = map.createStaticLayer(0, [tileSetImg]);
+    const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn");
+
+    let slimeGroup = this.physics.add.group();
+    let enemySpawn = map.createFromObjects("Objects", "EnemySpawn", {key:"slime_black_walking", width:500});
+    for (var i = 0; i < enemySpawn.length; i++) {
+      //enemySpawn.body.setScale(3);
+      slimeGroup.add(enemySpawn[i]);
+      
+    }
+    this.anims.play('slimeAnim', enemySpawn);
+    //Only need to specify the object layers name, no need to create it
     //this.groundLayer = this.map.createLayer('Pillars');
     // Physics
-    this.physics.world.setBounds(0, 0, 4800, 2700, true, true, true, true);
+    this.physics.world.setBounds(0, 0, 6500, 4400, true, true, true, true);
 
     // Player
-    this.player = new Player(this, 150, 150, 'player');
+    this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player');
     this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
 
 		// key inputs
@@ -58,22 +76,8 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, backgroundlayer);
     backgroundlayer.setCollisionByProperty({collides:true});
 	
-    // Pause Game
-    this.input.keyboard.on('keyup_ESC', function (event) {
-      this.scene.run('PauseScene');
-      this.scene.bringToTop('PauseScene');
-      this.scene.pause('GameScene');
-    }, this);
-
-		this.dashAnimTest = this.physics.add.sprite(100, 100, 'frameTest').setScale(2).setImmovable(true);
-		this.dashAnim = game.anims.create({
-			key: 'dash',
-			frames: game.anims.generateFrameNumbers('frameTest', { start: 0, end: 4 }),
-			frameRate: 5,
-			repeat: -1
-		});
-		this.dashAnimTest.anims.play('dash');
-		this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
+ 
+    this.physics.add.collider(slimeGroup.getChildren(), this.player, this.player.takeDamage, null, this);
 
 		// Pause Game
 		this.input.keyboard.on('keyup_ESC', function (event) {
