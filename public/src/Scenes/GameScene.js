@@ -46,36 +46,10 @@ class GameScene extends Phaser.Scene {
 		let circle = new Phaser.Geom.Circle(4800, 2600, 4800);
 		Phaser.Actions.RandomCircle(pillarGroup.getChildren(), circle);
 
-		this.dashAnimTest = this.physics.add.sprite(100, 100, 'frameTest').setScale(2).setImmovable(true);
-		this.anims.create({
-			key: 'dash',
-			frames: this.anims.generateFrameNumbers('frameTest', { start: 0, end: 4 }),
-			frameRate: 5,
-			repeat: -1
-		});
-		this.dashAnimTest.anims.play('dash');
-
 		// Context of this changes in the callback below, Beware!
-		this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this);
+		this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
 		this.physics.add.collider(this.player, backgroundlayer);
 		backgroundlayer.setCollisionByProperty({ collides: true });
-
-		// Pause Game
-		this.input.keyboard.on('keyup_ESC', function (event) {
-			this.scene.run('PauseScene');
-			this.scene.bringToTop('PauseScene');
-			this.scene.pause('GameScene');
-		}, this);
-
-		this.dashAnimTest = this.physics.add.sprite(100, 100, 'frameTest').setScale(2).setImmovable(true);
-		this.dashAnim = game.anims.create({
-			key: 'dash',
-			frames: game.anims.generateFrameNumbers('frameTest', { start: 0, end: 4 }),
-			frameRate: 5,
-			repeat: -1
-		});
-		this.dashAnimTest.anims.play('dash');
-		this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
 
 		// Pause Game
 		this.input.keyboard.on('keyup_ESC', function (event) {
