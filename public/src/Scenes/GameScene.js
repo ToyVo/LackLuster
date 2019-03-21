@@ -26,21 +26,38 @@ class GameScene extends Phaser.Scene {
 		let backgroundlayer = map.createStaticLayer(0, [tileSetImg]);
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
+		// Enemy
 		let slimeGroup = this.physics.add.group();
 		let enemySpawn = map.createFromObjects('Objects', 'EnemySpawn', { key: 'slime_black_walking', width: 500 });
 		for (var i = 0; i < enemySpawn.length; i++) {
 			// enemySpawn.body.setScale(3);
 			slimeGroup.add(enemySpawn[i]);
 		}
-		this.anims.play('slimeAnim', enemySpawn);
+		// this.anims.play('slimeAnim', enemySpawn);
 		// Only need to specify the object layers name, no need to create it
 		// this.groundLayer = this.map.createLayer('Pillars');
+
 		// Physics
 		this.physics.world.setBounds(0, 0, 6500, 4400, true, true, true, true);
 
 		// Player
 		this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
 		this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
+
+		// Pillars
+		let pillarGroup = this.physics.add.group({ key: 'pillarCollide', frameQuantity: 350 });
+		pillarGroup.children.iterate(function (child) {
+			child.setImmovable(true);
+			child.setScale(3);
+		});
+		let circle = new Phaser.Geom.Circle(4800, 2600, 4800);
+		Phaser.Actions.RandomCircle(pillarGroup.getChildren(), circle);
+
+		// Collions
+		this.physics.add.collider(slimeGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
+		this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
+		this.physics.add.collider(this.player, backgroundlayer);
+		backgroundlayer.setCollisionByProperty({ collides: true });
 
 		// key inputs
 		this.keys = {
@@ -54,21 +71,6 @@ class GameScene extends Phaser.Scene {
 			d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
 			space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 		};
-
-		let pillarGroup = this.physics.add.group({ key: 'pillarCollide', frameQuantity: 350 });
-		pillarGroup.children.iterate(function (child) {
-			child.setImmovable(true);
-			child.setScale(3);
-		});
-		let circle = new Phaser.Geom.Circle(4800, 2600, 4800);
-		Phaser.Actions.RandomCircle(pillarGroup.getChildren(), circle);
-
-		// Context of this changes in the callback below, Beware!
-		this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
-		this.physics.add.collider(this.player, backgroundlayer);
-		backgroundlayer.setCollisionByProperty({ collides: true });
-
-    	this.physics.add.collider(slimeGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
 
 		// Pause Game
 		this.input.keyboard.on('keyup_ESC', function (event) {
