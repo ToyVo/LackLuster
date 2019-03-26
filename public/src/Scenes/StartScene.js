@@ -12,12 +12,9 @@ class StartScene extends Phaser.Scene {
 		this.load.image('LL_tile_01_6x', 'assets/sprites/LL_tile_01_6x.png');
 		this.load.tilemapTiledJSON('Test3', 'assets/json/Test3.json');
 		this.load.image('LL_pillar_01_6x', 'assets/sprites/LL_pillar_01_6x.png');
-
+    this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', {frameWidth: 32, frameHeight: 32 });
+ 
 		this.load.image('sky', 'assets/skies/space3.png');
-		// this.load.image('player', 'assets/pics/LL_char.png');
-		// this.load.image('pFront', 'assets/pics/LL_front_tester.png');
-		// this.load.image('pBack', 'assets/pics/LL_back_tester.png');
-		// this.load.image('pLeft', 'assets/pics/LL_left_tester.png');
 		this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
 
 		/* Player AKA THICC SNACC */
@@ -29,8 +26,6 @@ class StartScene extends Phaser.Scene {
 
 		/* Spritesheets Below */
 		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
-		// this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', 'assets/spritesheets/slime_walking_black.json');
-
 		/* Animations */
 		this.anims.create({
 			key: 'player_walk_front_anim',
