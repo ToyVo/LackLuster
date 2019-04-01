@@ -37,6 +37,9 @@ let config = {
 		arcade: {
 			gravity: { y: 0 }
 		}
+	},
+	input: {
+		gamepad: true
 	}
 };
 

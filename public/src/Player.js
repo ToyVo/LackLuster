@@ -30,7 +30,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.setScale(6, 6);
 	}
 
-	update (keys, time, delta) {
+	update (keys, gamepad, time, delta) {
 		this.body.setAcceleration(0, 0);
 		this.body.setDrag(500, 500);
 
@@ -62,7 +62,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		// if (this.anims.currentAnim.key !== anim && !this.scene.physics.world.isPaused) {
-		// 	this.anims.play(anim);
+		// this.anims.play(anim);
 		// }
 
 		this.rollCooldown -= delta;

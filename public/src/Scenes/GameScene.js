@@ -112,7 +112,9 @@ class GameScene extends Phaser.Scene {
 	}
 
 	update (time, delta) {
-		this.player.update(this.keys, time, delta);
+		console.log(this.input.gamepad.gamepads);
+		let gamepad = null;
+		this.player.update(this.keys, gamepad, time, delta);
 		// Behold the terrifying moving pillars of DOOM, must be in update
 		// or they will not follow the playeres new X,Y position as they
 		// move about in the world
