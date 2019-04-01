@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "PauseScene" }] */
 class PauseScene extends Phaser.Scene {
 	init () {}
 
