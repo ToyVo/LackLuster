@@ -20,6 +20,12 @@ class GameScene extends Phaser.Scene {
 		this.gameCamera.setViewport(0, 0, 1920, 1080);
 		this.cameras.main.setBounds(0, 0, 4800, 2700, true);
 
+		// gamepad
+		this.gamepad = null;
+		this.input.gamepad.once('down', function (pad, button, index) {
+			this.gamepad = pad;
+		});
+
 		// Physics
 		this.physics.world.setBounds(0, 0, 6500, 4400, true, true, true, true);
 
@@ -66,19 +72,6 @@ class GameScene extends Phaser.Scene {
 		this.physics.add.collider(this.slimeGroup.getChildren(), backgroundlayer, slimeMove, null, this);
 		backgroundlayer.setCollisionByProperty({ collides: true });
 
-		// key inputs
-		this.keys = {
-			up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
-			down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-			left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
-			right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-			w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-			a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-			s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-			d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-			space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-		};
-
 		// Pause Game
 		this.input.keyboard.on('keyup_ESC', function (event) {
 			this.scene.run('PauseScene');
@@ -112,9 +105,8 @@ class GameScene extends Phaser.Scene {
 	}
 
 	update (time, delta) {
-		console.log(this.input.gamepad.gamepads);
-		let gamepad = null;
-		this.player.update(this.keys, gamepad, time, delta);
+		this.player.update(this.gamepad, time, delta);
+
 		// Behold the terrifying moving pillars of DOOM, must be in update
 		// or they will not follow the playeres new X,Y position as they
 		// move about in the world
