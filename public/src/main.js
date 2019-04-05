@@ -1,4 +1,4 @@
-/* global GameScene, GameOver, PauseScene, StartScene */
+/* global GameScene, GameOver, PauseScene, StartScene, ControllerDebug */
 
 // Configure any plugins
 let scenePlugins = [{
@@ -40,6 +40,9 @@ let config = {
 	},
 	input: {
 		gamepad: true
+	},
+	render: {
+		pixelArt: true
 	}
 };
 
@@ -47,6 +50,7 @@ let config = {
 window.game = new Phaser.Game(config);
 
 // Register and start the main scene
+window.game.scene.add('ControllerDebug', ControllerDebug, false);
 window.game.scene.add('GameOver', GameOver, false);
 window.game.scene.add('PauseScene', PauseScene, false);
 window.game.scene.add('GameScene', GameScene, false);

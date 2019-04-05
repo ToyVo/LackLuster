@@ -3,13 +3,7 @@ class GameScene extends Phaser.Scene {
 	// Pre-load function: queues all needed assets for downloading
 	// (they are actually downloaded asynchronously, prior to 'create')
 	preload () {
-		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
-		this.anims.create({
-			key: 'slimeAnim',
-			frames: this.anims.generateFrameNumbers('slime_black_walking', { start: 0, end: 4 }),
-			frameRate: 12,
-			repeat: -1
-		});
+		setupAnimations(this);
 	}
 
 	// Run after all loading (queued in preload) is finished

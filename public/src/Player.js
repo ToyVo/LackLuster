@@ -16,9 +16,9 @@ class Player extends Phaser.GameObjects.Sprite {
 		scene.physics.world.enable(this);
 		scene.add.existing(this);
 		this.body.setCollideWorldBounds(true);
-		// this.body.onWorldBounds = true;
+		this.body.onWorldBounds = true;
 
-		// this.anims.play('front');
+		this.anims.play('player_walk_front_anim');
 
 		this.acceleration = 600;
 		this.body.setMaxSpeed(700);
