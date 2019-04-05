@@ -6,7 +6,7 @@ class GameScene extends Phaser.Scene {
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
 		this.anims.create({
 			key: 'slimeAnim',
-			frames: this.anims.generateFrameNumbers('slime_black_walking', { start: 0, end: 4 }),
+			frames: this.anims.generateFrameNumbers('slime_black_walking', { start: 0, end: 12 }),
 			frameRate: 12,
 			repeat: -1
 		});
@@ -26,49 +26,48 @@ class GameScene extends Phaser.Scene {
 		let backgroundlayer = map.createStaticLayer(0, [tileSetImg]);
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
-		// Enemy
-		let slimeGroup = this.physics.add.group();
-		let enemySpawn = map.createFromObjects('Objects', 'EnemySpawn', { key: 'slime_black_walking', width: 500 });
-		for (var i = 0; i < enemySpawn.length; i++) {
-			// enemySpawn.body.setScale(3);
-			slimeGroup.add(enemySpawn[i]);
-		}
-		// this.anims.play('slimeAnim', enemySpawn);
 		// Only need to specify the object layers name, no need to create it
 		// this.groundLayer = this.map.createLayer('Pillars');
 
 		// Physics
 		this.physics.world.setBounds(0, 0, 6500, 4400, true, true, true, true);
+		let enemySpawn = map.createFromObjects('Objects', 'EnemySpawn', { key: 'slime_black_walking' });
+		this.slimeGroup = this.physics.add.group({ key: 'slime_black_walking' });
+		//this.anims.play('slimeAnim', enemySpawn);
+		for (var i = 0; i < enemySpawn.length; i++) {
+			// enemySpawn.body.setScale(3);
+			this.slimeGroup.add(enemySpawn[i]);
+			this.physics.add.existing(enemySpawn[i]);
+		}
 
-    this.slimeGroup = this.physics.add.group({key: 'slime_black_walking'});
-    let enemySpawn = map.createFromObjects("Objects", "EnemySpawn", {key:"slime_black_walking"});
-    for (var i = 0; i < enemySpawn.length; i++) {
-      //enemySpawn.body.setScale(3);
-      this.slimeGroup.add(enemySpawn[i]); 
-      this.physics.add.existing(enemySpawn[i]);
-    }
-    
-    this.anims.play('slimeAnim', enemySpawn);
-    //Only need to specify the object layers name, no need to create it
-    //this.groundLayer = this.map.createLayer('Pillars');
-    // Physics
-    this.physics.world.setBounds(0, 0, 6500, 4400, true, true, true, true);
+		// Only need to specify the object layers name, no need to create it
+		// this.groundLayer = this.map.createLayer('Pillars');
+		// Physics
+		this.physics.world.setBounds(0, 0, 6500, 4400, true, true, true, true);
 		// Player
+    let playerContainer = this.add.container(spawnPoint.x, spawnPoint.y);
+    playerContainer.setExclusive(false);
+    this.friendSLime = this.add.sprite(spawnPoint.x + 20, spawnPoint.y + 20, 'slime_black_walking');
+    this.friendSLime2 = this.add.sprite(spawnPoint.x + 20, spawnPoint.y + 20, 'slime_black_walking');
+    this.friendSLime3 = this.add.sprite(spawnPoint.x + 20, spawnPoint.y + 20, 'slime_black_walking');
 		this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
 		this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
-
+		playerContainer.add(this.player);
+    playerContainer.add(this.friendSLime);
+    playerContainer.add(this.friendSLime2);
+    playerContainer.add(this.friendSLime3);
 		// Pillars
-		let pillarGroup = this.physics.add.group({ key: 'pillarCollide', frameQuantity: 350 });
-		pillarGroup.children.iterate(function (child) {
+		this.pillarGroup = this.physics.add.group({ key: 'pillarCollide', frameQuantity: 350 });
+		this.pillarGroup.children.iterate(function (child) {
 			child.setImmovable(true);
 			child.setScale(3);
 		});
 		let circle = new Phaser.Geom.Circle(4800, 2600, 4800);
-		Phaser.Actions.RandomCircle(pillarGroup.getChildren(), circle);
+		Phaser.Actions.RandomCircle(this.pillarGroup.getChildren(), circle);
 
 		// Collions
-		this.physics.add.collider(slimeGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
-		this.physics.add.collider(pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
+		this.physics.add.collider(this.slimeGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
+		this.physics.add.collider(this.pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
 		this.physics.add.collider(this.player, backgroundlayer);
 		backgroundlayer.setCollisionByProperty({ collides: true });
 
@@ -85,31 +84,15 @@ class GameScene extends Phaser.Scene {
 			space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 		};
 
-    this.pillarGroup = this.physics.add.group({key: 'pillarCollide', frameQuantity: 350});
-    this.pillarGroup.children.iterate(function (child) {
-      child.setImmovable(true);
-      child.setScale(3)
-    });
-    let circle = new Phaser.Geom.Circle( 4800, 2600, 4800);
-    Phaser.Actions.RandomCircle(this.pillarGroup.getChildren(), circle);
-    
-    this.dashAnimTest = this.physics.add.sprite(100, 100, 'frameTest').setScale(2).setImmovable(true);
-    this.dashAnim = game.anims.create({
-      key: 'dash',
-      frames: game.anims.generateFrameNumbers('frameTest', {start:0, end:4}),
-      frameRate:5,
-      repeat:-1,
-    });
-    this.dashAnimTest.anims.play('dash'); //Context of this changes in the callback below, Beware!
-    this.physics.add.collider(this.pillarGroup.getChildren(), this.player,this.player.takeDamage, null, this);
-    this.physics.add.collider(this.player, backgroundlayer);
-    backgroundlayer.setCollisionByProperty({collides:true});
-    
-    Phaser.Actions.Call(this.slimeGroup.getChildren(), function(child) {
-      child.body.setVelocityX(-100); // ACTUALLY WORKS YES, Appears to be a one time method call
-    }); //so we get no weird overriding -100 velocityX in our update
-    this.physics.add.collider(this.slimeGroup.getChildren(), this.player, this.player.takeDamage, null, this);
-    this.physics.add.collider(this.slimeGroup.getChildren(), backgroundlayer, slimeMove, null, this);
+		this.physics.add.collider(this.pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this);
+		this.physics.add.collider(this.player, backgroundlayer);
+		backgroundlayer.setCollisionByProperty({ collides: true });
+
+		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) {
+			child.body.setVelocityX(-100); // ACTUALLY WORKS YES, Appears to be a one time method call
+		}); // so we get no weird overriding -100 velocityX in our update
+		this.physics.add.collider(this.slimeGroup.getChildren(), this.player, this.player.takeDamage, null, this);
+		this.physics.add.collider(this.slimeGroup.getChildren(), backgroundlayer, slimeMove, null, this);
 		// Pause Game
 		this.input.keyboard.on('keyup_ESC', function (event) {
 			this.scene.run('PauseScene');
@@ -120,39 +103,55 @@ class GameScene extends Phaser.Scene {
 		// Bring the debug draw layer to the top
 		if (__DEV__) {
 			this.debugDraw.bringToTop();
-    } 
+		}
 
-    function slimeMove() {
-      this.slimeGroup.children.iterate(function (child) {
-        child.body.setImmovable(true);
-        if (child.body.touching.right || child.body.blocked.right) {
-          child.body.velocity.y = 300; 
-          child.body.velocity.x = 0; // turn down
-        } else if (child.body.touching.left || child.body.blocked.left) {
-          child.body.velocity.y = -300; // turn up
-          child.body.velocity.x = 0;
-        } else if (child.body.touching.up || child.body.blocked.up) {
-          child.body.velocity.y = 0; 
-          child.body.velocity.x = 300; // turn right
-        } else if (child.body.touching.down || child.body.blocked.down) {
-          child.body.velocity.y = 0;
-          child.body.velocity.x = -300; // turn left
-        } 
-      });
-    }
-  }
-  
-
+		function slimeMove () {
+			this.slimeGroup.children.iterate(function (child) {
+				child.body.setImmovable(true);
+				if (child.body.touching.right || child.body.blocked.right) {
+					child.body.velocity.y = 300;
+					child.body.velocity.x = 0; // turn down
+				} else if (child.body.touching.left || child.body.blocked.left) {
+					child.body.velocity.y = -300; // turn up
+					child.body.velocity.x = 0;
+				} else if (child.body.touching.up || child.body.blocked.up) {
+					child.body.velocity.y = 0;
+					child.body.velocity.x = 300; // turn right
+				} else if (child.body.touching.down || child.body.blocked.down) {
+					child.body.velocity.y = 0;
+					child.body.velocity.x = -300; // turn left
+				}
+			});
+		}
+	}
 
 	update (time, delta) {
     this.player.update(this.keys, time, delta);
-    //Behold the terrifying moving pillars of DOOM, must be in update
-    //or they will not follow the playeres new X,Y position as they 
-    //move about in the world
-    Phaser.Actions.Call(this.pillarGroup.getChildren(), function(child) {
-      this.physics.moveToObject(child, this.player, 20);
-    }, this);
-    
+    if (this.player.health == 3) {
+      this.friendSLime3.visible = true;
+      this.friendSLime2.visible = true;
+      this.friendSLime.visible = true;
+    } else if (this.player.health == 2) {
+        this.friendSLime3.visible = false;
+        this.friendSLime2.visible = true;
+        this.friendSLime.visible = true;
+    } else if (this.player.health == 1) {
+      this.friendSLime3.visible = false;
+      this.friendSLime2.visible = false;
+      this.friendSLime.visible = true;
+  }
+    this.friendSLime.x = this.player.body.x + 50;
+    this.friendSLime.y = this.player.body.y - 20;
+    this.friendSLime2.x = this.player.body.x + 110;
+    this.friendSLime2.y = this.player.body.y +20 ;
+    this.friendSLime3.x = this.player.body.x - 30;
+    this.friendSLime3.y = this.player.body.y + 20;
+		// Behold the terrifying moving pillars of DOOM, must be in update
+		// or they will not follow the playeres new X,Y position as they
+		// move about in the world
+		Phaser.Actions.Call(this.pillarGroup.getChildren(), function (child) {
+			this.physics.moveToObject(child, this.player, 20);
+		}, this);
 	}
 }
 
