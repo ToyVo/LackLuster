@@ -1,4 +1,5 @@
 /* global centerX, centerY, centerGameObjects */
+/* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "GameOver" }] */
 
 class GameOver extends Phaser.Scene {
 	preload () {}

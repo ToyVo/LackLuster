@@ -7,18 +7,18 @@ class Player extends Phaser.GameObjects.Sprite {
 	/**
 	 * player constuctor
 	 * @param {Phaser.Game.scene} scene scene this object exists in (this)
-	 * @param {*} x x Location
-	 * @param {*} y y Location
-	 * @param {*} texture texture key
+	 * @param {Number} x x Location
+	 * @param {Number} y y Location
+	 * @param {String} texture texture key
 	 */
 	constructor (scene, x, y, texture) {
 		super(scene, x, y, texture);
 		scene.physics.world.enable(this);
 		scene.add.existing(this);
 		this.body.setCollideWorldBounds(true);
-		// this.body.onWorldBounds = true;
+		this.body.onWorldBounds = true;
 
-		// this.anims.play('front');
+		this.anims.play('player_walk_front_anim');
 
 		this.acceleration = 600;
 		this.body.setMaxSpeed(700);
@@ -30,17 +30,43 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.setScale(6, 6);
 	}
 
-	update (keys, time, delta) {
+	update (gamepad, time, delta) {
 		this.body.setAcceleration(0, 0);
 		this.body.setDrag(500, 500);
 
-		let input = {
-			left: keys.left.isDown || keys.a.isDown,
-			right: keys.right.isDown || keys.d.isDown,
-			down: keys.down.isDown || keys.s.isDown,
-			up: keys.up.isDown || keys.w.isDown,
-			space: keys.space.isDown
+		// key inputs
+		let keys = {
+			up: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
+			down: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+			left: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
+			right: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
+			w: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+			a: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+			s: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+			d: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+			space: this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 		};
+
+		let input = null;
+
+		if (gamepad) {
+			console.log('gamepad connected');
+			input = {
+				left: keys.left.isDown || keys.a.isDown,
+				right: keys.right.isDown || keys.d.isDown,
+				down: keys.down.isDown || keys.s.isDown,
+				up: keys.up.isDown || keys.w.isDown,
+				space: keys.space.isDown
+			};
+		} else {
+			input = {
+				left: keys.left.isDown || keys.a.isDown,
+				right: keys.right.isDown || keys.d.isDown,
+				down: keys.down.isDown || keys.s.isDown,
+				up: keys.up.isDown || keys.w.isDown,
+				space: keys.space.isDown
+			};
+		}
 
 		let anim = null;
 
@@ -62,7 +88,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		// if (this.anims.currentAnim.key !== anim && !this.scene.physics.world.isPaused) {
-		// 	this.anims.play(anim);
+		// this.anims.play(anim);
 		// }
 
 		this.rollCooldown -= delta;

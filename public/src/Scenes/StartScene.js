@@ -1,4 +1,5 @@
 /* global centerX, centerY, centerGameObjects */
+/* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "StartScene" }] */
 class StartScene extends Phaser.Scene {
 	// Run when the scene is first loaded
 	init () {
@@ -12,8 +13,8 @@ class StartScene extends Phaser.Scene {
 		this.load.image('LL_tile_01_6x', 'assets/sprites/LL_tile_01_6x.png');
 		this.load.tilemapTiledJSON('Test3', 'assets/json/Test3.json');
 		this.load.image('LL_pillar_01_6x', 'assets/sprites/LL_pillar_01_6x.png');
-    this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', {frameWidth: 32, frameHeight: 32 });
- 
+		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
+
 		this.load.image('sky', 'assets/skies/space3.png');
 		this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
 
@@ -26,13 +27,9 @@ class StartScene extends Phaser.Scene {
 
 		/* Spritesheets Below */
 		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
+
 		/* Animations */
-		this.anims.create({
-			key: 'player_walk_front_anim',
-			frames: this.anims.generateFrameNumbers('player_walk_front_sheet', { start: 0, end: 12 }),
-			frameRate: 12,
-			repeat: -1
-		});
 	}
 
 	create () {
@@ -56,16 +53,24 @@ class StartScene extends Phaser.Scene {
 			font: '40px Arial',
 			fill: '#FFFFFF'
 		}).setInteractive();
-		start.setOrigin(0.5, 0.5);
-		start.setDepth(1);
+		start.setOrigin(0.5, 0.5).setDepth(1);
+
+		let debug = this.add.text(gameWidth / 2, gameHeight / 6, 'Debug Controller', {
+			font: '40px Arial',
+			fill: '#FFFFFF'
+		}).setInteractive();
+		debug.setOrigin(0.5, 0.5).setDepth(1);
 
 		let startBg = this.add.graphics();
 		startBg.fillStyle(0x000000, 0.7);
 		startBg.fillRect(gameWidth / 2 - start.width / 2 - 10, gameHeight / 2 - start.height / 2 - 10, start.width + 20, start.height + 20);
 
 		start.on('pointerup', function () {
-			console.log('start game');
 			this.scene.start('GameScene');
+		}, this);
+
+		debug.on('pointerup', function () {
+			this.scene.start('ControllerDebug');
 		}, this);
 	}
 }
