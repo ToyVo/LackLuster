@@ -14,12 +14,6 @@ class GameScene extends Phaser.Scene {
 		this.gameCamera.setViewport(0, 0, 1920, 1080);
 		this.cameras.main.setBounds(0, 0, 4800, 2700, true);
 
-		// gamepad
-		this.gamepad = null;
-		this.input.gamepad.once('down', function (pad, button, index) {
-			this.gamepad = pad;
-		});
-
 		// Physics
 		this.physics.world.setBounds(0, 0, 6500, 4400, true, true, true, true);
 
@@ -58,6 +52,7 @@ class GameScene extends Phaser.Scene {
 		playerContainer.add(this.friendSLime);
 		playerContainer.add(this.friendSLime2);
 		playerContainer.add(this.friendSLime3);
+
 		// Pillars
 		this.pillarGroup = this.physics.add.group({ key: 'pillarCollide', frameQuantity: 350 });
 		this.pillarGroup.children.iterate(function (child) {
@@ -75,7 +70,14 @@ class GameScene extends Phaser.Scene {
 		backgroundlayer.setCollisionByProperty({ collides: true });
 
 		// Pause Game
-		this.input.keyboard.on('keyup_ESC', function (event) {
+		this.input.gamepad.on('up', function (pad, button, value) {
+			if (button.index === 1) {
+				this.scene.run('PauseScene');
+				this.scene.bringToTop('PauseScene');
+				this.scene.pause('GameScene');
+			}
+		}, this);
+		this.input.keyboard.on('keyup-ESC', function (event) {
 			this.scene.run('PauseScene');
 			this.scene.bringToTop('PauseScene');
 			this.scene.pause('GameScene');
@@ -107,15 +109,16 @@ class GameScene extends Phaser.Scene {
 	}
 
 	update (time, delta) {
-		if (this.player.health == 3) {
+		this.input.update();
+		if (this.player.health === 3) {
 			this.friendSLime3.visible = true;
 			this.friendSLime2.visible = true;
 			this.friendSLime.visible = true;
-		} else if (this.player.health == 2) {
+		} else if (this.player.health === 2) {
 			this.friendSLime3.visible = false;
 			this.friendSLime2.visible = true;
 			this.friendSLime.visible = true;
-		} else if (this.player.health == 1) {
+		} else if (this.player.health === 1) {
 			this.friendSLime3.visible = false;
 			this.friendSLime2.visible = false;
 			this.friendSLime.visible = true;
@@ -126,7 +129,7 @@ class GameScene extends Phaser.Scene {
 		this.friendSLime2.y = this.player.body.y + 20;
 		this.friendSLime3.x = this.player.body.x - 30;
 		this.friendSLime3.y = this.player.body.y + 20;
-		this.player.update(this.gamepad, time, delta);
+		this.player.update(time, delta);
 
 		// Behold the terrifying moving pillars of DOOM, must be in update
 		// or they will not follow the playeres new X,Y position as they
