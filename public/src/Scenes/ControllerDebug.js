@@ -12,6 +12,7 @@ class ControllerDebug extends Phaser.Scene {
 	}
 
 	update () {
+		this.input.update();
 		if (this.input.gamepad.total === 0) {
 			return;
 		}

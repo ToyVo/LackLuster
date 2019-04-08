@@ -23,11 +23,15 @@ class GameOver extends Phaser.Scene {
 		this.retryText.on('pointerup', function () {
 			// Ideally here we would have a checkpoint we could load or a way to detect
 			// And run different scenes based off progression
-			this.scene.scene.start('GameScene'); // I hate that this works.
-		});
+			this.scene.start('GameScene');
+		}, this);
+
+		this.input.gamepad.on('up', function (pad, button, value) {
+			this.scene.start('GameScene');
+		}, this);
 	}
 
 	update () {
-
+		this.input.update();
 	}
 }

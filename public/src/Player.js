@@ -37,7 +37,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.setScale(6, 6);
 	}
 
-	update (gamepad, time, delta) {
+	update (time, delta) {
 		this.body.setAcceleration(0, 0);
 		this.body.setDrag(500, 500);
 
@@ -56,14 +56,15 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		let input = null;
 
-		if (gamepad) {
+		let gamepad = this.scene.input.gamepad.getPad(0);
+		if (gamepad.connected) {
 			console.log('gamepad connected');
 			input = {
-				left: keys.left.isDown || keys.a.isDown,
-				right: keys.right.isDown || keys.d.isDown,
-				down: keys.down.isDown || keys.s.isDown,
-				up: keys.up.isDown || keys.w.isDown,
-				space: keys.space.isDown
+				left: keys.left.isDown || keys.a.isDown || gamepad.leftStick.x === -1,
+				right: keys.right.isDown || keys.d.isDown || gamepad.leftStick.x === 1,
+				down: keys.down.isDown || keys.s.isDown || gamepad.leftStick.y === 1,
+				up: keys.up.isDown || keys.w.isDown || gamepad.leftStick.y === -1,
+				space: keys.space.isDown || gamepad.A
 			};
 		} else {
 			input = {

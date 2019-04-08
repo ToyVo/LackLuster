@@ -1,10 +1,5 @@
 /* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "PauseScene" }] */
 class PauseScene extends Phaser.Scene {
-	init () {}
-
-	preload () {
-	}
-
 	create () {
 		this.esc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
@@ -38,17 +33,33 @@ class PauseScene extends Phaser.Scene {
 			this.scene.stop('PauseScene');
 		}, this);
 
+		this.input.gamepad.on('up', function (pad, button, value) {
+			if (button.index === 1) {
+				this.scene.resume('GameScene');
+				this.scene.stop('PauseScene');
+			}
+		}, this);
+
+		this.input.keyboard.on('keyup-ESC', function () {
+			this.scene.resume('GameScene');
+			this.scene.stop('PauseScene');
+		}, this);
+
+		// Quit Game
+		this.input.gamepad.on('up', function (pad, button, value) {
+			if (button.index === 0) {
+				this.scene.start('StartScene');
+				this.scene.stop('GameScene');
+			}
+		}, this);
+
 		quit.on('pointerup', function () {
 			this.scene.start('StartScene');
 			this.scene.stop('GameScene');
 		}, this);
-
-		this.input.keyboard.on('keyup_ESC', function () {
-			this.scene.resume('GameScene');
-			this.scene.stop('PauseScene');
-		}, this);
 	}
 
 	update () {
+		this.input.update();
 	}
 }

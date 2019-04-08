@@ -79,5 +79,13 @@ class StartScene extends Phaser.Scene {
 		debug.on('pointerup', function () {
 			this.scene.start('ControllerDebug');
 		}, this);
+
+		this.input.gamepad.on('up', function (pad, button, value) {
+			this.scene.start('GameScene');
+		}, this);
+	}
+
+	update () {
+		this.input.update();
 	}
 }
