@@ -8,11 +8,21 @@ class GameScene extends Phaser.Scene {
 
 	// Run after all loading (queued in preload) is finished
 	create () {
+		let map = this.make.tilemap({ key: 'map' });
+		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
+		let grass = map.createStaticLayer(0, tileSetImg, 0, 0);
+		let tiles = map.createStaticLayer(1, tileSetImg, 0, 0);
+		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
+		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0);
+		wallTop.setDepth(10);
+		walls.setCollisionByProperty({ collides: true });
+		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 		// Camera
 		this.gameCamera = this.cameras.main;
 		this.gameCamera.setBackgroundColor('#434343');
-		this.gameCamera.setViewport(0, 0, 1920, 1080);
-		this.cameras.main.setBounds(0, 0, 4800, 2700, true);
+		// this.gameCamera.setViewport(0, 0, 1920, 1080);
+		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true, true, true, true);
+		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true);
 
 		// gamepad
 		this.gamepad = null;
@@ -20,16 +30,7 @@ class GameScene extends Phaser.Scene {
 			this.gamepad = pad;
 		});
 
-		// Physics
-		this.physics.world.setBounds(0, 0, 6500, 4400, true, true, true, true);
-
-		let map = this.make.tilemap({ key: 'Test3' });
-		let tileSetImg = map.addTilesetImage('LL_tile_01_6x', 'LL_tile_01_6x');
-
-		let backgroundlayer = map.createStaticLayer(0, [tileSetImg]);
-		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
-
-		// Enemy
+		/* // Enemy
 		this.slimeGroup = this.physics.add.group({ key: 'slime_black_walking' });
 		let enemySpawn = map.createFromObjects('Objects', 'EnemySpawn', { key: 'slime_black_walking' });
 		for (var i = 0; i < enemySpawn.length; i++) {
@@ -44,11 +45,10 @@ class GameScene extends Phaser.Scene {
 
 		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) {
 			child.body.setVelocityX(-100); // ACTUALLY WORKS YES, Appears to be a one time method call
-		}); // so we get no weird overriding -100 velocityX in our update
+		}); // so we get no weird overriding -100 velocityX in our update */
 
 		// Player
-		let playerContainer = this.add.container(spawnPoint.x, spawnPoint.y);
-		playerContainer.setExclusive(false);
+		let playerContainer = this.add.container(0, 0);
 		this.friendSLime = this.add.sprite(spawnPoint.x + 20, spawnPoint.y + 20, 'slime_black_walking');
 		this.friendSLime2 = this.add.sprite(spawnPoint.x + 20, spawnPoint.y + 20, 'slime_black_walking');
 		this.friendSLime3 = this.add.sprite(spawnPoint.x + 20, spawnPoint.y + 20, 'slime_black_walking');
@@ -68,11 +68,10 @@ class GameScene extends Phaser.Scene {
 		Phaser.Actions.RandomCircle(this.pillarGroup.getChildren(), circle);
 
 		// Collions
-		this.physics.add.collider(this.slimeGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
-		this.physics.add.collider(this.pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
-		this.physics.add.collider(this.player, backgroundlayer);
-		this.physics.add.collider(this.slimeGroup.getChildren(), backgroundlayer, slimeMove, null, this);
-		backgroundlayer.setCollisionByProperty({ collides: true });
+		this.physics.add.collider(this.player, walls);
+		// this.physics.add.collider(this.player, wallTop);
+		// this.physics.add.collider(this.slimeGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
+		// this.physics.add.collider(this.pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
 
 		// Pause Game
 		this.input.keyboard.on('keyup_ESC', function (event) {
@@ -107,15 +106,15 @@ class GameScene extends Phaser.Scene {
 	}
 
 	update (time, delta) {
-		if (this.player.health == 3) {
+		if (this.player.health === 3) {
 			this.friendSLime3.visible = true;
 			this.friendSLime2.visible = true;
 			this.friendSLime.visible = true;
-		} else if (this.player.health == 2) {
+		} else if (this.player.health === 2) {
 			this.friendSLime3.visible = false;
 			this.friendSLime2.visible = true;
 			this.friendSLime.visible = true;
-		} else if (this.player.health == 1) {
+		} else if (this.player.health === 1) {
 			this.friendSLime3.visible = false;
 			this.friendSLime2.visible = false;
 			this.friendSLime.visible = true;

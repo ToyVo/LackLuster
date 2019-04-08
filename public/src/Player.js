@@ -20,6 +20,13 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.anims.play('player_walk_front_anim');
 
+		this.playerHurt = game.sound.add('playerH', {
+			volume: 0.3, rate: 1, loop: false
+		});
+		this.dashDash = game.sound.add('dash', {
+			volume: 0.3, rate: 1, loop: false
+		});
+
 		this.acceleration = 600;
 		this.body.setMaxSpeed(700);
 
@@ -97,6 +104,7 @@ class Player extends Phaser.GameObjects.Sprite {
 			this.body.setAcceleration(this.body.acceleration.x * 100, this.body.acceleration.y * 100);
 			this.body.setDrag(1500, 1500);
 			this.rollCooldown = 500;
+			this.dashDash.play();
 		}
 
 		this.damageCooldown -= delta;
@@ -111,6 +119,9 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.tint = Math.random() * 0xffffff;
 		this.tint = Math.random() * 0xffffff;
 		this.tint = Math.random() * 0xffffff;
+		if (this.playerHurt.isPlaying === true) {
+			this.playerHurt.play();
+		}
 		// this.player.tint = 0xffffff;
 		if (this.damageCooldown < 0) {
 			this.scene.gameCamera.shake(50, 0.005);

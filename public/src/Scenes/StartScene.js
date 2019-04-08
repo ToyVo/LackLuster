@@ -10,8 +10,8 @@ class StartScene extends Phaser.Scene {
 	}
 
 	preload () {
-		this.load.image('LL_tile_01_6x', 'assets/sprites/LL_tile_01_6x.png');
-		this.load.tilemapTiledJSON('Test3', 'assets/json/Test3.json');
+		this.load.image('LL_tiled_tiles', 'assets/sprites/LL_tiled_tiles.png');
+		this.load.tilemapTiledJSON('map', 'assets/json/LL_base_map2.json');
 		this.load.image('LL_pillar_01_6x', 'assets/sprites/LL_pillar_01_6x.png');
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
 
@@ -29,10 +29,17 @@ class StartScene extends Phaser.Scene {
 		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
 
-		/* Animations */
+		/* Audio */
+		this.load.audio('dash', 'assets/audio/dash.wav');
+		this.load.audio('playerH', 'assets/audio/slimeHurt.wav');
+		this.load.audio('mainTheme', 'assets/audio/mainTheme.wav');
 	}
 
 	create () {
+		let theme = this.game.sound.add('mainTheme', {
+			volume: 0.4, rate: 1, loop: true
+		});
+		theme.play();
 		// Delete loading text
 		this.loadingText.destroy();
 
