@@ -27,7 +27,7 @@ let config = {
 		height: window.CONFIG.gameHeight
 	},
 	title: 'Lack Luster',
-	backgroundColor: '#434343',
+	backgroundColor: '#2D4439',
 	plugins: {
 		scene: scenePlugins
 	},
