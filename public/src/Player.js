@@ -55,9 +55,12 @@ class Player extends Phaser.GameObjects.Sprite {
 		};
 
 		let input = null;
+		let gamepad = null;
+		if (this.scene.input.gamepad.total !== 0) {
+			gamepad = this.scene.input.gamepad.getPad(0);
+		}
 
-		let gamepad = this.scene.input.gamepad.getPad(0);
-		if (gamepad.connected) {
+		if (gamepad != null) {
 			console.log('gamepad connected');
 			input = {
 				left: keys.left.isDown || keys.a.isDown || gamepad.leftStick.x === -1,
