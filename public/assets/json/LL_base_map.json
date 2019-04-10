@@ -66,6 +66,28 @@
                  "width":0,
                  "x":3376,
                  "y":3328
+                }, 
+                {
+                 "height":112,
+                 "id":2,
+                 "name":"SpTrigger",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":96,
+                 "x":3320,
+                 "y":5704
+                }, 
+                {
+                 "height":0,
+                 "id":3,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1800,
+                 "y":6520
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -74,7 +96,7 @@
          "y":0
         }],
  "nextlayerid":10,
- "nextobjectid":2,
+ "nextobjectid":4,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.3",

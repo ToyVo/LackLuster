@@ -19,7 +19,7 @@ class GameScene extends Phaser.Scene {
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 		// Camera
 		this.gameCamera = this.cameras.main;
-		this.gameCamera.setBackgroundColor('#434343');
+		this.gameCamera.setBackgroundColor('#2D4439');
 		// this.gameCamera.setViewport(0, 0, 1920, 1080);
 		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true, true, true, true);
 		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true);
