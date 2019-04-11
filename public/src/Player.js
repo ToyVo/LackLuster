@@ -35,7 +35,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.health = 3;
 
 		this.rollCooldown = 50;
-		this.setScale(6, 6);
+		this.setScale(5.2); // Lil smaller so we can fit him everywhere
 
 		this.lastDirection = 'down';
 		this.lastTexture = 'player_front';

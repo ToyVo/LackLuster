@@ -1,13 +1,13 @@
 /* global Player */
-/* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "Level1" }] */
+/* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "Level2" }] */
 
-class Level1 extends Phaser.Scene {
+class Level2 extends Phaser.Scene {
 	preload () {
 		setupAnimations(this);
 	}
 
 	create () {
-		let map = this.make.tilemap({ key: 'Level1' });
+		let map = this.make.tilemap({ key: 'Level2' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		// We dont add the transition tileset as we *want* this to not render
 		// This helps make invisible triggers, but keeps them visible in Tiled

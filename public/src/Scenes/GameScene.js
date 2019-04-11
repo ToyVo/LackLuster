@@ -8,6 +8,10 @@ class GameScene extends Phaser.Scene {
 
 	// Run after all loading (queued in preload) is finished
 	create () {
+		let theme = this.game.sound.add('mainTheme', {
+			volume: 0.4, rate: 1, loop: true
+		});
+
 		const map = this.make.tilemap({ key: 'map' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		let grass = map.createStaticLayer(0, tileSetImg, 0, 0);
@@ -15,16 +19,21 @@ class GameScene extends Phaser.Scene {
 		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
 		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0);
 		let transitions = map.createStaticLayer(4, tileSetImg, 0, 0);
-		transitions.setCollisionByProperty({ levelOne: true });
-		wallTop.setDepth(10);
+		transitions.setTileIndexCallback(0, triggerLevelOne, this);
+		transitions.setTileIndexCallback(1, triggerMusic, this);
+		 transitions.setTileLocationCallback(105, 30, 3, 3, triggerLevelOne, this);
+		// transitions.setTileLocationCallback(30, 100, 3, 3, triggerLevelTwo, this);
+		// transitions.setTileLocationCallback(177, 100, 3, 3, triggerLevelThree, this);
+		transitions.setTileLocationCallback(105, 175, 3, 3, triggerMusic, this);
 		walls.setCollisionByProperty({ collides: true });
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
+
 		// Camera
 		this.gameCamera = this.cameras.main;
 		this.gameCamera.setBackgroundColor('#536b5d');
 		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true, true, true, true);
 		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true);
-
+		console.log('Width:' + map.widthInPixels + 'Height: ' + map.heightInPixels);
 		// gamepad
 		this.gamepad = null;
 		this.input.gamepad.once('down', function (pad, button, index) {
@@ -71,7 +80,8 @@ class GameScene extends Phaser.Scene {
 
 		// Collisions
 		this.physics.add.collider(this.player, walls);
-		this.physics.add.collider(this.player, transitions, triggerLevelOne, null, this); // How we transition player to level 1
+		this.physics.add.collider(this.player, transitions); // How we transition player to level 1
+
 		// Pause Game
 		this.input.gamepad.on('up', function (pad, button, value) {
 			if (button.index === 1) {
@@ -91,8 +101,18 @@ class GameScene extends Phaser.Scene {
 			this.debugDraw.bringToTop();
 		}
 
+		function triggerMusic () {
+			theme.play();
+		}
+
 		function triggerLevelOne () {
 			this.scene.start('Level1');
+		}
+		function triggerLevelTwo () {
+			this.scene.start('Level2');
+		}
+		function triggerLevelThree () {
+			this.scene.start('Level3');
 		}
 		function slimeMove () {
 			this.slimeGroup.children.iterate(function (child) {

@@ -1,4 +1,4 @@
-/* global GameScene, GameOver, PauseScene, StartScene, ControllerDebug, Level1 */
+/* global GameScene, GameOver, PauseScene, StartScene, ControllerDebug, Level1, Level2, Level3 */
 
 // Configure any plugins
 let scenePlugins = [{
@@ -55,5 +55,7 @@ window.game.scene.add('GameOver', GameOver, false);
 window.game.scene.add('PauseScene', PauseScene, false);
 window.game.scene.add('GameScene', GameScene, false);
 window.game.scene.add('Level1', Level1, false);
+window.game.scene.add('Level2', Level2, false);
+window.game.scene.add('Level3', Level3, false);
 window.game.scene.add('StartScene', StartScene, false);
 window.game.scene.start('StartScene');
