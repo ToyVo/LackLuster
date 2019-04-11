@@ -26,6 +26,9 @@ class StartScene extends Phaser.Scene {
 		this.load.image('player_back', 'assets/player/player_back.png');
 		this.load.image('player_left', 'assets/player/player_left.png');
 		this.load.spritesheet('player_walk_front_sheet', 'assets/player/player_walk_front.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
+		this.load.spritesheet('player_walk_back_sheet', 'assets/player/player_walk_back.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
+		this.load.spritesheet('player_walk_left_sheet', 'assets/player/player_walk_left.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
+		this.load.spritesheet('player_walk_right_sheet', 'assets/player/player_walk_right.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
 
 		/* Spritesheets Below */
 		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });

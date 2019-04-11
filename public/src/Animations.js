@@ -18,4 +18,25 @@ function setupAnimations (scene) {
 		frameRate: 12,
 		repeat: -1
 	});
+
+	scene.anims.create({
+		key: 'player_walk_back_anim',
+		frames: scene.anims.generateFrameNumbers('player_walk_back_sheet', { start: 0, end: 12 }),
+		frameRate: 12,
+		repeat: -1
+	});
+
+	scene.anims.create({
+		key: 'player_walk_left_anim',
+		frames: scene.anims.generateFrameNumbers('player_walk_left_sheet', { start: 0, end: 12 }),
+		frameRate: 12,
+		repeat: -1
+	});
+
+	scene.anims.create({
+		key: 'player_walk_right_anim',
+		frames: scene.anims.generateFrameNumbers('player_walk_right_sheet', { start: 0, end: 12 }),
+		frameRate: 12,
+		repeat: -1
+	});
 }

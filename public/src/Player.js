@@ -103,21 +103,20 @@ class Player extends Phaser.GameObjects.Sprite {
 			let anim = null;
 			switch (this.lastDirection) {
 			case 'up':
-				// anim = 'player_walk_back_anim';
+				anim = 'player_walk_back_anim';
 				break;
 			case 'down':
 				anim = 'player_walk_front_anim';
 				break;
 			case 'left':
-				// anim = 'player_walk_left_anim';
+				anim = 'player_walk_left_anim';
 				break;
 			case 'right':
-				// anim = 'player_walk_right_anim';
+				anim = 'player_walk_right_anim';
 				break;
 			}
-			if (anim !== this.lastAnim) {
+			if (anim !== this.lastAnim || !this.anims.isPlaying) {
 				this.lastAnim = anim;
-				console.log('set animation');
 				this.anims.play(anim);
 			}
 		} else {
