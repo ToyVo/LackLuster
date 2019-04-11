@@ -14,6 +14,8 @@ class StartScene extends Phaser.Scene {
 		this.load.image('transition', 'assets/sprites/transition.png');
 		this.load.tilemapTiledJSON('map', 'assets/json/LL_base_map.json');
 		this.load.tilemapTiledJSON('Level1', 'assets/json/Level_1.json');
+		// this.load.tilemapTiledJSON('Level2', 'assets/json/Level_2.json');
+		// this.load.tilemapTiledJSON('Level3', 'assets/json/Level_3.json');
 		this.load.image('LL_pillar_01_6x', 'assets/sprites/LL_pillar_01_6x.png');
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
 
@@ -41,10 +43,6 @@ class StartScene extends Phaser.Scene {
 	}
 
 	create () {
-		let theme = this.game.sound.add('mainTheme', {
-			volume: 0.4, rate: 1, loop: true
-		});
-		theme.play();
 		// Delete loading text
 		this.loadingText.destroy();
 
