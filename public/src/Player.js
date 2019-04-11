@@ -1,4 +1,5 @@
 /* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "(Player)" }] */
+/* global game */
 /**
  * Main player class used in game
  *
@@ -35,6 +36,10 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.rollCooldown = 50;
 		this.setScale(6, 6);
+
+		this.lastDirection = 'down';
+		this.lastTexture = 'player_front';
+		this.lastAnim = 'player_walk_front_anim';
 	}
 
 	update (time, delta) {
@@ -61,7 +66,6 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		if (gamepad != null) {
-			console.log('gamepad connected');
 			input = {
 				left: keys.left.isDown || keys.a.isDown || gamepad.leftStick.x === -1,
 				right: keys.right.isDown || keys.d.isDown || gamepad.leftStick.x === 1,
@@ -79,28 +83,66 @@ class Player extends Phaser.GameObjects.Sprite {
 			};
 		}
 
-		let anim = null;
-
 		if (input.left) {
 			this.body.setAccelerationX(-this.acceleration);
-			this.setTexture('player_left');
+			this.lastDirection = 'left';
 		} else if (input.right) {
 			this.body.setAccelerationX(this.acceleration);
-			this.setTexture('player_right');
+			this.lastDirection = 'right';
 		}
 
 		if (input.up) {
 			this.body.setAccelerationY(-this.acceleration);
-			this.setTexture('player_back');
+			this.lastDirection = 'up';
 		} else if (input.down) {
 			this.body.setAccelerationY(this.acceleration);
-			anim = 'player_walk_front_anim';
-			this.setTexture('player_front');
+			this.lastDirection = 'down';
 		}
 
-		// if (this.anims.currentAnim.key !== anim && !this.scene.physics.world.isPaused) {
-		// this.anims.play(anim);
-		// }
+		if (input.up || input.down || input.left || input.right) {
+			let anim = null;
+			switch (this.lastDirection) {
+			case 'up':
+				// anim = 'player_walk_back_anim';
+				break;
+			case 'down':
+				anim = 'player_walk_front_anim';
+				break;
+			case 'left':
+				// anim = 'player_walk_left_anim';
+				break;
+			case 'right':
+				// anim = 'player_walk_right_anim';
+				break;
+			}
+			if (anim !== this.lastAnim) {
+				this.lastAnim = anim;
+				console.log('set animation');
+				this.anims.play(anim);
+			}
+		} else {
+			this.anims.stop();
+			let texture = null;
+			switch (this.lastDirection) {
+			case 'up':
+				texture = 'player_back';
+				break;
+			case 'down':
+				texture = 'player_front';
+				break;
+			case 'left':
+				texture = 'player_left';
+				break;
+			case 'right':
+				texture = 'player_right';
+				break;
+			}
+			if (texture !== this.lastTexture) {
+				this.lastTexture = texture;
+				console.log('set texture');
+				this.setTexture(texture);
+			}
+		}
 
 		this.rollCooldown -= delta;
 
