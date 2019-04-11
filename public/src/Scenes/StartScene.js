@@ -11,7 +11,9 @@ class StartScene extends Phaser.Scene {
 
 	preload () {
 		this.load.image('LL_tiled_tiles', 'assets/sprites/LL_tiled_tiles.png');
-		this.load.tilemapTiledJSON('map', 'assets/json/LL_base_map2.json');
+		this.load.image('transition', 'assets/sprites/transition.png');
+		this.load.tilemapTiledJSON('map', 'assets/json/LL_base_map.json');
+		this.load.tilemapTiledJSON('Level1', 'assets/json/Level_1.json');
 		this.load.image('LL_pillar_01_6x', 'assets/sprites/LL_pillar_01_6x.png');
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
 

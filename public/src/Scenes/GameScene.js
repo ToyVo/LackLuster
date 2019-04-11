@@ -8,19 +8,20 @@ class GameScene extends Phaser.Scene {
 
 	// Run after all loading (queued in preload) is finished
 	create () {
-		let map = this.make.tilemap({ key: 'map' });
+		const map = this.make.tilemap({ key: 'map' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		let grass = map.createStaticLayer(0, tileSetImg, 0, 0);
 		let tiles = map.createStaticLayer(1, tileSetImg, 0, 0);
 		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
 		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0);
+		let transitions = map.createStaticLayer(4, tileSetImg, 0, 0);
+		transitions.setCollisionByProperty({ levelOne: true });
 		wallTop.setDepth(10);
 		walls.setCollisionByProperty({ collides: true });
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 		// Camera
 		this.gameCamera = this.cameras.main;
-		this.gameCamera.setBackgroundColor('#2D4439');
-		// this.gameCamera.setViewport(0, 0, 1920, 1080);
+		this.gameCamera.setBackgroundColor('#536b5d');
 		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true, true, true, true);
 		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true);
 
@@ -68,12 +69,9 @@ class GameScene extends Phaser.Scene {
 		let circle = new Phaser.Geom.Circle(4800, 2600, 4800);
 		Phaser.Actions.RandomCircle(this.pillarGroup.getChildren(), circle);
 
-		// Collions
+		// Collisions
 		this.physics.add.collider(this.player, walls);
-		// this.physics.add.collider(this.player, wallTop);
-		// this.physics.add.collider(this.slimeGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
-		// this.physics.add.collider(this.pillarGroup.getChildren(), this.player, this.player.takeDamage, null, this.player);
-
+		this.physics.add.collider(this.player, transitions, triggerLevelOne, null, this); // How we transition player to level 1
 		// Pause Game
 		this.input.gamepad.on('up', function (pad, button, value) {
 			if (button.index === 1) {
@@ -93,6 +91,9 @@ class GameScene extends Phaser.Scene {
 			this.debugDraw.bringToTop();
 		}
 
+		function triggerLevelOne () {
+			this.scene.start('Level1');
+		}
 		function slimeMove () {
 			this.slimeGroup.children.iterate(function (child) {
 				child.body.setImmovable(true);
@@ -111,7 +112,7 @@ class GameScene extends Phaser.Scene {
 				}
 			});
 		}
-	}
+	} // End create func
 
 	update (time, delta) {
 		this.input.update();
@@ -144,6 +145,5 @@ class GameScene extends Phaser.Scene {
 		}, this);
 	}
 }
-
 // Ensure this is a globally accessible class
 window.GameScene = GameScene;

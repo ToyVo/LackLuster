@@ -1,4 +1,4 @@
-/* global GameScene, GameOver, PauseScene, StartScene, ControllerDebug */
+/* global GameScene, GameOver, PauseScene, StartScene, ControllerDebug, Level1 */
 
 // Configure any plugins
 let scenePlugins = [{
@@ -27,7 +27,7 @@ let config = {
 		height: window.CONFIG.gameHeight
 	},
 	title: 'Lack Luster',
-	backgroundColor: '#434343',
+	backgroundColor: '#536b5d',
 	plugins: {
 		scene: scenePlugins
 	},
@@ -54,5 +54,6 @@ window.game.scene.add('ControllerDebug', ControllerDebug, false);
 window.game.scene.add('GameOver', GameOver, false);
 window.game.scene.add('PauseScene', PauseScene, false);
 window.game.scene.add('GameScene', GameScene, false);
+window.game.scene.add('Level1', Level1, false);
 window.game.scene.add('StartScene', StartScene, false);
 window.game.scene.start('StartScene');
