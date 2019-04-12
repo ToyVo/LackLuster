@@ -19,9 +19,6 @@ class GameScene extends Phaser.Scene {
 		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
 		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0);
 		wallTop.setDepth(10);
-		// let transitions = map.createStaticLayer(3, tileSetImg, 0, 0);
-		// transitions.setTileIndexCallback(0, triggerLevelOne, this);
-		// transitions.setTileIndexCallback(1, triggerMusic, this);
 		walls.setTileLocationCallback(105, 30, 3, 3, triggerLevelOne, this);
 		// walls.setTileLocationCallback(30, 100, 3, 3, triggerLevelTwo, this);
 		// walls.setTileLocationCallback(177, 100, 3, 3, triggerLevelThree, this);
@@ -51,7 +48,6 @@ class GameScene extends Phaser.Scene {
 
 		// Collisions
 		this.physics.add.collider(this.player, walls);
-		// this.physics.add.collider(this.player, transitions); // How we transition player to level 1
 		// this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.player.takeDamage, null, this.player);
 		// Pause Game
 		this.input.gamepad.on('up', function (pad, button, value) {
