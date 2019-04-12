@@ -26,7 +26,7 @@ class GameOver extends Phaser.Scene {
 			this.scene.start('GameScene');
 		}, this);
 
-		this.input.gamepad.on('up', function (pad, button, value) {
+		this.input.gamepad.on('up', function () {
 			this.scene.start('GameScene');
 		}, this);
 	}
