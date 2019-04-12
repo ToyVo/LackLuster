@@ -18,13 +18,14 @@ class GameScene extends Phaser.Scene {
 		let tiles = map.createStaticLayer(1, tileSetImg, 0, 0);
 		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
 		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0);
-		let transitions = map.createStaticLayer(4, tileSetImg, 0, 0);
-		transitions.setTileIndexCallback(0, triggerLevelOne, this);
-		transitions.setTileIndexCallback(1, triggerMusic, this);
-		 transitions.setTileLocationCallback(105, 30, 3, 3, triggerLevelOne, this);
-		// transitions.setTileLocationCallback(30, 100, 3, 3, triggerLevelTwo, this);
-		// transitions.setTileLocationCallback(177, 100, 3, 3, triggerLevelThree, this);
-		transitions.setTileLocationCallback(105, 175, 3, 3, triggerMusic, this);
+		wallTop.setDepth(10);
+		// let transitions = map.createStaticLayer(3, tileSetImg, 0, 0);
+		// transitions.setTileIndexCallback(0, triggerLevelOne, this);
+		// transitions.setTileIndexCallback(1, triggerMusic, this);
+		walls.setTileLocationCallback(105, 30, 3, 3, triggerLevelOne, this);
+		// walls.setTileLocationCallback(30, 100, 3, 3, triggerLevelTwo, this);
+		// walls.setTileLocationCallback(177, 100, 3, 3, triggerLevelThree, this);
+		walls.setTileLocationCallback(105, 175, 3, 3, triggerMusic, this);
 		walls.setCollisionByProperty({ collides: true });
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
@@ -39,23 +40,6 @@ class GameScene extends Phaser.Scene {
 		this.input.gamepad.once('down', function (pad, button, index) {
 			this.gamepad = pad;
 		});
-
-		/* // Enemy
-		this.slimeGroup = this.physics.add.group({ key: 'slime_black_walking' });
-		let enemySpawn = map.createFromObjects('Objects', 'EnemySpawn', { key: 'slime_black_walking' });
-		for (var i = 0; i < enemySpawn.length; i++) {
-			// enemySpawn.body.setScale(3);
-			this.slimeGroup.add(enemySpawn[i]);
-			this.physics.add.existing(enemySpawn[i]);
-		}
-
-		this.anims.play('slimeAnim', enemySpawn);
-		// Only need to specify the object layers name, no need to create it
-		// this.groundLayer = this.map.createLayer('Pillars');
-
-		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) {
-			child.body.setVelocityX(-100); // ACTUALLY WORKS YES, Appears to be a one time method call
-		}); // so we get no weird overriding -100 velocityX in our update */
 
 		// Player
 		let playerContainer = this.add.container(0, 0);
@@ -80,8 +64,8 @@ class GameScene extends Phaser.Scene {
 
 		// Collisions
 		this.physics.add.collider(this.player, walls);
-		this.physics.add.collider(this.player, transitions); // How we transition player to level 1
-
+		// this.physics.add.collider(this.player, transitions); // How we transition player to level 1
+		// this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.player.takeDamage, null, this.player);
 		// Pause Game
 		this.input.gamepad.on('up', function (pad, button, value) {
 			if (button.index === 1) {
@@ -102,6 +86,7 @@ class GameScene extends Phaser.Scene {
 		}
 
 		function triggerMusic () {
+			// walls.destroy();
 			theme.play();
 		}
 
@@ -113,24 +98,6 @@ class GameScene extends Phaser.Scene {
 		}
 		function triggerLevelThree () {
 			this.scene.start('Level3');
-		}
-		function slimeMove () {
-			this.slimeGroup.children.iterate(function (child) {
-				child.body.setImmovable(true);
-				if (child.body.touching.right || child.body.blocked.right) {
-					child.body.velocity.y = 300;
-					child.body.velocity.x = 0; // turn down
-				} else if (child.body.touching.left || child.body.blocked.left) {
-					child.body.velocity.y = -300; // turn up
-					child.body.velocity.x = 0;
-				} else if (child.body.touching.up || child.body.blocked.up) {
-					child.body.velocity.y = 0;
-					child.body.velocity.x = 300; // turn right
-				} else if (child.body.touching.down || child.body.blocked.down) {
-					child.body.velocity.y = 0;
-					child.body.velocity.x = -300; // turn left
-				}
-			});
 		}
 	} // End create func
 
