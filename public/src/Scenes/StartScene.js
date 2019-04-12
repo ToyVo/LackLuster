@@ -65,12 +65,6 @@ class StartScene extends Phaser.Scene {
 		}).setInteractive();
 		start.setOrigin(0.5, 0.5).setDepth(1);
 
-		let debug = this.add.text(gameWidth / 2, gameHeight / 6, 'Debug Controller', {
-			font: '40px Arial',
-			fill: '#FFFFFF'
-		}).setInteractive();
-		debug.setOrigin(0.5, 0.5).setDepth(1);
-
 		let startBg = this.add.graphics();
 		startBg.fillStyle(0x000000, 0.7);
 		startBg.fillRect(gameWidth / 2 - start.width / 2 - 10, gameHeight / 2 - start.height / 2 - 10, start.width + 20, start.height + 20);
@@ -79,11 +73,7 @@ class StartScene extends Phaser.Scene {
 			this.scene.start('GameScene');
 		}, this);
 
-		debug.on('pointerup', function () {
-			this.scene.start('ControllerDebug');
-		}, this);
-
-		this.input.gamepad.on('up', function (pad, button, value) {
+		this.input.gamepad.on('up', function () {
 			this.scene.start('GameScene');
 		}, this);
 	}
