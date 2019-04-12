@@ -32,12 +32,11 @@ class Level1 extends Phaser.Scene {
 		this.slimeGroup = this.physics.add.group({ key: 'slime_black_walking' });
 		let enemySpawn = map.createFromObjects('Objects', 'EnemySpawn', { key: 'slime_black_walking' });
 		for (var i = 0; i < enemySpawn.length; i++) {
-			// enemySpawn.body.setScale(3);
 			this.slimeGroup.add(enemySpawn[i]);
 			this.physics.add.existing(enemySpawn[i]);
 		}
 
-		// this.anims.play('slimeAnim', enemySpawn);enemyColl
+		// this.anims.play('slimeAnim', enemySpawn);
 
 		function triggerHubTransition () {
 			this.scene.start('GameScene');
