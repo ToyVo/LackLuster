@@ -1,4 +1,4 @@
-/* global GameScene, GameOver, PauseScene, StartScene, ControllerDebug, Level1, Level2, Level3 */
+/* global GameScene, GameOver, PauseScene, StartScene, Level1, Level2, Level3 */
 
 // Configure any plugins
 let scenePlugins = [{

@@ -1,4 +1,4 @@
-/* global Player */
+/* global Player setupAnimations */
 /* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "Level3" }] */
 
 class Level3 extends Phaser.Scene {
@@ -30,14 +30,14 @@ class Level3 extends Phaser.Scene {
 		this.physics.add.collider(this.player, botWalls);
 
 		// Pause Game
-		this.input.gamepad.on('up', function (pad, button, value) {
+		this.input.gamepad.on('up', function (button) {
 			if (button.index === 1) {
 				this.scene.run('PauseScene', 'Level3');
 				this.scene.bringToTop('PauseScene');
 				this.scene.pause('Level3');
 			}
 		}, this);
-		this.input.keyboard.on('keyup-ESC', function (event) {
+		this.input.keyboard.on('keyup-ESC', function () {
 			this.scene.run('PauseScene', 'Level3');
 			this.scene.bringToTop('PauseScene');
 			this.scene.pause('Level3');

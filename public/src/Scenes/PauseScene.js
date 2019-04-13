@@ -3,7 +3,7 @@ class PauseScene extends Phaser.Scene {
 	init (data) {
 		// Data must be passed in when strting the scene
 		this.previousScene = data;
-	  }
+	}
 
 	create () {
 		this.esc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
@@ -38,7 +38,7 @@ class PauseScene extends Phaser.Scene {
 			this.scene.stop('PauseScene');
 		}, this);
 
-		this.input.gamepad.on('up', function (pad, button, value) {
+		this.input.gamepad.on('up', function (button) {
 			if (button.index === 1) {
 				this.scene.resume(this.previousScene);
 				this.scene.stop('PauseScene');
@@ -51,7 +51,7 @@ class PauseScene extends Phaser.Scene {
 		}, this);
 
 		// Quit Game
-		this.input.gamepad.on('up', function (pad, button, value) {
+		this.input.gamepad.on('up', function (button) {
 			if (button.index === 0) {
 				this.scene.start('StartScene');
 				this.scene.stop(this.previousScene);

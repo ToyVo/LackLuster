@@ -1,4 +1,4 @@
-/* global Player */
+/* global Player setupAnimations */
 class GameScene extends Phaser.Scene {
 	// Pre-load function: queues all needed assets for downloading
 	// (they are actually downloaded asynchronously, prior to 'create')
