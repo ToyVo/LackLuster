@@ -21,6 +21,7 @@ class Level1 extends Phaser.Scene {
 		topWalls.setCollisionByProperty({ collides: true });
 		enemyColl.setCollisionByProperty({ collides: true });
 		botWalls.setTileLocationCallback(90, 150, 100, 100, triggerHubTransition, this);
+		botWalls.setTileLocationCallback(20, 100, 10, 10, letsRoll, this);
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
 		// Camera
@@ -37,10 +38,34 @@ class Level1 extends Phaser.Scene {
 			this.physics.add.existing(enemySpawn[i]);
 		}
 
+		this.trapGroup = this.physics.add.group({ key: 'spikeT' });
+		let traps = map.createFromObjects('Objects', 'Trap', { key: 'spikeT' });
+		for (var j = 0; j < traps.length; j++) {
+			this.trapGroup.add(traps[j]);
+			this.physics.add.existing(traps[j]);
+		}
+		this.boulderGroup = this.physics.add.group({ key: 'boul' });
+		let boulder = map.createFromObjects('Objects', 'Boulder', { key: 'boul' });
+		for (var k = 0; k < boulder.length; k++) {
+			this.boulderGroup.add(boulder[k]);
+			this.physics.add.existing(boulder[k]);
+		}
+
 		// this.anims.play('slimeAnim', enemySpawn);
 
 		function triggerHubTransition () {
 			this.scene.start('GameScene');
+		}
+
+		function letsRoll () {
+			Phaser.Actions.Call(this.boulderGroup.getChildren(), function (child) {
+				// this.anims.play('boulder_roll');
+				child.body.setImmovable(true); // Spikes
+				child.body.setVelocityX(100);
+				if (child.body.checkCollision.right) {
+					// child.body.destroy();
+				}
+			}); // so we get no weird overriding -100 velocityX in our update
 		}
 
 		function slimeMove () {
@@ -60,6 +85,14 @@ class Level1 extends Phaser.Scene {
 					child.body.velocity.x = -300; // turn left
 				}
 			});
+		}
+
+		function triggerSpikes () {
+			Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {
+				child.anims.play('spikeTrapOn'); // WE split these to add a tiny delay in spike down
+				child.anims.play('spikeTrapOff');
+			});
+			this.player.takeDamage();
 		}
 		// Player
 		this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
@@ -87,14 +120,21 @@ class Level1 extends Phaser.Scene {
 
 		this.physics.add.collider(this.player, botWalls);
 		this.physics.add.collider(this.player, this.slimeGroup.getChildren(), this.player.takeDamage, null, this.player);
+		this.physics.add.overlap(this.player, this.trapGroup.getChildren(), triggerSpikes, null, this); // Want overlap
+		this.physics.add.collider(this.player, this.boulderGroup.getChildren(), this.player.takeDamage, null, this.player);
+		this.physics.add.collider(this.boulderGroup.getChildren(), botWalls);
+
 		this.physics.add.collider(botWalls, this.slimeGroup.getChildren(), slimeMove, null, this);
 		this.physics.add.collider(enemyColl, this.slimeGroup.getChildren()); // Contains the slimes
 		this.physics.add.collider(topWalls, this.slimeGroup.getChildren(), slimeMove, null, this); // Contains the slimes
 		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) {
 			child.body.setVelocityX(-100); // ACTUALLY WORKS YES, Appears to be a one time method call
 			child.setScale(2);
-			// child.setDepth(-1);
 		}); // so we get no weird overriding -100 velocityX in our update
+		Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {
+			child.body.setImmovable(true); // Spikes
+			child.setScale(3);
+		});
 	}
 
 	update (time, delta) {

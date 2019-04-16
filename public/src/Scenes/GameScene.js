@@ -48,7 +48,8 @@ class GameScene extends Phaser.Scene {
 
 		// Collisions
 		this.physics.add.collider(this.player, walls);
-		this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.player.takeDamage, null, this.player);
+		this.physics.add.collider(this.pillarGroup.getChildren(), walls);
+		// this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.player.takeDamage, null, this.player);
 		// Pause Game
 		this.input.gamepad.on('up', function (pad, button, value) {
 			if (button.index === 1) {

@@ -18,6 +18,8 @@ class StartScene extends Phaser.Scene {
 		this.load.image('LL_pillar_01_6x', 'assets/sprites/LL_pillar_01_6x.png');
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.image('sky', 'assets/skies/space3.png');
+		this.load.image('Tile', 'assets/sprites/Trap.png');
+		this.load.image('boul', 'assets/particles/red.png');
 		this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
 
 		/* Player AKA THICC SNACC */
@@ -33,6 +35,7 @@ class StartScene extends Phaser.Scene {
 		/* Spritesheets Below */
 		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('spikeT', 'assets/spritesheets/Spike.png', { frameWidth: 32, frameHeight: 32 });
 
 		/* Audio */
 		this.load.audio('dash', 'assets/audio/dash.wav');
