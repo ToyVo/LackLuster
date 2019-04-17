@@ -16,6 +16,8 @@ class Player extends Phaser.GameObjects.Sprite {
 		super(scene, x, y, texture);
 		scene.physics.world.enable(this);
 		scene.add.existing(this);
+		this.setOrigin(0.5, 0.5);
+		this.setScale(5); // Lil smaller so we can fit him everywhere
 		this.body.setCollideWorldBounds(true);
 		this.body.onWorldBounds = true;
 
@@ -35,11 +37,10 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.health = 3;
 
 		this.rollCooldown = 50;
-		this.setScale(5.2); // Lil smaller so we can fit him everywhere
 
-		this.healthOne = this.scene.add.sprite(x + 50, y + 20, 'slime_black_walking');
-		this.healthTwo = this.scene.add.sprite(x + 20, y + 20, 'slime_black_walking');
-		this.healthThree = this.scene.add.sprite(x + 20, y + 20, 'slime_black_walking');
+		this.healthOne = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
+		this.healthTwo = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
+		this.healthThree = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
 
 		this.lastDirection = 'down';
 		this.lastTexture = 'player_front';
@@ -48,7 +49,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
 	update (time, delta) {
 		this.body.setAcceleration(0, 0);
-		this.body.setDrag(1000, 1000);
+		this.body.setDrag(3000, 3000);
 
 		// key inputs
 		let keys = {
@@ -65,17 +66,18 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		let input = null;
 		let gamepad = null;
+
 		if (this.scene.input.gamepad.total !== 0) {
 			gamepad = this.scene.input.gamepad.getPad(0);
 		}
 
 		if (gamepad != null) {
 			input = {
-				left: keys.left.isDown || keys.a.isDown || gamepad.leftStick.x === -1,
-				right: keys.right.isDown || keys.d.isDown || gamepad.leftStick.x === 1,
-				down: keys.down.isDown || keys.s.isDown || gamepad.leftStick.y === 1,
-				up: keys.up.isDown || keys.w.isDown || gamepad.leftStick.y === -1,
-				space: keys.space.isDown || gamepad.A
+				left: keys.left.isDown || keys.a.isDown || gamepad.leftStick.x === -1, // analog stick left
+				right: keys.right.isDown || keys.d.isDown || gamepad.leftStick.x === 1, // analog stick right
+				down: keys.down.isDown || keys.s.isDown || gamepad.leftStick.y === 1, // analog stick down
+				up: keys.up.isDown || keys.w.isDown || gamepad.leftStick.y === -1, // analog stick up
+				space: keys.space.isDown || gamepad.buttons[0].pressed // left button, right button is index 1
 			};
 		} else {
 			input = {
@@ -176,12 +178,16 @@ class Player extends Phaser.GameObjects.Sprite {
 			this.healthTwo.visible = false;
 			this.healthThree.visible = true;
 			break;
+		case 0:
+			this.healthOne.visible = false;
+			this.healthTwo.visible = false;
+			this.healthThree.visible = false;
+			break;
 		}
 	}
 
 	takeDamage () {
 		// the context of this function is on player, please don't switch it back to being the scene so that we have to do this.player on everything
-		console.log('player health:' + this.health);
 		this.body.setAcceleration(this.body.acceleration.x * -100, this.body.acceleration.y * -100);
 		this.tint = Math.random() * 0xffffff;
 		this.tint = Math.random() * 0xffffff;
@@ -199,8 +205,9 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		if (this.health <= 0) {
-			console.log('player dead');
-			this.scene.scene.start('GameOver');
+			this.scene.scene.run('GameOver');
+			this.scene.scene.bringToTop('GameOver');
+			this.scene.scene.pause('GameScene');
 		}
 	}
 }

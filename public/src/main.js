@@ -1,4 +1,4 @@
-/* global GameScene, GameOver, PauseScene, StartScene, Level1, Level2, Level3 */
+/* global GameScene, GameOver, PauseScene, StartScene, ControlsScene, CreditsScene, Level1, Level2, Level3 */
 
 // Configure any plugins
 let scenePlugins = [{
@@ -53,6 +53,8 @@ window.game = new Phaser.Game(config);
 window.game.scene.add('GameOver', GameOver, false);
 window.game.scene.add('PauseScene', PauseScene, false);
 window.game.scene.add('GameScene', GameScene, false);
+window.game.scene.add('ControlsScene', ControlsScene, false);
+window.game.scene.add('CreditsScene', CreditsScene, false);
 window.game.scene.add('Level1', Level1, false);
 window.game.scene.add('Level2', Level2, false);
 window.game.scene.add('Level3', Level3, false);

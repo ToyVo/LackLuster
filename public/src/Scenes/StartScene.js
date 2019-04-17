@@ -5,7 +5,7 @@ class StartScene extends Phaser.Scene {
 	init () {
 		// Show message that the assets are loading
 		this.loadingText = this.add.text(centerX(this), centerY(this),
-			'Loading ...', { font: '16px Arial', fill: '#dddddd', align: 'center' });
+			'Loading ...', { fontFamily: 'font1', fontSize: '16px', fill: '#dddddd', align: 'center' });
 		centerGameObjects([this.loadingText]);
 	}
 
@@ -21,6 +21,7 @@ class StartScene extends Phaser.Scene {
 		this.load.image('Tile', 'assets/sprites/Trap.png');
 		this.load.image('boul', 'assets/particles/red.png');
 		this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
+		this.load.image('health_orb', 'assets/sprites/health_orb.png');
 
 		/* Player AKA THICC SNACC */
 		this.load.image('player_front', 'assets/player/player_front.png');
@@ -49,33 +50,81 @@ class StartScene extends Phaser.Scene {
 
 		let gameHeight = this.sys.game.config.height;
 		let gameWidth = this.sys.game.config.width;
+		let background = this.add.graphics();
+		background.fillStyle(0x000000, 0.4);
+		background.fillRect(0, 0, gameWidth, gameHeight);
+
+		// Title
 		let title = this.add.text(gameWidth / 2, gameHeight / 4, 'Lack Luster', {
-			font: '40px Arial',
+			fontFamily: 'font1',
+			fontSize: '80px',
 			fill: '#FFFFFF'
-		});
-		title.setOrigin(0.5, 0.5);
-		title.setDepth(1);
+		}).setOrigin(0.5, 0.5).setDepth(1);
 
-		let titleBg = this.add.graphics();
-		titleBg.fillStyle(0x000000, 0.7);
-		titleBg.fillRect(gameWidth / 2 - title.width / 2 - 10, gameHeight / 4 - title.height / 2 - 10, title.width + 20, title.height + 20);
-
-		let start = this.add.text(gameWidth / 2, gameHeight / 2, 'Start', {
-			font: '40px Arial',
+		// Start Button
+		let start = this.add.text(gameWidth / 2, 3 * gameHeight / 4, 'START', {
+			fontFamily: 'font1',
+			fontSize: '30px',
 			fill: '#FFFFFF'
-		}).setInteractive();
-		start.setOrigin(0.5, 0.5).setDepth(1);
+		}).setInteractive().setOrigin(0.5, 0.5).setDepth(1);
 
-		let startBg = this.add.graphics();
-		startBg.fillStyle(0x000000, 0.7);
-		startBg.fillRect(gameWidth / 2 - start.width / 2 - 10, gameHeight / 2 - start.height / 2 - 10, start.width + 20, start.height + 20);
+		// Credits Button
+		let credits = this.add.text(gameWidth / 3, 3 * gameHeight / 4, 'CREDITS', {
+			fontFamily: 'font1',
+			fontSize: '30px',
+			fill: '#FFFFFF'
+		}).setInteractive().setOrigin(0.5, 0.5).setDepth(1);
 
+		// Controls Button
+		let controls = this.add.text(2 * gameWidth / 3, 3 * gameHeight / 4, 'CONTROLS', {
+			fontFamily: 'font1',
+			fontSize: '30px',
+			fill: '#FFFFFF'
+		}).setInteractive().setOrigin(0.5, 0.5).setDepth(1);
+
+		// Scene Switching
 		start.on('pointerup', function () {
-			this.scene.start('GameScene');
+			this.scene.resume('GameScene');
+			this.scene.stop('StartScene');
 		}, this);
 
 		this.input.gamepad.on('up', function () {
-			this.scene.start('GameScene');
+			this.scene.resume('GameScene');
+			this.scene.stop('StartScene');
+		}, this);
+
+		this.scene.run('GameScene');
+		this.scene.bringToTop('StartScene');
+		this.scene.pause('GameScene');
+
+		controls.on('pointerup', function () {
+			this.scene.run('ControlsScene');
+			this.scene.stop('StartScene');
+		}, this);
+
+		credits.on('pointerup', function () {
+			this.scene.run('CreditsScene');
+			this.scene.stop('StartScene');
+		}, this);
+
+		// Button highlighting
+		start.on('pointerover', function () {
+			start.tint = Math.random() * 0xffffff;
+		}, this);
+		start.on('pointerout', function () {
+			start.clearTint();
+		}, this);
+		credits.on('pointerover', function () {
+			credits.tint = Math.random() * 0xffffff;
+		}, this);
+		credits.on('pointerout', function () {
+			credits.clearTint();
+		}, this);
+		controls.on('pointerover', function () {
+			controls.tint = Math.random() * 0xffffff;
+		}, this);
+		controls.on('pointerout', function () {
+			controls.clearTint();
 		}, this);
 	}
 
