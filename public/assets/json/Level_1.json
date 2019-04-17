@@ -155,6 +155,54 @@
                  "width":0,
                  "x":5194,
                  "y":3420
+                }, 
+                {
+                 "height":0,
+                 "id":12,
+                 "name":"Trap",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2896,
+                 "y":3510
+                }, 
+                {
+                 "height":0,
+                 "id":13,
+                 "name":"Trap",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2882,
+                 "y":3310
+                }, 
+                {
+                 "height":0,
+                 "id":14,
+                 "name":"Boulder",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":496,
+                 "y":3510
+                }, 
+                {
+                 "height":0,
+                 "id":16,
+                 "name":"Boulder",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":486,
+                 "y":3606
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -163,7 +211,7 @@
          "y":0
         }],
  "nextlayerid":13,
- "nextobjectid":12,
+ "nextobjectid":17,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.3",

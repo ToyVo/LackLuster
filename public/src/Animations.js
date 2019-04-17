@@ -39,4 +39,17 @@ function setupAnimations (scene) {
 		frameRate: 12,
 		repeat: -1
 	});
+
+	scene.anims.create({
+		key: 'spikeTrapOn',
+		frames: scene.anims.generateFrameNumbers('spikeT', { start: 0, end: 4 }),
+		frameRate: 12,
+		repeat: 0
+	});
+	scene.anims.create({
+		key: 'spikeTrapOff',
+		frames: scene.anims.generateFrameNumbers('spikeT', { start: 4, end: 8 }),
+		frameRate: 12,
+		repeat: 0
+	});
 }
