@@ -7,6 +7,7 @@ class Level1 extends Phaser.Scene {
 	}
 
 	create () {
+		this.boulderCollide = false;
 		let map = this.make.tilemap({ key: 'Level1' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		// We dont add the transition tileset as we *want* this to not render
@@ -21,7 +22,7 @@ class Level1 extends Phaser.Scene {
 		topWalls.setCollisionByProperty({ collides: true });
 		enemyColl.setCollisionByProperty({ collides: true });
 		botWalls.setTileLocationCallback(90, 150, 100, 100, triggerHubTransition, this);
-		botWalls.setTileLocationCallback(20, 100, 10, 10, letsRoll, this);
+		botWalls.setTileLocationCallback(20, 100, 5, 5, letsRoll, this);
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
 		// Camera
@@ -61,11 +62,14 @@ class Level1 extends Phaser.Scene {
 			Phaser.Actions.Call(this.boulderGroup.getChildren(), function (child) {
 				// this.anims.play('boulder_roll');
 				child.body.setImmovable(true); // Spikes
-				child.body.setVelocityX(100);
-				if (child.body.checkCollision.right) {
-					// child.body.destroy();
+				child.body.velocity.x = 500;
+				if (child.body.touching.right || child.body.blocked.right ||
+					child.body.touching.left || child.body.blocked.left) {
+					// this.anims.play('boulder_death');
+					// this.on('animationcomplete', child.body.destroy(), this); //Only destroy IF animation is finished
+					child.destroy();
 				}
-			}); // so we get no weird overriding -100 velocityX in our update
+			}, this); // so we get no weird overriding -100 velocityX in our update
 		}
 
 		function slimeMove () {
@@ -123,12 +127,13 @@ class Level1 extends Phaser.Scene {
 		this.physics.add.overlap(this.player, this.trapGroup.getChildren(), triggerSpikes, null, this); // Want overlap
 		this.physics.add.collider(this.player, this.boulderGroup.getChildren(), this.player.takeDamage, null, this.player);
 		this.physics.add.collider(this.boulderGroup.getChildren(), botWalls);
+		// this.physics.add.collider(this.boulderGroup.getChildren(), topWalls, this.boulderCollide = true);
 
 		this.physics.add.collider(botWalls, this.slimeGroup.getChildren(), slimeMove, null, this);
 		this.physics.add.collider(enemyColl, this.slimeGroup.getChildren()); // Contains the slimes
 		this.physics.add.collider(topWalls, this.slimeGroup.getChildren(), slimeMove, null, this); // Contains the slimes
 		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) {
-			child.body.setVelocityX(-100); // ACTUALLY WORKS YES, Appears to be a one time method call
+			child.body.setVelocityX(-300); // ACTUALLY WORKS YES, Appears to be a one time method call
 			child.setScale(2);
 		}); // so we get no weird overriding -100 velocityX in our update
 		Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {

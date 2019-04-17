@@ -37,7 +37,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.rollCooldown = 50;
 		this.setScale(5.2); // Lil smaller so we can fit him everywhere
 
-		this.healthOne = this.scene.add.sprite(x + 20, y + 20, 'slime_black_walking');
+		this.healthOne = this.scene.add.sprite(x + 50, y + 20, 'slime_black_walking');
 		this.healthTwo = this.scene.add.sprite(x + 20, y + 20, 'slime_black_walking');
 		this.healthThree = this.scene.add.sprite(x + 20, y + 20, 'slime_black_walking');
 
@@ -154,34 +154,27 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		this.damageCooldown -= delta;
-
+		this.healthOne.x = this.body.x + 35;
+		this.healthOne.y = this.body.y - 13;
+		this.healthTwo.x = this.body.x + 80;
+		this.healthTwo.y = this.body.y + 20;
+		this.healthThree.x = this.body.x - 10;
+		this.healthThree.y = this.body.y + 20;
 		switch (this.health) {
 		case 3:
-			this.healthOne.visible = true;
-			this.healthTwo.visible = true;
-			this.healthThree.visible = true;
-			this.healthOne.x = this.body.x + 50;
-			this.healthOne.y = this.body.y - 20;
-			this.healthTwo.x = this.body.x + 110;
-			this.healthTwo.y = this.body.y + 20;
-			this.healthThree.x = this.body.x - 30;
-			this.healthThree.y = this.body.y + 20;
+			this.healthOne.visible = true; // Left HP piece
+			this.healthTwo.visible = true; // Right HP
+			this.healthThree.visible = true; // Middle One
 			break;
 		case 2:
-			this.healthOne.visible = false;
-			this.healthTwo.visible = true;
+			this.healthOne.visible = true;
+			this.healthTwo.visible = false;
 			this.healthThree.visible = true;
-			this.healthTwo.x = this.body.x + 110;
-			this.healthTwo.y = this.body.y + 20;
-			this.healthThree.x = this.body.x - 30;
-			this.healthThree.y = this.body.y + 20;
 			break;
 		case 1:
 			this.healthOne.visible = false;
 			this.healthTwo.visible = false;
 			this.healthThree.visible = true;
-			this.healthThree.x = this.body.x - 30;
-			this.healthThree.y = this.body.y + 20;
 			break;
 		}
 	}

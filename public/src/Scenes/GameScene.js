@@ -31,7 +31,6 @@ class GameScene extends Phaser.Scene {
 		this.gameCamera.setBackgroundColor('#536b5d');
 		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true, true, true, true);
 		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true);
-		console.log('Width:' + map.widthInPixels + 'Height: ' + map.heightInPixels);
 
 		// Player
 		this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
