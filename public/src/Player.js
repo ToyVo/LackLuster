@@ -37,9 +37,9 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.rollCooldown = 50;
 		this.setScale(5.2); // Lil smaller so we can fit him everywhere
 
-		this.healthOne = this.scene.add.sprite(x + 20, y + 20, 'slime_black_walking');
-		this.healthTwo = this.scene.add.sprite(x + 20, y + 20, 'slime_black_walking');
-		this.healthThree = this.scene.add.sprite(x + 20, y + 20, 'slime_black_walking');
+		this.healthOne = this.scene.add.sprite(x, y, 'slime_black_walking');
+		this.healthTwo = this.scene.add.sprite(x, y, 'slime_black_walking');
+		this.healthThree = this.scene.add.sprite(x, y, 'slime_black_walking');
 
 		this.lastDirection = 'down';
 		this.lastTexture = 'player_front';
@@ -48,7 +48,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
 	update (time, delta) {
 		this.body.setAcceleration(0, 0);
-		this.body.setDrag(1000, 1000);
+		this.body.setDrag(3000, 3000);
 
 		// key inputs
 		let keys = {
@@ -183,12 +183,16 @@ class Player extends Phaser.GameObjects.Sprite {
 			this.healthThree.x = this.body.x - 30;
 			this.healthThree.y = this.body.y + 20;
 			break;
+		case 0:
+			this.healthOne.visible = false;
+			this.healthTwo.visible = false;
+			this.healthThree.visible = false;
+			break;
 		}
 	}
 
 	takeDamage () {
 		// the context of this function is on player, please don't switch it back to being the scene so that we have to do this.player on everything
-		console.log('player health:' + this.health);
 		this.body.setAcceleration(this.body.acceleration.x * -100, this.body.acceleration.y * -100);
 		this.tint = Math.random() * 0xffffff;
 		this.tint = Math.random() * 0xffffff;
@@ -206,8 +210,9 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		if (this.health <= 0) {
-			console.log('player dead');
-			this.scene.scene.start('GameOver');
+			this.scene.scene.run('GameOver');
+			this.scene.scene.bringToTop('GameOver');
+			this.scene.scene.pause('GameScene');
 		}
 	}
 }

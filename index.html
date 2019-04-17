@@ -23,10 +23,19 @@
           -ms-interpolation-mode: nearest-neighbor;    /* IE (non standard naming) */
           image-rendering: pixelated;                  /* Chrome 41 */
         }
-    </style>
+	</style>
+	<style media='screen' type='text/css'>
+		@font-face {
+		  font-family: font1;
+		  src: url('assets/Font/Pixeled.ttf');
+		  font-weight:400;
+		  font-weight:normal;
+		}
+  </style>
 </head>
 
 <body style="background-color: black;">
+	<div style="font-family:font1; position:absolute; left:-1000px; visibility:hidden;">.</div>
     <div id="content" style="display: block; width: 100%;"></div>
 
     <!-- LIBS GO HERE -->
@@ -42,6 +51,8 @@
     <script src="src/config.js"></script>
     <script src="src/utils.js"></script>
 	<script src="src/Scenes/GameScene.js"></script>
+	<script src="src/Scenes/ControlsScene.js"></script>
+	<script src="src/Scenes/CreditsScene.js"></script>
 	<script src="src/Scenes/Level1.js"></script>
 	<script src="src/Scenes/Level2.js"></script>
 	<script src="src/Scenes/Level3.js"></script>
