@@ -8,10 +8,12 @@ class GameScene extends Phaser.Scene {
 
 	// Run after all loading (queued in preload) is finished
 	create () {
+		// sounds
 		this.theme = this.game.sound.add('mainTheme', {
 			volume: 0.4, rate: 1, loop: true
 		});
 
+		// map
 		const map = this.make.tilemap({ key: 'map' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		let grass = map.createStaticLayer(0, tileSetImg, 0, 0);
@@ -31,6 +33,11 @@ class GameScene extends Phaser.Scene {
 		// Player
 		this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
 		this.cameras.main.startFollow(this.player, false, 0.5, 0.5);
+
+		// light orb
+		this.orb = this.physics.add.sprite(spawnPoint.x + 100, spawnPoint.y + 100, 'light_orb').setScale(3).setImmovable();
+		this.orb.setSize(32, 32).setOffset(0, 32);
+		this.physics.add.collider(this.player, this.orb, this.playOrb, null, this);
 
 		// Collisions
 		this.physics.add.collider(this.player, walls);
@@ -75,6 +82,10 @@ class GameScene extends Phaser.Scene {
 
 	triggerLevelThree () {
 		this.scene.start('Level3');
+	}
+
+	playOrb () {
+		this.orb.anims.play('light_orb_activated');
 	}
 }
 // Ensure this is a globally accessible class

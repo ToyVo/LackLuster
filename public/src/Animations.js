@@ -52,4 +52,11 @@ function setupAnimations (scene) {
 		frameRate: 12,
 		repeat: 0
 	});
+
+	scene.anims.create({
+		key: 'light_orb_activated',
+		frames: scene.anims.generateFrameNumbers('light_orb', { start: 1, end: 6 }),
+		frameRate: 4,
+		repeat: -1
+	});
 }
