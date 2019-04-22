@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "CreditsScene|creditsText" }] */
+
 class CreditsScene extends Phaser.Scene {
 	create () {
 		let gameHeight = this.sys.game.config.height;
