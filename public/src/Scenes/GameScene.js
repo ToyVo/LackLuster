@@ -1,9 +1,12 @@
-/* global Player setupAnimations */
+/* global Player setupAnimations game */
 class GameScene extends Phaser.Scene {
 	// Pre-load function: queues all needed assets for downloading
 	// (they are actually downloaded asynchronously, prior to 'create')
 	preload () {
 		setupAnimations(this);
+		this.pillarUp = game.sound.add('powerUp', {
+			volume: 0.6, rate: 2.75, loop: false
+		});
 	}
 
 	// Run after all loading (queued in preload) is finished
@@ -77,6 +80,7 @@ class GameScene extends Phaser.Scene {
 	}
 
 	playOrb () {
+		this.pillarUp.play();
 		this.orb.anims.play('light_orb_activated');
 	}
 }

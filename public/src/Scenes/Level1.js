@@ -14,6 +14,7 @@ class Level1 extends Phaser.Scene {
 
 	create () {
 		this.boulderCollide = false;
+		this.counter = 0;
 		let map = this.make.tilemap({ key: 'Level1' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		// We dont add the transition tileset as we *want* this to not render
@@ -101,10 +102,11 @@ class Level1 extends Phaser.Scene {
 
 		function triggerSpikes () {
 			Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {
-				if (!this.spikeTrap.isPlaying) { this.spikeTrap.play(); }
+				if (!this.spikeTrap.isPlaying && this.counter === 0) { this.spikeTrap.play(); this.counter++; }
 				child.anims.play('spikeTrapOn'); // WE split these to add a tiny delay in spike down
 				child.anims.play('spikeTrapOff');
 			}, this);
+
 			this.player.takeDamage();
 		}
 		// Player
@@ -157,5 +159,6 @@ class Level1 extends Phaser.Scene {
 	update (time, delta) {
 		this.input.update();
 		this.player.update(time, delta);
+		this.counter = 0;
 	}
 }

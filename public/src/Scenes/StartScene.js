@@ -47,7 +47,7 @@ class StartScene extends Phaser.Scene {
 		this.load.audio('spike', 'assets/audio/spike.wav');
 		this.load.audio('playerD', 'assets/audio/pDeath.wav');
 		this.load.audio('walk', 'assets/audio/footsteps.wav');
-		this.load.audio('playerD', 'assets/audio/pDeath.wav');
+		this.load.audio('powerUp', 'assets/audio/pillarCollide.wav');
 	}
 
 	create () {

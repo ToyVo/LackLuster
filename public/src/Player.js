@@ -27,10 +27,10 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.anims.play('player_walk_front_anim');
 
 		this.playerHurt = game.sound.add('playerH', {
-			volume: 0.3, rate: 1, loop: false
+			volume: 0.8, rate: 1, loop: false
 		});
 		this.playerDeath = game.sound.add('playerD', {
-			volume: 0.3, rate: 1, loop: false
+			volume: 0.8, rate: 1.3, loop: false
 		});
 		this.footsteps = game.sound.add('walk', {
 			volume: 5, rate: 0.25, loop: false
@@ -228,6 +228,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		if (this.health <= 0) {
+			this.playerDeath.play();
 			this.scene.scene.run('GameOver');
 			this.scene.scene.bringToTop('GameOver');
 			this.scene.scene.pause('GameScene');
