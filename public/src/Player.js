@@ -21,6 +21,8 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.setSize(2, 3);
 		this.body.setCollideWorldBounds(true);
 		this.body.onWorldBounds = true;
+		this.body.setSize(14, 14);
+		this.body.setOffset(0, 10);
 
 		this.anims.play('player_walk_front_anim');
 
@@ -45,9 +47,9 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.rollCooldown = 50;
 
-		this.healthOne = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
-		this.healthTwo = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
-		this.healthThree = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
+		this.healthCenter = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
+		this.healthRight = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
+		this.healthLeft = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
 
 		this.lastDirection = 'down';
 		this.lastTexture = 'player_front';
@@ -177,32 +179,32 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		this.damageCooldown -= delta;
-		this.healthOne.x = this.body.x + 35;
-		this.healthOne.y = this.body.y - 13;
-		this.healthTwo.x = this.body.x + 80;
-		this.healthTwo.y = this.body.y + 20;
-		this.healthThree.x = this.body.x - 10;
-		this.healthThree.y = this.body.y + 20;
+		this.healthCenter.x = this.body.x + 35;
+		this.healthCenter.y = this.body.y - 60;
+		this.healthRight.x = this.body.x + 80;
+		this.healthRight.y = this.body.y - 20;
+		this.healthLeft.x = this.body.x - 10;
+		this.healthLeft.y = this.body.y - 20;
 		switch (this.health) {
 		case 3:
-			this.healthOne.visible = true; // Left HP piece
-			this.healthTwo.visible = true; // Right HP
-			this.healthThree.visible = true; // Middle One
+			this.healthCenter.visible = true;
+			this.healthRight.visible = true;
+			this.healthLeft.visible = true;
 			break;
 		case 2:
-			this.healthOne.visible = true;
-			this.healthTwo.visible = false;
-			this.healthThree.visible = true;
+			this.healthCenter.visible = true;
+			this.healthRight.visible = false;
+			this.healthLeft.visible = true;
 			break;
 		case 1:
-			this.healthOne.visible = false;
-			this.healthTwo.visible = false;
-			this.healthThree.visible = true;
+			this.healthCenter.visible = false;
+			this.healthRight.visible = false;
+			this.healthLeft.visible = true;
 			break;
 		case 0:
-			this.healthOne.visible = false;
-			this.healthTwo.visible = false;
-			this.healthThree.visible = false;
+			this.healthCenter.visible = false;
+			this.healthRight.visible = false;
+			this.healthLeft.visible = false;
 			break;
 		}
 	}
@@ -229,6 +231,7 @@ class Player extends Phaser.GameObjects.Sprite {
 			this.scene.scene.run('GameOver');
 			this.scene.scene.bringToTop('GameOver');
 			this.scene.scene.pause('GameScene');
+			this.scene.scene.pause('Level1');
 		}
 	}
 }

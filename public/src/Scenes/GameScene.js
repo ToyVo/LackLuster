@@ -8,38 +8,40 @@ class GameScene extends Phaser.Scene {
 
 	// Run after all loading (queued in preload) is finished
 	create () {
-		let theme = this.game.sound.add('mainTheme', {
+		// sounds
+		this.theme = this.game.sound.add('mainTheme', {
 			volume: 0.4, rate: 1, loop: true
 		});
 
+		// map
 		const map = this.make.tilemap({ key: 'map' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		let grass = map.createStaticLayer(0, tileSetImg, 0, 0);
 		let tiles = map.createStaticLayer(1, tileSetImg, 0, 0);
 		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
-		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0);
-		wallTop.setDepth(10);
-		// wallTop.visible = false;Can make entire layers invisible...So yay!
-		walls.setTileLocationCallback(105, 30, 3, 3, triggerLevelOne, this);
-
-		walls.setTileLocationCallback(105, 175, 3, 3, triggerMusic, this);
+		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(10);
+		walls.setTileLocationCallback(105, 30, 3, 3, this.triggerLevelOne, this);
+		walls.setTileLocationCallback(105, 175, 3, 3, this.triggerMusic, this);
 		walls.setCollisionByProperty({ collides: true });
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
 		// Camera
-		this.gameCamera = this.cameras.main;
-		this.gameCamera.setBackgroundColor('#536b5d');
+		this.cameras.main.setBackgroundColor('#536b5d');
 		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true, true, true, true);
 		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true);
 
 		// Player
 		this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
-		this.gameCamera.startFollow(this.player, false, 0.5, 0.5);
+		this.cameras.main.startFollow(this.player, false, 0.5, 0.5);
+
+		// light orb
+		this.orb = this.physics.add.sprite(spawnPoint.x + 100, spawnPoint.y + 100, 'light_orb').setScale(3).setImmovable();
+		this.orb.setSize(32, 32).setOffset(0, 32);
+		this.physics.add.collider(this.player, this.orb, this.playOrb, null, this);
 
 		// Collisions
 		this.physics.add.collider(this.player, walls);
 
-		// this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.player.takeDamage, null, this.player);
 		// Pause Game
 		this.input.gamepad.on('up', function (pad, button, value) {
 			if (button.index === 1) {
@@ -58,23 +60,24 @@ class GameScene extends Phaser.Scene {
 		if (__DEV__) {
 			this.debugDraw.bringToTop();
 		}
-
-		function triggerMusic () {
-			// walls.destroy();
-			theme.play();
-		}
-
-		function triggerLevelOne () {
-			this.scene.start('Level1');
-		}
-		function triggerLevelTwo () {
-			this.scene.start('Level2');
-		}
 	} // End create func
 
 	update (time, delta) {
 		this.input.update();
 		this.player.update(time, delta);
+	}
+
+	triggerMusic () {
+		// walls.destroy();
+		this.theme.play();
+	}
+
+	triggerLevelOne () {
+		this.scene.start('Level1');
+	}
+
+	playOrb () {
+		this.orb.anims.play('light_orb_activated');
 	}
 }
 // Ensure this is a globally accessible class

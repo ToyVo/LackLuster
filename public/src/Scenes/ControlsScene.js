@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "ControlsScene|controlsText" }] */
+
 class ControlsScene extends Phaser.Scene {
 	create () {
 		let gameHeight = this.sys.game.config.height;
@@ -23,7 +25,7 @@ class ControlsScene extends Phaser.Scene {
 			backButton.clearTint();
 		}, this);
 
-		let controlstext = this.add.text(gameWidth / 2, gameHeight / 2,
+		let controlsText = this.add.text(gameWidth / 2, gameHeight / 2,
 			'W, A, S, D, or arrow keys to move\nSpace to "dash"', {
 				fontFamily: 'font1',
 				align: 'center',

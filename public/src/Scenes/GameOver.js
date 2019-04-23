@@ -1,5 +1,5 @@
-/* global centerX, centerY, centerGameObjects */
-/* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "GameOver" }] */
+/* global */
+/* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "GameOver|gameOverText" }] */
 
 class GameOver extends Phaser.Scene {
 	preload () {}
@@ -34,10 +34,12 @@ class GameOver extends Phaser.Scene {
 			// Ideally here we would have a checkpoint we could load or a way to detect
 			// And run different scenes based off progression
 			this.scene.start('GameScene');
+			this.scene.stop('Level1');
 		}, this);
 
 		this.input.gamepad.on('up', function () {
 			this.scene.start('GameScene');
+			this.scene.stop('Level1');
 		}, this);
 	}
 
