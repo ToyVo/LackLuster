@@ -18,6 +18,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		scene.add.existing(this);
 		this.setOrigin(0.5, 0.5);
 		this.setScale(5); // Lil smaller so we can fit him everywhere
+		this.setSize(2, 3);
 		this.body.setCollideWorldBounds(true);
 		this.body.onWorldBounds = true;
 
@@ -25,6 +26,12 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.playerHurt = game.sound.add('playerH', {
 			volume: 0.3, rate: 1, loop: false
+		});
+		this.playerDeath = game.sound.add('playerD', {
+			volume: 0.3, rate: 1, loop: false
+		});
+		this.footsteps = game.sound.add('walk', {
+			volume: 5, rate: 0.25, loop: false
 		});
 		this.dashDash = game.sound.add('dash', {
 			volume: 0.3, rate: 1, loop: false
@@ -48,6 +55,7 @@ class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	update (time, delta) {
+		// this.footsteps.pause();
 		this.body.setAcceleration(0, 0);
 		this.body.setDrag(3000, 3000);
 
@@ -90,17 +98,29 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		if (input.left) {
+			if (!this.footsteps.isPlaying) {
+				this.footsteps.play();
+			}
 			this.body.setAccelerationX(-this.acceleration);
 			this.lastDirection = 'left';
 		} else if (input.right) {
+			if (!this.footsteps.isPlaying) {
+				this.footsteps.play();
+			}
 			this.body.setAccelerationX(this.acceleration);
 			this.lastDirection = 'right';
 		}
 
 		if (input.up) {
+			if (!this.footsteps.isPlaying) {
+				this.footsteps.play();
+			}
 			this.body.setAccelerationY(-this.acceleration);
 			this.lastDirection = 'up';
 		} else if (input.down) {
+			if (!this.footsteps.isPlaying) {
+				this.footsteps.play();
+			}
 			this.body.setAccelerationY(this.acceleration);
 			this.lastDirection = 'down';
 		}
@@ -127,6 +147,7 @@ class Player extends Phaser.GameObjects.Sprite {
 			}
 		} else {
 			this.anims.stop();
+			this.footsteps.stop();
 			let texture = null;
 			switch (this.lastDirection) {
 			case 'up':

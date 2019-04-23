@@ -19,7 +19,7 @@ class StartScene extends Phaser.Scene {
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.image('sky', 'assets/skies/space3.png');
 		this.load.image('Tile', 'assets/sprites/Trap.png');
-		this.load.image('boul', 'assets/particles/red.png');
+		this.load.image('boul', 'assets/sprites/boulder.png');
 		this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
 		this.load.image('health_orb', 'assets/sprites/health_orb.png');
 
@@ -42,6 +42,11 @@ class StartScene extends Phaser.Scene {
 		this.load.audio('dash', 'assets/audio/dash.wav');
 		this.load.audio('playerH', 'assets/audio/slimeHurt.wav');
 		this.load.audio('mainTheme', 'assets/audio/mainTheme.wav');
+		this.load.audio('BoulderD', 'assets/audio/BoulderD.wav');
+		this.load.audio('spike', 'assets/audio/spike.wav');
+		this.load.audio('playerD', 'assets/audio/pDeath.wav');
+		this.load.audio('walk', 'assets/audio/footsteps.wav');
+		this.load.audio('playerD', 'assets/audio/pDeath.wav');
 	}
 
 	create () {

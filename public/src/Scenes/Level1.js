@@ -1,9 +1,15 @@
-/* global Player setupAnimations */
+/* global Player setupAnimations game */
 /* eslint no-unused-vars: ["warn", { "varsIgnorePattern": "Level1" }] */
 
 class Level1 extends Phaser.Scene {
 	preload () {
 		setupAnimations(this);
+		this.boulderDeath = game.sound.add('BoulderD', {
+			volume: 0.6, rate: 1, loop: false
+		});
+		this.spikeTrap = game.sound.add('spike', {
+			volume: 0.3, rate: 1, loop: false
+		});
 	}
 
 	create () {
@@ -22,7 +28,7 @@ class Level1 extends Phaser.Scene {
 		topWalls.setCollisionByProperty({ collides: true });
 		enemyColl.setCollisionByProperty({ collides: true });
 		botWalls.setTileLocationCallback(90, 150, 100, 100, triggerHubTransition, this);
-		botWalls.setTileLocationCallback(20, 100, 5, 5, letsRoll, this);
+		botWalls.setTileLocationCallback(20, 105, 5, 5, letsRoll, this);
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
 		// Camera
@@ -59,15 +65,17 @@ class Level1 extends Phaser.Scene {
 		}
 
 		function letsRoll () {
-			Phaser.Actions.Call(this.boulderGroup.getChildren(), function (child) {
+			this.boulderGroup.children.iterate(function (child) {
 				// this.anims.play('boulder_roll');
-				child.body.setImmovable(true); // Spikes
+				child.body.setImmovable(true);
 				child.body.velocity.x = 500;
 				if (child.body.touching.right || child.body.blocked.right ||
 					child.body.touching.left || child.body.blocked.left) {
+					if (!this.boulderDeath.isPlaying) { this.boulderDeath.play(); }
 					// this.anims.play('boulder_death');
-					// this.on('animationcomplete', child.body.destroy(), this); //Only destroy IF animation is finished
-					child.destroy();
+					// this.on('animationcomplete', child.body.destroy(), this); // Only destroy IF animation is finished
+					child.visible = false;
+					child.body.destroy();
 				}
 			}, this); // so we get no weird overriding -100 velocityX in our update
 		}
@@ -93,9 +101,10 @@ class Level1 extends Phaser.Scene {
 
 		function triggerSpikes () {
 			Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {
+				if (!this.spikeTrap.isPlaying) { this.spikeTrap.play(); }
 				child.anims.play('spikeTrapOn'); // WE split these to add a tiny delay in spike down
 				child.anims.play('spikeTrapOff');
-			});
+			}, this);
 			this.player.takeDamage();
 		}
 		// Player
@@ -139,6 +148,9 @@ class Level1 extends Phaser.Scene {
 		Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {
 			child.body.setImmovable(true); // Spikes
 			child.setScale(3);
+		});
+		Phaser.Actions.Call(this.boulderGroup.getChildren(), function (child) {
+			child.setScale(5);
 		});
 	}
 
