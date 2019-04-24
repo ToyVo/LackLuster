@@ -7,7 +7,7 @@
 function setupAnimations (scene) {
 	scene.anims.create({
 		key: 'slimeAnim',
-		frames: scene.anims.generateFrameNumbers('slime_black_walking', { start: 0, end: 4 }),
+		frames: scene.anims.generateFrameNumbers('slime_black_walking', { start: 0, end: 12 }),
 		frameRate: 12,
 		repeat: -1
 	});

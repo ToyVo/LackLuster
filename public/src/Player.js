@@ -212,19 +212,17 @@ class Player extends Phaser.GameObjects.Sprite {
 	takeDamage () {
 		// the context of this function is on player, please don't switch it back to being the scene so that we have to do this.player on everything
 		this.body.setAcceleration(this.body.acceleration.x * -100, this.body.acceleration.y * -100);
-		this.tint = Math.random() * 0xffffff;
-		this.tint = Math.random() * 0xffffff;
-		this.tint = Math.random() * 0xffffff;
-		this.tint = Math.random() * 0xffffff;
-		this.tint = Math.random() * 0xffffff;
-		if (this.playerHurt.isPlaying === true) {
+		if (!this.playerHurt.isPlaying === true) {
 			this.playerHurt.play();
 		}
-		// this.player.tint = 0xffffff;
+		this.tint = 0xffffff;// Will reset player color from damage
 		if (this.damageCooldown < 0) {
 			this.scene.gameCamera.shake(50, 0.005);
 			this.health--;// We need to do this.player.body as the context of this changes below
 			this.damageCooldown = 1000;
+			for (let i = 0; i < 10; i++) { // Loop the color for an extra visual effect
+				this.tint = Math.random() * 0xffffff;
+			}
 		}
 
 		if (this.health <= 0) {

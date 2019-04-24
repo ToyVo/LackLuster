@@ -5,7 +5,10 @@ class Level1 extends Phaser.Scene {
 	preload () {
 		setupAnimations(this);
 		this.boulderDeath = game.sound.add('BoulderD', {
-			volume: 0.6, rate: 1, loop: false
+			volume: 0.85, rate: 1, loop: false
+		});
+		this.boulderRoll = game.sound.add('BoulderRoll', {
+			volume: 0.85, rate: 2.5, loop: false
 		});
 		this.spikeTrap = game.sound.add('spike', {
 			volume: 0.3, rate: 1, loop: false
@@ -44,6 +47,7 @@ class Level1 extends Phaser.Scene {
 		for (var i = 0; i < enemySpawn.length; i++) {
 			this.slimeGroup.add(enemySpawn[i]);
 			this.physics.add.existing(enemySpawn[i]);
+			enemySpawn[i].anims.play('slimeAnim');
 		}
 
 		this.trapGroup = this.physics.add.group({ key: 'spikeT' });
@@ -68,6 +72,7 @@ class Level1 extends Phaser.Scene {
 		function letsRoll () {
 			this.boulderGroup.children.iterate(function (child) {
 				// this.anims.play('boulder_roll');
+				this.boulderRoll.play();
 				child.body.setImmovable(true);
 				child.body.velocity.x = 500;
 				if (child.body.touching.right || child.body.blocked.right ||

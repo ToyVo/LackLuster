@@ -35,7 +35,7 @@ class StartScene extends Phaser.Scene {
 
 		/* Spritesheets Below */
 		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32, spacing: 1 });
 		this.load.spritesheet('spikeT', 'assets/spritesheets/Spike.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('light_orb', 'assets/spritesheets/light_ORB.png', { frameWidth: 32, frameHeight: 64 });
 
@@ -44,6 +44,7 @@ class StartScene extends Phaser.Scene {
 		this.load.audio('playerH', 'assets/audio/slimeHurt.wav');
 		this.load.audio('mainTheme', 'assets/audio/mainTheme.wav');
 		this.load.audio('BoulderD', 'assets/audio/BoulderD.wav');
+		this.load.audio('BoulderRoll', 'assets/audio/boulderRoll.wav');
 		this.load.audio('spike', 'assets/audio/spike.wav');
 		this.load.audio('playerD', 'assets/audio/pDeath.wav');
 		this.load.audio('walk', 'assets/audio/footsteps.wav');
