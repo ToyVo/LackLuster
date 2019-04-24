@@ -54,6 +54,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.lastDirection = 'down';
 		this.lastTexture = 'player_front';
 		this.lastAnim = 'player_walk_front_anim';
+		this.lastDashAnim = 'playerDashDown';
 	}
 
 	update (time, delta) {
@@ -129,22 +130,28 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		if (input.up || input.down || input.left || input.right) {
 			let anim = null;
+			let dashAnim = null;
 			switch (this.lastDirection) {
 			case 'up':
 				anim = 'player_walk_back_anim';
+				dashAnim = 'playerDashUp';
 				break;
 			case 'down':
 				anim = 'player_walk_front_anim';
+				dashAnim = 'playerDashDown';
 				break;
 			case 'left':
 				anim = 'player_walk_left_anim';
+				dashAnim = 'playerDashLeft';
 				break;
 			case 'right':
 				anim = 'player_walk_right_anim';
+				dashAnim = 'playerDashRight';
 				break;
 			}
 			if (anim !== this.lastAnim || !this.anims.isPlaying) {
 				this.lastAnim = anim;
+				this.lastDashAnim = dashAnim;
 				this.anims.play(anim);
 			}
 		} else {
@@ -176,6 +183,7 @@ class Player extends Phaser.GameObjects.Sprite {
 			this.body.setDrag(1500, 1500);
 			this.rollCooldown = 500;
 			this.dashDash.play();
+			this.anims.play(this.lastDashAnim);
 		}
 
 		this.damageCooldown -= delta;

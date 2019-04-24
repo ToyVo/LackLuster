@@ -19,11 +19,12 @@ class GameScene extends Phaser.Scene {
 		// map
 		const map = this.make.tilemap({ key: 'map' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
+		let tileLightSetImg = map.addTilesetImage('LL_tiled_light_tiles', 'LL_tiled_light_tiles');
 		let grass = map.createStaticLayer(0, tileSetImg, 0, 0);
-		let tiles = map.createStaticLayer(1, tileSetImg, 0, 0);
+		let tiles = map.createStaticLayer(1, [tileSetImg, tileLightSetImg], 0, 0);
 		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
 		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(10);
-		walls.setTileLocationCallback(105, 30, 3, 3, this.triggerLevelOne, this);
+		// walls.setTileLocationCallback(105, 30, 3, 3, this.triggerLevelOne, this);
 		walls.setTileLocationCallback(105, 175, 3, 3, this.triggerMusic, this);
 		walls.setCollisionByProperty({ collides: true });
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');

@@ -11,6 +11,7 @@ class StartScene extends Phaser.Scene {
 
 	preload () {
 		this.load.image('LL_tiled_tiles', 'assets/sprites/LL_tiled_tiles.png');
+		this.load.image('LL_tiled_light_tiles', 'assets/sprites/LL_tiled_light_tiles.png');
 		this.load.tilemapTiledJSON('map', 'assets/json/LL_base_map.json');
 		this.load.tilemapTiledJSON('Level1', 'assets/json/Level_1.json');
 		// this.load.tilemapTiledJSON('Level2', 'assets/json/Level_2.json');
@@ -38,6 +39,10 @@ class StartScene extends Phaser.Scene {
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32, spacing: 1 });
 		this.load.spritesheet('spikeT', 'assets/spritesheets/Spike.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('light_orb', 'assets/spritesheets/light_ORB.png', { frameWidth: 32, frameHeight: 64 });
+		this.load.spritesheet('player_dash_anim_down', 'assets/spritesheets/Dash_Down.png', { frameWidth: 16, frameHeight: 32 });
+		this.load.spritesheet('player_dash_anim_up', 'assets/spritesheets/Dash_Up.png', { frameWidth: 16, frameHeight: 32 });
+		this.load.spritesheet('player_dash_anim_left', 'assets/spritesheets/Dash_Left.png', { frameWidth: 64, frameHeight: 24 });
+		this.load.spritesheet('player_dash_anim_right', 'assets/spritesheets/Dash_Right.png', { frameWidth: 64, frameHeight: 24 });
 
 		/* Audio */
 		this.load.audio('dash', 'assets/audio/dash.wav');

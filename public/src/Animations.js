@@ -41,6 +41,34 @@ function setupAnimations (scene) {
 	});
 
 	scene.anims.create({
+		key: 'playerDashRight',
+		frames: scene.anims.generateFrameNumbers('player_dash_anim_right', { start: 0, end: 8 }),
+		frameRate: 12,
+		repeat: 0
+	});
+
+	scene.anims.create({
+		key: 'playerDashLeft',
+		frames: scene.anims.generateFrameNumbers('player_dash_anim_left', { start: 0, end: 8 }),
+		frameRate: 12,
+		repeat: 0
+	});
+
+	scene.anims.create({
+		key: 'playerDashUp',
+		frames: scene.anims.generateFrameNumbers('player_dash_anim_up', { start: 0, end: 8 }),
+		frameRate: 12,
+		repeat: 0
+	});
+
+	scene.anims.create({
+		key: 'playerDashDown',
+		frames: scene.anims.generateFrameNumbers('player_dash_anim_down', { start: 0, end: 8 }),
+		frameRate: 12,
+		repeat: 0
+	});
+
+	scene.anims.create({
 		key: 'spikeTrapOn',
 		frames: scene.anims.generateFrameNumbers('spikeT', { start: 0, end: 4 }),
 		frameRate: 12,
