@@ -49,13 +49,13 @@ class GameScene extends Phaser.Scene {
 		// Pause Game
 		this.input.gamepad.on('up', function (pad, button, value) {
 			if (button.index === 1) {
-				this.scene.run('PauseScene', 'GameScene');
+				this.scene.run('PauseScene');
 				this.scene.bringToTop('PauseScene');
 				this.scene.pause('GameScene');
 			}
 		}, this);
 		this.input.keyboard.on('keyup-ESC', function (event) {
-			this.scene.run('PauseScene', 'GameScene');
+			this.scene.run('PauseScene');
 			this.scene.bringToTop('PauseScene');
 			this.scene.pause('GameScene');
 		}, this);
