@@ -1,20 +1,16 @@
-/* global Player setupAnimations game */
+/* global Player setupAnimations setupSound game */
 class GameScene extends Phaser.Scene {
 	// Pre-load function: queues all needed assets for downloading
 	// (they are actually downloaded asynchronously, prior to 'create')
 	preload () {
 		setupAnimations(this);
-		this.pillarUp = game.sound.add('powerUp', {
-			volume: 0.6, rate: 2.75, loop: false
-		});
+		setupSound(this);
 	}
 
 	// Run after all loading (queued in preload) is finished
 	create () {
-		// sounds
-		this.theme = this.game.sound.add('mainTheme', {
-			volume: 0.4, rate: 1, loop: true
-		});
+		// mTheme
+		// this.mainTheme.play();
 
 		// map
 		const map = this.make.tilemap({ key: 'map' });
@@ -24,9 +20,14 @@ class GameScene extends Phaser.Scene {
 		let tiles = map.createStaticLayer(1, [tileSetImg, tileLightSetImg], 0, 0);
 		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
 		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(10);
-		// walls.setTileLocationCallback(105, 30, 3, 3, this.triggerLevelOne, this);
-		walls.setTileLocationCallback(105, 175, 3, 3, this.triggerMusic, this);
+		let enemyColl = map.createStaticLayer(4, tileSetImg);
 		walls.setCollisionByProperty({ collides: true });
+		enemyColl.setCollisionByProperty({ collides: true });
+		grass.setCollisionByProperty({ collides: true });
+		walls.setTileLocationCallback(249, 186, 15, 5, this.triggerLevelOneMusic, this);
+		walls.setTileLocationCallback(170, 263, 5, 15, this.triggerLevelTwoMusic, this);
+		walls.setTileLocationCallback(325, 263, 5, 15, this.triggerLevelThreeMusic, this);
+		walls.setTileLocationCallback(180, 195, 145, 150, this.triggerMusic, this);// 190-340y, 175-320x covers the hub area
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
 		// Camera
@@ -38,14 +39,11 @@ class GameScene extends Phaser.Scene {
 		this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
 		this.cameras.main.startFollow(this.player, false, 0.5, 0.5);
 
-		// light orb
-		this.orb = this.physics.add.sprite(spawnPoint.x + 100, spawnPoint.y + 100, 'light_orb').setScale(3).setImmovable();
-		this.orb.setSize(32, 32).setOffset(0, 32);
-		this.physics.add.collider(this.player, this.orb, this.playOrb, null, this);
-
-		// Collisions
-		this.physics.add.collider(this.player, walls);
-
+		this.sparkles = this.physics.add.sprite(spawnPoint.x + 10, spawnPoint.y + 10, 'sparkle').setScale(50, 45).setImmovable();
+		this.sparkles.alpha = 0.3;
+		this.sparkles.anims.play('sparkles');
+		
+		
 		// Pause Game
 		this.input.gamepad.on('up', function (pad, button, value) {
 			if (button.index === 1) {
@@ -64,25 +62,156 @@ class GameScene extends Phaser.Scene {
 		if (__DEV__) {
 			this.debugDraw.bringToTop();
 		}
+
+		// Enemy
+		this.slimeGroup = this.physics.add.group({ key: 'slime_black_walking' });
+		let enemySpawn = map.createFromObjects('Objects', 'EnemySpawn', { key: 'slime_black_walking' });
+		for (var i = 0; i < enemySpawn.length; i++) {
+			this.slimeGroup.add(enemySpawn[i]);
+			this.physics.add.existing(enemySpawn[i]);
+			enemySpawn[i].anims.play('slimeAnim');
+		}
+
+		// light orbs
+		this.pillarGroup = this.physics.add.group({ key: 'light_orb' });
+		let pSpawn = map.createFromObjects('Objects', 'PillarSpawn', { key: 'light_orb' });
+		for (var l = 0; l < pSpawn.length; l++) {
+			this.pillarGroup.add(pSpawn[l]);
+			this.physics.add.existing(pSpawn[l]);
+			pSpawn[l].setScale(3);
+			pSpawn[l].body.setImmovable();
+			pSpawn[l].setSize(32, 32);
+			pSpawn[l].body.setOffset(0, 32);
+		}
+
+		this.trapGroup = this.physics.add.group({ key: 'spikeT' });
+		let traps = map.createFromObjects('Objects', 'Spike', { key: 'spikeT' });
+		for (var j = 0; j < traps.length; j++) {
+			this.trapGroup.add(traps[j]);
+			this.physics.add.existing(traps[j]);
+		}
+		this.boulderGroup = this.physics.add.group({ key: 'boul' });
+		let boulder = map.createFromObjects('Objects', 'Boulder', { key: 'boul' });
+		for (var k = 0; k < boulder.length; k++) {
+			this.boulderGroup.add(boulder[k]);
+			this.physics.add.existing(boulder[k]);
+		}
+
+		// Player Collisions
+		this.physics.add.collider(this.player, walls);
+		this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.playOrb, null, this);
+		this.physics.add.collider(this.player, this.slimeGroup.getChildren(), this.player.takeDamage, null, this.player);
+		this.physics.add.overlap(this.player, this.trapGroup.getChildren(), triggerSpikes, null, this); // Want overlap
+		this.physics.add.collider(this.player, this.boulderGroup.getChildren(), this.player.takeDamage, null, this.player);
+
+		// Other Collisions
+		this.physics.add.collider(this.boulderGroup.getChildren(), walls);
+		this.physics.add.collider(walls, this.slimeGroup.getChildren(), slimeMove, null, this);
+		this.physics.add.collider(enemyColl, this.slimeGroup.getChildren()); // Contains the slimes
+		this.physics.add.collider(wallTop, this.slimeGroup.getChildren(), slimeMove, null, this); // Contains the slimes
+		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) {
+			child.body.setVelocityX(-300); // ACTUALLY WORKS YES, Appears to be a one time method call
+			child.setScale(2);
+		}); // so we get no weird overriding -100 velocityX in our update
+		Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {
+			child.body.setImmovable(true);
+			child.setScale(3);
+			child.setDepth(-1);// Spikes
+		});
+		Phaser.Actions.Call(this.boulderGroup.getChildren(), function (child) {
+			child.setScale(2.75);
+		});
+		function letsRoll () {
+			this.boulderGroup.children.iterate(function (child) {
+				// this.anims.play('boulder_roll');
+				this.boulderRoll.play();
+				child.body.setImmovable(true);
+				child.body.velocity.x = 500;
+				if (child.body.touching.right || child.body.blocked.right ||
+					child.body.touching.left || child.body.blocked.left) {
+					if (!this.boulderDeath.isPlaying) { this.boulderDeath.play(); }
+					// this.anims.play('boulder_death');
+					// this.on('animationcomplete', child.body.destroy(), this); // Only destroy IF animation is finished
+					child.visible = false;
+					child.body.destroy();
+				}
+			}, this); // so we get no weird overriding -100 velocityX in our update
+		}
+
+		function slimeMove () {
+			this.slimeGroup.children.iterate(function (child) {
+				child.body.setImmovable(true);
+				if (child.body.touching.right || child.body.blocked.right) {
+					child.body.velocity.y = 300;
+					child.body.velocity.x = 0; // turn down
+				} else if (child.body.touching.left || child.body.blocked.left) {
+					child.body.velocity.y = -300; // turn up
+					child.body.velocity.x = 0;
+				} else if (child.body.touching.up || child.body.blocked.up) {
+					child.body.velocity.y = 0;
+					child.body.velocity.x = 300; // turn right
+				} else if (child.body.touching.down || child.body.blocked.down) {
+					child.body.velocity.y = 0;
+					child.body.velocity.x = -300; // turn left
+				}
+			});
+		}
+
+		function triggerSpikes () {
+			Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {
+				if (!this.spikeTrap.isPlaying && this.counter === 0) { this.spikeTrap.play(); this.counter++; }
+				child.anims.play('spikeTrapOn'); // WE split these to add a tiny delay in spike down
+				child.anims.play('spikeTrapOff');
+			}, this);
+			this.player.takeDamage();
+		}
 	} // End create func
 
 	update (time, delta) {
 		this.input.update();
 		this.player.update(time, delta);
+		// this.sparkles.x = this.player.x;
 	}
 
 	triggerMusic () {
-		// walls.destroy();
-		this.theme.play();
+		if (!this.mainTheme.isPlaying) {
+			this.mainTheme.play();
+			this.levelOne.stop();
+			this.levelTwo.stop();
+			this.levelThree.stop();
+		}
 	}
 
-	triggerLevelOne () {
-		this.scene.start('Level1');
+	triggerLevelOneMusic () {
+		if (!this.levelOne.isPlaying) {
+			this.mainTheme.stop();
+			this.levelOne.play();
+			this.levelTwo.stop();
+			this.levelThree.stop();
+		}
+	}
+
+	triggerLevelTwoMusic () {
+		if (!this.levelTwo.isPlaying) {
+			this.mainTheme.stop();
+			this.levelOne.stop();
+			this.levelTwo.play();
+			this.levelThree.stop();
+		}
+	}
+
+	triggerLevelThreeMusic () {
+		if (!this.levelThree.isPlaying) {
+			this.mainTheme.stop();
+			this.levelOne.stop();
+			this.levelTwo.stop();
+			this.levelThree.play();
+		}
 	}
 
 	playOrb () {
+		Phaser.Actions.PlayAnimation(this.pillarGroup.getChildren(), 'light_orb_activated');
 		this.pillarUp.play();
-		this.orb.anims.play('light_orb_activated');
 	}
 }
 // Ensure this is a globally accessible class

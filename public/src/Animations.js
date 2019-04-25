@@ -13,6 +13,13 @@ function setupAnimations (scene) {
 	});
 
 	scene.anims.create({
+		key: 'sparkles',
+		frames: scene.anims.generateFrameNumbers('sparkle', { start: 0, end: 6 }),
+		frameRate: 5,
+		repeat: -1
+	});
+
+	scene.anims.create({
 		key: 'player_walk_front_anim',
 		frames: scene.anims.generateFrameNumbers('player_walk_front_sheet', { start: 0, end: 12 }),
 		frameRate: 12,

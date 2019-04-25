@@ -225,7 +225,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 		this.tint = 0xffffff;// Will reset player color from damage
 		if (this.damageCooldown < 0) {
-			this.scene.gameCamera.shake(50, 0.005);
+			this.scene.cameras.main.shake(50, 0.005);
 			this.health--;// We need to do this.player.body as the context of this changes below
 			this.damageCooldown = 1000;
 			for (let i = 0; i < 10; i++) { // Loop the color for an extra visual effect
