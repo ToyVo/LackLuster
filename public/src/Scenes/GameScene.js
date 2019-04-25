@@ -1,4 +1,4 @@
-/* global Player setupAnimations setupSound game */
+/* global Player setupAnimations setupSound  */
 class GameScene extends Phaser.Scene {
 	// Pre-load function: queues all needed assets for downloading
 	// (they are actually downloaded asynchronously, prior to 'create')
@@ -9,9 +9,6 @@ class GameScene extends Phaser.Scene {
 
 	// Run after all loading (queued in preload) is finished
 	create () {
-		// mTheme
-		// this.mainTheme.play();
-
 		// map
 		const map = this.make.tilemap({ key: 'map' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
@@ -39,11 +36,9 @@ class GameScene extends Phaser.Scene {
 		this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
 		this.cameras.main.startFollow(this.player, false, 0.5, 0.5);
 
-		this.sparkles = this.physics.add.sprite(spawnPoint.x + 10, spawnPoint.y + 10, 'sparkle').setScale(50, 45).setImmovable();
+		/*    this.sparkles = this.physics.add.sprite(spawnPoint.x + 10, spawnPoint.y + 10, 'sparkle').setScale(50, 45).setImmovable();
 		this.sparkles.alpha = 0.3;
-		this.sparkles.anims.play('sparkles');
-		
-		
+		this.sparkles.anims.play('sparkles');  */
 		// Pause Game
 		this.input.gamepad.on('up', function (pad, button, value) {
 			if (button.index === 1) {
@@ -112,33 +107,30 @@ class GameScene extends Phaser.Scene {
 		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) {
 			child.body.setVelocityX(-300); // ACTUALLY WORKS YES, Appears to be a one time method call
 			child.setScale(2);
-		}); // so we get no weird overriding -100 velocityX in our update
+		});
 		Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {
 			child.body.setImmovable(true);
 			child.setScale(3);
-			child.setDepth(-1);// Spikes
+			child.setDepth(1);// Spikes
 		});
 		Phaser.Actions.Call(this.boulderGroup.getChildren(), function (child) {
 			child.setScale(2.75);
+			child.body.setImmovable(true);
 		});
-		function letsRoll () {
-			this.boulderGroup.children.iterate(function (child) {
-				// this.anims.play('boulder_roll');
-				this.boulderRoll.play();
-				child.body.setImmovable(true);
-				child.body.velocity.x = 500;
-				if (child.body.touching.right || child.body.blocked.right ||
-					child.body.touching.left || child.body.blocked.left) {
-					if (!this.boulderDeath.isPlaying) { this.boulderDeath.play(); }
-					// this.anims.play('boulder_death');
-					// this.on('animationcomplete', child.body.destroy(), this); // Only destroy IF animation is finished
-					child.visible = false;
-					child.body.destroy();
-				}
-			}, this); // so we get no weird overriding -100 velocityX in our update
+		function letsRoll (player, boulder) {
+			// boulder.anims.play('boulder_roll');
+			this.boulderRoll.play();
+			boulder.body.velocity.y = 500;
+			if (boulder.body.touching.right || boulder.body.blocked.right ||
+				boulder.body.touching.left || boulder.body.blocked.left) {
+				if (!this.boulderDeath.isPlaying) { this.boulderDeath.play(); }
+				// boulder.anims.play('boulder_death');
+				boulder.visible = false;
+				boulder.body.destroy();
+			}
 		}
 
-		function slimeMove () {
+		function slimeMove () { // Is fine on the group since they all behave the same
 			this.slimeGroup.children.iterate(function (child) {
 				child.body.setImmovable(true);
 				if (child.body.touching.right || child.body.blocked.right) {
@@ -157,12 +149,10 @@ class GameScene extends Phaser.Scene {
 			});
 		}
 
-		function triggerSpikes () {
-			Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {
-				if (!this.spikeTrap.isPlaying && this.counter === 0) { this.spikeTrap.play(); this.counter++; }
-				child.anims.play('spikeTrapOn'); // WE split these to add a tiny delay in spike down
-				child.anims.play('spikeTrapOff');
-			}, this);
+		function triggerSpikes (player, spike) {
+			spike.play('spikeTrapOn');
+			spike.play('spikeTrapOff');
+			this.spikeTrap.play();
 			this.player.takeDamage();
 		}
 	} // End create func
@@ -209,8 +199,8 @@ class GameScene extends Phaser.Scene {
 		}
 	}
 
-	playOrb () {
-		Phaser.Actions.PlayAnimation(this.pillarGroup.getChildren(), 'light_orb_activated');
+	playOrb (player, pillar) {
+		pillar.anims.play('light_orb_activated');
 		this.pillarUp.play();
 	}
 }
