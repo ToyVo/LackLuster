@@ -36,11 +36,18 @@ class StartScene extends Phaser.Scene {
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32, spacing: 1 });
 		this.load.spritesheet('spikeT', 'assets/spritesheets/Spike.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('light_orb', 'assets/spritesheets/light_ORB.png', { frameWidth: 32, frameHeight: 64 });
+<<<<<<< HEAD
 		this.load.spritesheet('player_dash_anim_down', 'assets/spritesheets/Dash_Down.png', { frameWidth: 16, frameHeight: 32 });
 		this.load.spritesheet('player_dash_anim_up', 'assets/spritesheets/Dash_Up.png', { frameWidth: 16, frameHeight: 32 });
 		this.load.spritesheet('player_dash_anim_left', 'assets/spritesheets/Dash_Left.png', { frameWidth: 64, frameHeight: 24 });
 		this.load.spritesheet('player_dash_anim_right', 'assets/spritesheets/Dash_Right.png', { frameWidth: 64, frameHeight: 24 });
 		this.load.spritesheet('sparkle', 'assets/spritesheets/sparkle.png', { frameWidth: 32, frameHeight: 32 });
+=======
+		this.load.spritesheet('player_dash_anim_down', 'assets/spritesheets/Dash_Down.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
+		this.load.spritesheet('player_dash_anim_up', 'assets/spritesheets/Dash_Up.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
+		this.load.spritesheet('player_dash_anim_left', 'assets/spritesheets/Dash_Left.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
+		this.load.spritesheet('player_dash_anim_right', 'assets/spritesheets/Dash_Right.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
+>>>>>>> 22971387212b475ddd0c59cccb14d7a05f6c80c9
 
 		/* Audio */
 		this.load.audio('dash', 'assets/audio/dash.wav');
@@ -74,12 +81,37 @@ class StartScene extends Phaser.Scene {
 			fill: '#FFFFFF'
 		}).setOrigin(0.5, 0.5).setDepth(1);
 
-		// Start Button
+		// Start Button(s)
 		let start = this.add.text(gameWidth / 2, 3 * gameHeight / 4, 'START', {
 			fontFamily: 'font1',
 			fontSize: '30px',
 			fill: '#FFFFFF'
 		}).setInteractive().setOrigin(0.5, 0.5).setDepth(1);
+
+		this.blinkTimer = 0;
+		this.anyButton = this.add.text(start.x, start.y + 120, 'PRESS ANY BUTTON TO START', {
+			fontFamily: 'font1',
+			fontSize: '12px',
+			fill: '#FFFFFF'
+		}).setOrigin(0.5, 0.5);
+
+		let leftX = start.x - 40;
+		let leftY = start.y + 70;
+		let leftButton = this.add.graphics({ fillStyle: { color: 0xFF0000 } }).fillCircle(leftX, leftY, 30);
+		let leftButtonText = this.add.text(leftX, leftY, 'LEFT', {
+			fontFamily: 'font1',
+			fontSize: '12px',
+			fill: '#FFFFFF'
+		}).setOrigin(0.5, 0.5);
+
+		let rightX = start.x + 40;
+		let rightY = start.y + 70;
+		let rightButton = this.add.graphics({ fillStyle: { color: 0x0000FF } }).fillCircle(rightX, rightY, 30);
+		let rightButtonText = this.add.text(rightX, rightY, 'RIGHT', {
+			fontFamily: 'font1',
+			fontSize: '12px',
+			fill: '#FFFFFF'
+		}).setOrigin(0.5, 0.5);
 
 		// Credits Button
 		let credits = this.add.text(gameWidth / 3, 3 * gameHeight / 4, 'CREDITS', {
@@ -141,7 +173,12 @@ class StartScene extends Phaser.Scene {
 		}, this);
 	}
 
-	update () {
+	update (time, delta) {
 		this.input.update();
+		this.blinkTimer += delta;
+		if (this.blinkTimer >= 1000) {
+			this.blinkTimer = 0;
+			this.anyButton.visible = !this.anyButton.visible;
+		}
 	}
 }
