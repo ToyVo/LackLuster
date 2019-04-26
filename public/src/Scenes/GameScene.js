@@ -27,7 +27,7 @@ class GameScene extends Phaser.Scene {
 		lightLayer3.visible = false;
 
 		this.lightsArray = [lightLayerStart, lightLayer1, lightLayer2, lightLayer3];
-		
+
 		walls.setCollisionByProperty({ collides: true });
 		enemyColl.setCollisionByProperty({ collides: true });
 		grass.setCollisionByProperty({ collides: true });
@@ -36,7 +36,7 @@ class GameScene extends Phaser.Scene {
 		walls.setTileLocationCallback(325, 263, 5, 15, this.triggerLevelThreeMusic, this);
 		walls.setTileLocationCallback(180, 195, 145, 150, this.triggerMusic, this);// 190-340y, 175-320x covers the hub area
 		walls.setTileLocationCallback(249, 375, 5, 5, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
-		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
+		this.spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
 		// Camera
 		this.cameras.main.setBackgroundColor('#536b5d');
@@ -44,10 +44,10 @@ class GameScene extends Phaser.Scene {
 		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true);
 
 		// Player
-		this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
+		this.player = new Player(this, this.spawnPoint.x, this.spawnPoint.y, 'player_front');
 		this.cameras.main.startFollow(this.player, false, 0.5, 0.5);
 
-		/*    this.sparkles = this.physics.add.sprite(spawnPoint.x + 10, spawnPoint.y + 10, 'sparkle').setScale(50, 45).setImmovable();
+		/*    this.sparkles = this.physics.add.sprite(this.spawnPoint.x + 10, this.spawnPoint.y + 10, 'sparkle').setScale(50, 45).setImmovable();
 		this.sparkles.alpha = 0.3;
 		this.sparkles.anims.play('sparkles');  */
 		// Pause Game
@@ -62,6 +62,13 @@ class GameScene extends Phaser.Scene {
 			this.scene.run('PauseScene');
 			this.scene.bringToTop('PauseScene');
 			this.scene.pause('GameScene');
+		}, this);
+
+		this.events.on('resume', function (sys, data) {
+			if (data === 1) {
+				this.player.setPosition(this.spawnPoint.x, this.spawnPoint.y);
+				this.player.health = 3;
+			}
 		}, this);
 
 		// Bring the debug draw layer to the top
@@ -94,12 +101,16 @@ class GameScene extends Phaser.Scene {
 			// this.slimeGroup[l].tint = Math.random() * 0xffffff;
 		}
 
+		// Traps
 		this.trapGroup = this.physics.add.group({ key: 'spikeT' });
 		let traps = map.createFromObjects('Objects', 'Spike', { key: 'spikeT' });
 		for (var j = 0; j < traps.length; j++) {
 			this.trapGroup.add(traps[j]);
 			this.physics.add.existing(traps[j]);
 		}
+		this.trapGroup.children.each(function (spikeTrap) {
+			spikeTrap.body.setSize(22, 22).setOffset(6, 6);
+		}, this);
 		this.boulderGroup = this.physics.add.group({ key: 'boul' });
 		let boulder = map.createFromObjects('Objects', 'Boulder', { key: 'boul' });
 		for (var k = 0; k < boulder.length; k++) {
@@ -116,7 +127,7 @@ class GameScene extends Phaser.Scene {
 		this.physics.add.collider(this.player, this.boulderGroup.getChildren(), this.player.takeDamage, null, this.player);
 
 		// Final Orb
-		this.finalOrb = this.physics.add.sprite(spawnPoint.x + 200, spawnPoint.y, 'final_orb_activation_sheet').setScale(3).setImmovable();
+		this.finalOrb = this.physics.add.sprite(this.spawnPoint.x + 200, this.spawnPoint.y, 'final_orb_activation_sheet').setScale(3).setImmovable();
 		this.finalOrb.setSize(96, 96).setOffset(0, 32);
 		this.physics.add.collider(this.player, this.finalOrb, null, null, this);
 		this.finalOrb.on('animationcomplete', function (animation, frame, gameObject) {
@@ -206,7 +217,6 @@ class GameScene extends Phaser.Scene {
 	triggerStart () {
 		this.lightsArray[0].visible = true;
 	}
-
 
 	triggerLevelOneMusic () {
 		if (!this.levelOne.isPlaying) {

@@ -33,11 +33,13 @@ class GameOver extends Phaser.Scene {
 		retryText.on('pointerup', function () {
 			// Ideally here we would have a checkpoint we could load or a way to detect
 			// And run different scenes based off progression
-			this.scene.start('GameScene');
+			this.scene.resume('GameScene', 1);
+			this.scene.stop('GameOver');
 		}, this);
 
 		this.input.gamepad.on('up', function () {
-			this.scene.start('GameScene');
+			this.scene.resume('GameScene', 'retry');
+			this.scene.stop('GameOver');
 		}, this);
 	}
 
