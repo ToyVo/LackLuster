@@ -21,9 +21,9 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.setSize(2, 3);
 		this.body.setCollideWorldBounds(true);
 		this.body.onWorldBounds = true;
-		this.body.setSize(14, 14);
+		this.body.setSize(14, 13);// Adjusting y value on the collider
 		this.body.setOffset(0, 10);
-
+		this.setDepth(10);
 		this.anims.play('player_walk_front_anim');
 
 		this.playerHurt = game.sound.add('playerH', {
@@ -58,7 +58,6 @@ class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	update (time, delta) {
-		// this.footsteps.pause();
 		this.body.setAcceleration(0, 0);
 		this.body.setDrag(3000, 3000);
 

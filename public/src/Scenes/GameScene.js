@@ -16,7 +16,7 @@ class GameScene extends Phaser.Scene {
 		let grass = map.createStaticLayer(0, tileSetImg, 0, 0);
 		let tiles = map.createStaticLayer(1, [tileSetImg, tileLightSetImg], 0, 0);
 		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
-		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(10);
+		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(12);
 		let enemyColl = map.createStaticLayer(4, tileSetImg);
 		walls.setCollisionByProperty({ collides: true });
 		enemyColl.setCollisionByProperty({ collides: true });
@@ -77,6 +77,9 @@ class GameScene extends Phaser.Scene {
 			pSpawn[l].body.setImmovable();
 			pSpawn[l].setSize(32, 32);
 			pSpawn[l].body.setOffset(0, 32);
+			console.log('Pillar: ' + pSpawn[l] + ' #' + l);
+			console.log('Slime #' + l);
+			// this.slimeGroup[l].tint = Math.random() * 0xffffff;
 		}
 
 		this.trapGroup = this.physics.add.group({ key: 'spikeT' });
@@ -100,7 +103,8 @@ class GameScene extends Phaser.Scene {
 		this.physics.add.collider(this.player, this.boulderGroup.getChildren(), this.player.takeDamage, null, this.player);
 
 		// Other Collisions
-		this.physics.add.collider(this.boulderGroup.getChildren(), walls);
+		this.physics.add.collider(this.boulderGroup.getChildren(), walls, letsRoll, null, this);
+		this.physics.add.collider(this.boulderGroup.getChildren(), wallTop, letsRoll, null, this);
 		this.physics.add.collider(walls, this.slimeGroup.getChildren(), slimeMove, null, this);
 		this.physics.add.collider(enemyColl, this.slimeGroup.getChildren()); // Contains the slimes
 		this.physics.add.collider(wallTop, this.slimeGroup.getChildren(), slimeMove, null, this); // Contains the slimes
@@ -114,20 +118,26 @@ class GameScene extends Phaser.Scene {
 			child.setDepth(1);// Spikes
 		});
 		Phaser.Actions.Call(this.boulderGroup.getChildren(), function (child) {
-			child.setScale(2.75);
-			child.body.setImmovable(true);
+			child.setScale(2.65); // this.boulderRoll.play();
+			child.body.setVelocityY(400);
 		});
 		function letsRoll (player, boulder) {
 			// boulder.anims.play('boulder_roll');
-			this.boulderRoll.play();
-			boulder.body.velocity.y = 500;
-			if (boulder.body.touching.right || boulder.body.blocked.right ||
+			this.boulderGroup.children.iterate(function (child) {
+				child.body.setImmovable(true);
+				if (child.body.touching.down || child.body.blocked.down) {
+					child.body.setVelocityY(-400);
+				} else if (child.body.touching.up || child.body.blocked.up) {
+					child.body.setVelocityY(400);
+				}
+			});
+			/* if (boulder.body.touching.right || boulder.body.blocked.right ||
 				boulder.body.touching.left || boulder.body.blocked.left) {
 				if (!this.boulderDeath.isPlaying) { this.boulderDeath.play(); }
 				// boulder.anims.play('boulder_death');
 				boulder.visible = false;
 				boulder.body.destroy();
-			}
+			} */
 		}
 
 		function slimeMove () { // Is fine on the group since they all behave the same
@@ -200,6 +210,13 @@ class GameScene extends Phaser.Scene {
 	}
 
 	playOrb (player, pillar) {
+		for (let o = 0; o < this.pSpawn.length; o++) {
+			if (this.pSPawn[o] === pillar) { // The pillar we touch is equiv to the pillar in the group..
+				// In here we want to get this pillar number and use it to activate a particular Tiled layer
+				// Probs setup an array with all the layers and access it using the same o we get
+				// layersArray[o].visible = true;
+			}
+		}
 		pillar.anims.play('light_orb_activated');
 		this.pillarUp.play();
 	}
