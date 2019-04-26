@@ -18,11 +18,10 @@ class Player extends Phaser.GameObjects.Sprite {
 		scene.add.existing(this);
 		this.setOrigin(0.5, 0.5);
 		this.setScale(5); // Lil smaller so we can fit him everywhere
-		this.setSize(2, 3);
 		this.body.setCollideWorldBounds(true);
 		this.body.onWorldBounds = true;
-		this.body.setSize(14, 13);// Adjusting y value on the collider
-		this.body.setOffset(0, 10);
+		this.body.setSize(14, 10);// Adjusting y value on the collider
+		this.body.setOffset(0, 14);
 		this.setDepth(10);
 		this.anims.play('player_walk_front_anim');
 
@@ -43,13 +42,13 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.body.setMaxSpeed(700);
 
 		this.damageCooldown = 0;
-		this.health = 3;
+		this.health = 300;
 
 		this.rollCooldown = 50;
 
-		this.healthCenter = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
-		this.healthRight = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
-		this.healthLeft = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
+		this.healthCenter = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4).setDepth(100);
+		this.healthRight = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4).setDepth(100);
+		this.healthLeft = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4).setDepth(100);
 
 		this.lastDirection = 'down';
 		this.lastTexture = 'player_front';
@@ -187,11 +186,11 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.damageCooldown -= delta;
 		this.healthCenter.x = this.body.x + 35;
-		this.healthCenter.y = this.body.y - 60;
+		this.healthCenter.y = this.body.y - 100;
 		this.healthRight.x = this.body.x + 80;
-		this.healthRight.y = this.body.y - 20;
+		this.healthRight.y = this.body.y - 60;
 		this.healthLeft.x = this.body.x - 10;
-		this.healthLeft.y = this.body.y - 20;
+		this.healthLeft.y = this.body.y - 60;
 		switch (this.health) {
 		case 3:
 			this.healthCenter.visible = true;
