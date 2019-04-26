@@ -8,8 +8,7 @@ class GameScene extends Phaser.Scene {
 	}
 
 	// Run after all loading (queued in preload) is finished
-	create () {
-		// map
+	create () { // map
 		const map = this.make.tilemap({ key: 'map' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		let tileLightSetImg = map.addTilesetImage('LL_tiled_light_tiles', 'LL_tiled_light_tiles');
@@ -18,6 +17,17 @@ class GameScene extends Phaser.Scene {
 		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
 		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(12);
 		let enemyColl = map.createStaticLayer(4, tileSetImg);
+		const lightLayerStart = map.createStaticLayer(5, [tileSetImg, tileLightSetImg]);
+		const lightLayer1 = map.createStaticLayer(6, [tileSetImg, tileLightSetImg]);
+		const lightLayer2 = map.createStaticLayer(7, [tileSetImg, tileLightSetImg]);
+		const lightLayer3 = map.createStaticLayer(8, [tileSetImg, tileLightSetImg]);
+		lightLayerStart.visible = false;
+		lightLayer1.visible = false;
+		lightLayer2.visible = false;
+		lightLayer3.visible = false;
+
+		this.lightsArray = [lightLayerStart, lightLayer1, lightLayer2, lightLayer3];
+		
 		walls.setCollisionByProperty({ collides: true });
 		enemyColl.setCollisionByProperty({ collides: true });
 		grass.setCollisionByProperty({ collides: true });
@@ -25,6 +35,7 @@ class GameScene extends Phaser.Scene {
 		walls.setTileLocationCallback(170, 263, 5, 15, this.triggerLevelTwoMusic, this);
 		walls.setTileLocationCallback(325, 263, 5, 15, this.triggerLevelThreeMusic, this);
 		walls.setTileLocationCallback(180, 195, 145, 150, this.triggerMusic, this);// 190-340y, 175-320x covers the hub area
+		walls.setTileLocationCallback(249, 375, 5, 5, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
 		// Camera
@@ -65,20 +76,21 @@ class GameScene extends Phaser.Scene {
 			this.slimeGroup.add(enemySpawn[i]);
 			this.physics.add.existing(enemySpawn[i]);
 			enemySpawn[i].anims.play('slimeAnim');
+			enemySpawn[i].setDepth(5);
 		}
 
 		// light orbs
 		this.pillarGroup = this.physics.add.group({ key: 'light_orb' });
-		let pSpawn = map.createFromObjects('Objects', 'PillarSpawn', { key: 'light_orb' });
-		for (var l = 0; l < pSpawn.length; l++) {
-			this.pillarGroup.add(pSpawn[l]);
-			this.physics.add.existing(pSpawn[l]);
-			pSpawn[l].setScale(3);
-			pSpawn[l].body.setImmovable();
-			pSpawn[l].setSize(32, 32);
-			pSpawn[l].body.setOffset(0, 32);
-			console.log('Pillar: ' + pSpawn[l] + ' #' + l);
-			console.log('Slime #' + l);
+		this.pSpawn = map.createFromObjects('Objects', 'PillarSpawn', { key: 'light_orb' });
+		for (var l = 0; l < this.pSpawn.length; l++) {
+			this.pillarGroup.add(this.pSpawn[l]);
+			this.physics.add.existing(this.pSpawn[l]);
+			this.pSpawn[l].setScale(3);
+			this.pSpawn[l].body.setImmovable();
+			this.pSpawn[l].setSize(32, 32);
+			this.pSpawn[l].body.setOffset(0, 32);
+			// console.log('Pillar: ' + pSpawn[l] + ' #' + l);
+			// console.log('Slime #' + l);
 			// this.slimeGroup[l].tint = Math.random() * 0xffffff;
 		}
 
@@ -93,6 +105,7 @@ class GameScene extends Phaser.Scene {
 		for (var k = 0; k < boulder.length; k++) {
 			this.boulderGroup.add(boulder[k]);
 			this.physics.add.existing(boulder[k]);
+			boulder[k].setDepth(11);
 		}
 
 		// Player Collisions
@@ -190,6 +203,11 @@ class GameScene extends Phaser.Scene {
 		}
 	}
 
+	triggerStart () {
+		this.lightsArray[0].visible = true;
+	}
+
+
 	triggerLevelOneMusic () {
 		if (!this.levelOne.isPlaying) {
 			this.mainTheme.stop();
@@ -223,10 +241,10 @@ class GameScene extends Phaser.Scene {
 
 	playOrb (player, pillar) {
 		for (let o = 0; o < this.pSpawn.length; o++) {
-			if (this.pSPawn[o] === pillar) { // The pillar we touch is equiv to the pillar in the group..
+			if (this.pSpawn[o] === pillar) { // The pillar we touch is equiv to the pillar in the group..
 				// In here we want to get this pillar number and use it to activate a particular Tiled layer
 				// Probs setup an array with all the layers and access it using the same o we get
-				// layersArray[o].visible = true;
+				this.lightsArray[o].visible = true;
 			}
 		}
 		pillar.anims.play('light_orb_activated');
