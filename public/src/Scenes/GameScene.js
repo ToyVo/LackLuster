@@ -14,19 +14,53 @@ class GameScene extends Phaser.Scene {
 		let tileLightSetImg = map.addTilesetImage('LL_tiled_light_tiles', 'LL_tiled_light_tiles');
 		let grass = map.createStaticLayer(0, tileSetImg, 0, 0);
 		let tiles = map.createStaticLayer(1, [tileSetImg, tileLightSetImg], 0, 0);
-		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
+		let walls = map.createStaticLayer(2, tileSetImg, 0, 0).setDepth(12);
 		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(12);
 		let enemyColl = map.createStaticLayer(4, tileSetImg);
+		// Light layers below
 		const lightLayerStart = map.createStaticLayer(5, [tileSetImg, tileLightSetImg]);
 		const lightLayer1 = map.createStaticLayer(6, [tileSetImg, tileLightSetImg]);
 		const lightLayer2 = map.createStaticLayer(7, [tileSetImg, tileLightSetImg]);
 		const lightLayer3 = map.createStaticLayer(8, [tileSetImg, tileLightSetImg]);
-		lightLayerStart.visible = false;
+		/* const lightLayer4 = map.createStaticLayer(9, [tileSetImg, tileLightSetImg]);
+		const lightLayer5 = map.createStaticLayer(10, [tileSetImg, tileLightSetImg]);
+		const lightLayer6 = map.createStaticLayer(11, [tileSetImg, tileLightSetImg]);
+		const lightLayer7 = map.createStaticLayer(12, [tileSetImg, tileLightSetImg]);
+		const lightLayer8 = map.createStaticLayer(13, [tileSetImg, tileLightSetImg]);
+		const lightLayer9 = map.createStaticLayer(14, [tileSetImg, tileLightSetImg]);
+		const lightLayer10 = map.createStaticLayer(15, [tileSetImg, tileLightSetImg]);
+		const lightLayer11 = map.createStaticLayer(16, [tileSetImg, tileLightSetImg]);
+		const lightLayer12 = map.createStaticLayer(17, [tileSetImg, tileLightSetImg]);
+		const lightLayer13 = map.createStaticLayer(18, [tileSetImg, tileLightSetImg]);
+		const lightLayer14 = map.createStaticLayer(19, [tileSetImg, tileLightSetImg]);
+		const lightLayer15 = map.createStaticLayer(20, [tileSetImg, tileLightSetImg]);
+		const lightLayer16 = map.createStaticLayer(21, [tileSetImg, tileLightSetImg]);
+		const lightLayer17 = map.createStaticLayer(22, [tileSetImg, tileLightSetImg]);
+		const lightLayer18 = map.createStaticLayer(23, [tileSetImg, tileLightSetImg]); */
+		lightLayerStart.visible = false; // Start
 		lightLayer1.visible = false;
 		lightLayer2.visible = false;
 		lightLayer3.visible = false;
-
+		/* lightLayer4.visible = false;
+		lightLayer5.visible = false;
+		lightLayer6.visible = false;
+		lightLayer7.visible = false;
+		lightLayer8.visible = false;
+		lightLayer9.visible = false;
+		lightLayer10.visible = false;
+		lightLayer11.visible = false;
+		lightLayer12.visible = false;
+		lightLayer13.visible = false;
+		lightLayer14.visible = false;
+		lightLayer15.visible = false;
+		lightLayer16.visible = false;
+		lightLayer17.visible = false;
+		lightLayer18.visible = false; */
 		this.lightsArray = [lightLayerStart, lightLayer1, lightLayer2, lightLayer3];
+		/* this.lightsArray = [lightLayerStart, lightLayer1, lightLayer2, lightLayer3,
+			lightLayer4, lightLayer5, lightLayer6, lightLayer7, lightLayer8, lightLayer9,
+			lightLayer10, lightLayer11, lightLayer12, lightLayer13, lightLayer14, lightLayer15,
+			lightLayer16, lightLayer17, lightLayer18]; */
 
 		walls.setCollisionByProperty({ collides: true });
 		enemyColl.setCollisionByProperty({ collides: true });
@@ -96,9 +130,6 @@ class GameScene extends Phaser.Scene {
 			this.pSpawn[l].body.setImmovable();
 			this.pSpawn[l].setSize(32, 32);
 			this.pSpawn[l].body.setOffset(0, 32);
-			// console.log('Pillar: ' + pSpawn[l] + ' #' + l);
-			// console.log('Slime #' + l);
-			// this.slimeGroup[l].tint = Math.random() * 0xffffff;
 		}
 
 		// Traps
@@ -254,7 +285,7 @@ class GameScene extends Phaser.Scene {
 			if (this.pSpawn[o] === pillar) { // The pillar we touch is equiv to the pillar in the group..
 				// In here we want to get this pillar number and use it to activate a particular Tiled layer
 				// Probs setup an array with all the layers and access it using the same o we get
-				this.lightsArray[o].visible = true;
+				this.lightsArray[o + 1].visible = true;
 			}
 		}
 		pillar.anims.play('light_orb_activated');

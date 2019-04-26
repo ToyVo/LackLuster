@@ -42,13 +42,13 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.body.setMaxSpeed(700);
 
 		this.damageCooldown = 0;
-		this.health = 3;
+		this.health = 300;
 
 		this.rollCooldown = 50;
 
-		this.healthCenter = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
-		this.healthRight = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
-		this.healthLeft = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4);
+		this.healthCenter = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4).setDepth(100);
+		this.healthRight = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4).setDepth(100);
+		this.healthLeft = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4).setDepth(100);
 
 		this.lastDirection = 'down';
 		this.lastTexture = 'player_front';
@@ -186,11 +186,11 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.damageCooldown -= delta;
 		this.healthCenter.x = this.body.x + 35;
-		this.healthCenter.y = this.body.y - 60;
+		this.healthCenter.y = this.body.y - 100;
 		this.healthRight.x = this.body.x + 80;
-		this.healthRight.y = this.body.y - 20;
+		this.healthRight.y = this.body.y - 60;
 		this.healthLeft.x = this.body.x - 10;
-		this.healthLeft.y = this.body.y - 20;
+		this.healthLeft.y = this.body.y - 60;
 		switch (this.health) {
 		case 3:
 			this.healthCenter.visible = true;
