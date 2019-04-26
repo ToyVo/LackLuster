@@ -102,6 +102,14 @@ class GameScene extends Phaser.Scene {
 		this.physics.add.overlap(this.player, this.trapGroup.getChildren(), triggerSpikes, null, this); // Want overlap
 		this.physics.add.collider(this.player, this.boulderGroup.getChildren(), this.player.takeDamage, null, this.player);
 
+		// Final Orb
+		this.finalOrb = this.physics.add.sprite(spawnPoint.x + 200, spawnPoint.y, 'final_orb_activation_sheet').setScale(3).setImmovable();
+		this.finalOrb.setSize(96, 96).setOffset(0, 32);
+		this.physics.add.collider(this.player, this.finalOrb, null, null, this);
+		this.finalOrb.on('animationcomplete', function (animation, frame, gameObject) {
+			this.finalOrb.anims.play('final_orb_idle_anim');
+		}, this);
+
 		// Other Collisions
 		this.physics.add.collider(this.boulderGroup.getChildren(), walls, letsRoll, null, this);
 		this.physics.add.collider(this.boulderGroup.getChildren(), wallTop, letsRoll, null, this);
@@ -207,6 +215,10 @@ class GameScene extends Phaser.Scene {
 			this.levelTwo.stop();
 			this.levelThree.play();
 		}
+	}
+
+	playFinalOrb () {
+		this.finalOrb.anims.play('final_orb_activation_anim');
 	}
 
 	playOrb (player, pillar) {

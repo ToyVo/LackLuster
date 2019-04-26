@@ -18,11 +18,10 @@ class Player extends Phaser.GameObjects.Sprite {
 		scene.add.existing(this);
 		this.setOrigin(0.5, 0.5);
 		this.setScale(5); // Lil smaller so we can fit him everywhere
-		this.setSize(2, 3);
 		this.body.setCollideWorldBounds(true);
 		this.body.onWorldBounds = true;
-		this.body.setSize(14, 13);// Adjusting y value on the collider
-		this.body.setOffset(0, 10);
+		this.body.setSize(14, 10);// Adjusting y value on the collider
+		this.body.setOffset(0, 14);
 		this.setDepth(10);
 		this.anims.play('player_walk_front_anim');
 
