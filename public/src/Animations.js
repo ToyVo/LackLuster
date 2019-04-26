@@ -94,4 +94,18 @@ function setupAnimations (scene) {
 		frameRate: 4,
 		repeat: -1
 	});
+
+	scene.anims.create({
+		key: 'final_orb_activation_anim',
+		frames: scene.anims.generateFrameNumbers('final_orb_activation_sheet', { start: 1, end: 14 }),
+		frameRate: 6,
+		repeat: 0
+	});
+
+	scene.anims.create({
+		key: 'final_orb_idle_anim',
+		frames: scene.anims.generateFrameNumbers('final_orb_idle_sheet', { start: 0, end: 9 }),
+		frameRate: 4,
+		repeat: -1
+	});
 }

@@ -41,6 +41,8 @@ class StartScene extends Phaser.Scene {
 		this.load.spritesheet('player_dash_anim_left', 'assets/spritesheets/Dash_Left.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
 		this.load.spritesheet('player_dash_anim_right', 'assets/spritesheets/Dash_Right.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
 		this.load.spritesheet('sparkle', 'assets/spritesheets/sparkle.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('final_orb_activation_sheet', 'assets/spritesheets/Orb_Activation.png', { frameWidth: 96, frameHeight: 128 });
+		this.load.spritesheet('final_orb_idle_sheet', 'assets/spritesheets/Orb_Idle.png', { frameWidth: 96, frameHeight: 128 });
 
 		/* Audio */
 		this.load.audio('dash', 'assets/audio/dash.wav');
