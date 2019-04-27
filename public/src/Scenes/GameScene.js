@@ -9,12 +9,13 @@ class GameScene extends Phaser.Scene {
 
 	// Run after all loading (queued in preload) is finished
 	create () { // map
+		this.finalTally = 17;
 		const map = this.make.tilemap({ key: 'map' });
 		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		let tileLightSetImg = map.addTilesetImage('LL_tiled_light_tiles', 'LL_tiled_light_tiles');
 		let grass = map.createStaticLayer(0, tileSetImg, 0, 0);
 		let tiles = map.createStaticLayer(1, [tileSetImg, tileLightSetImg], 0, 0);
-		let walls = map.createStaticLayer(2, tileSetImg, 0, 0).setDepth(12);
+		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
 		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(12);
 		let enemyColl = map.createStaticLayer(4, tileSetImg);
 		//Light layers below
@@ -71,7 +72,7 @@ class GameScene extends Phaser.Scene {
 		walls.setTileLocationCallback(180, 195, 145, 150, this.triggerMusic, this);// 190-340y, 175-320x covers the hub area
 		walls.setTileLocationCallback(249, 375, 5, 5, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
 		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
-
+		const fSpawnPoint = map.findObject('Objects', obj => obj.name === 'fSpawnPoint');
 		// Camera
 		this.cameras.main.setBackgroundColor('#536b5d');
 		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true, true, true, true);
@@ -123,6 +124,9 @@ class GameScene extends Phaser.Scene {
 			this.pSpawn[l].body.setImmovable();
 			this.pSpawn[l].setSize(32, 32);
 			this.pSpawn[l].body.setOffset(0, 32);
+			this.pSpawn[l].on('animationstart', function (animation, frame, gameObject) {
+				this.finalTally++;
+			}, this);
 		}
 
 		this.trapGroup = this.physics.add.group({ key: 'spikeT' });
@@ -147,7 +151,7 @@ class GameScene extends Phaser.Scene {
 		this.physics.add.collider(this.player, this.boulderGroup.getChildren(), this.player.takeDamage, null, this.player);
 
 		// Final Orb
-		this.finalOrb = this.physics.add.sprite(spawnPoint.x + 200, spawnPoint.y, 'final_orb_activation_sheet').setScale(3).setImmovable();
+		this.finalOrb = this.physics.add.sprite(fSpawnPoint.x, fSpawnPoint.y, 'final_orb_activation_sheet').setScale(3).setImmovable();
 		this.finalOrb.setSize(96, 96).setOffset(0, 32);
 		this.physics.add.collider(this.player, this.finalOrb, null, null, this);
 		this.finalOrb.on('animationcomplete', function (animation, frame, gameObject) {
@@ -222,7 +226,15 @@ class GameScene extends Phaser.Scene {
 	update (time, delta) {
 		this.input.update();
 		this.player.update(time, delta);
-		// this.sparkles.x = this.player.x;
+		if (this.finalTally >= 18) {
+			if (this.finalOrb.x - this.player.body.x < 350 && this.finalOrb.x - this.player.body.x > -350) {
+				if (this.finalOrb.y - this.player.body.y < 450 && this.finalOrb.y - this.player.body.y > -450) {
+					if (!this.finalOrb.anims.isPlaying) {
+						this.playFinalOrb();
+					}
+				}
+			}
+		}
 	}
 
 	triggerMusic () {
@@ -268,6 +280,19 @@ class GameScene extends Phaser.Scene {
 
 	playFinalOrb () {
 		this.finalOrb.anims.play('final_orb_activation_anim');
+		let title = this.add.text(7980, 8000, 'Thanks for playing!', {
+			fontFamily: 'font1',
+			fontSize: '80px',
+			fill: '#FFFFFF'
+		}).setOrigin(0.5, 0.5).setDepth(100);
+		this.cameras.main.fade(5000, 0, 0, 0, false);
+
+		this.cameras.main.on('camerafadeoutcomplete', function () {
+			this.end();
+		}, this);
+	}
+	end () {
+		this.scene.restart();
 	}
 
 	playOrb (player, pillar) {
@@ -275,10 +300,10 @@ class GameScene extends Phaser.Scene {
 			if (this.pSpawn[o] === pillar) { // The pillar we touch is equiv to the pillar in the group..
 				// In here we want to get this pillar number and use it to activate a particular Tiled layer
 				// Probs setup an array with all the layers and access it using the same o we get
-				this.lightsArray[o+1].visible = true;
+				this.lightsArray[o + 1].visible = true;
 			}
 		}
-		pillar.anims.play('light_orb_activated');
+		pillar.anims.play('light_orb_activated', true);
 		this.pillarUp.play();
 	}
 }
