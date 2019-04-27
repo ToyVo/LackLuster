@@ -96,6 +96,20 @@ function setupAnimations (scene) {
 	});
 
 	scene.anims.create({
+		key: 'boulUp',
+		frames: scene.anims.generateFrameNumbers('boulderUp', { start: 1, end: 8 }),
+		frameRate: 8,
+		repeat: -1
+	});
+
+	scene.anims.create({
+		key: 'boulDown',
+		frames: scene.anims.generateFrameNumbers('boulderDown', { start: 1, end: 8 }),
+		frameRate: 8,
+		repeat: -1
+	});
+
+	scene.anims.create({
 		key: 'final_orb_activation_anim',
 		frames: scene.anims.generateFrameNumbers('final_orb_activation_sheet', { start: 1, end: 14 }),
 		frameRate: 6,

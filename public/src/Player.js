@@ -29,10 +29,10 @@ class Player extends Phaser.GameObjects.Sprite {
 			volume: 0.8, rate: 1, loop: false
 		});
 		this.playerDeath = game.sound.add('playerD', {
-			volume: 0.8, rate: 1.3, loop: false
+			volume: 0.7, rate: 1.3, loop: false
 		});
 		this.footsteps = game.sound.add('walk', {
-			volume: 5, rate: 0.25, loop: false
+			volume: 0.05, rate: 1.25, loop: false
 		});
 		this.dashDash = game.sound.add('dash', {
 			volume: 0.3, rate: 1, loop: false
@@ -216,12 +216,12 @@ class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	takeDamage () {
+		this.tint = 0xffffff;// Will reset player color from damage
 		// the context of this function is on player, please don't switch it back to being the scene so that we have to do this.player on everything
 		this.body.setAcceleration(this.body.acceleration.x * -100, this.body.acceleration.y * -100);
 		if (!this.playerHurt.isPlaying === true) {
 			this.playerHurt.play();
 		}
-		this.tint = 0xffffff;// Will reset player color from damage
 		if (this.damageCooldown < 0) {
 			this.scene.cameras.main.shake(50, 0.005);
 			this.health--;// We need to do this.player.body as the context of this changes below
@@ -238,5 +238,6 @@ class Player extends Phaser.GameObjects.Sprite {
 			this.scene.scene.pause('GameScene');
 			this.scene.scene.pause('Level1');
 		}
+		this.tint = 0xffffff;// Will reset player color from damage
 	}
 }

@@ -9,7 +9,7 @@ class GameScene extends Phaser.Scene {
 
 	// Run after all loading (queued in preload) is finished
 	create () { // map
-		this.finalTally = 0;
+		this.finalTally = 2;
 		const map = this.make.tilemap({ key: 'map' });
 		const tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		const tileLightSetImg = map.addTilesetImage('LL_tiled_light_tiles', 'LL_tiled_light_tiles');
@@ -70,7 +70,7 @@ class GameScene extends Phaser.Scene {
 		walls.setTileLocationCallback(170, 263, 5, 15, this.triggerLevelTwoMusic, this);
 		walls.setTileLocationCallback(325, 263, 5, 15, this.triggerLevelThreeMusic, this);
 		walls.setTileLocationCallback(180, 195, 145, 150, this.triggerMusic, this);// 190-340y, 175-320x covers the hub area
-		walls.setTileLocationCallback(249, 375, 5, 5, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
+		walls.setTileLocationCallback(249, 380, 5, 5, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
 		const fSpawnPoint = map.findObject('Objects', obj => obj.name === 'fSpawnPoint');
 		this.spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
@@ -130,23 +130,31 @@ class GameScene extends Phaser.Scene {
 			this.physics.add.existing(this.pSpawn[l]);
 			this.pSpawn[l].setScale(3);
 			this.pSpawn[l].body.setImmovable();
-			this.pSpawn[l].setSize(32, 32);
-			this.pSpawn[l].body.setOffset(0, 32);
+			this.pSpawn[l].setSize(32, 30);
+			this.pSpawn[l].body.setOffset(0, 30);
 			this.pSpawn[l].on('animationstart', function (animation, frame, gameObject) {
+				this.pillarUp.play(); // Need these in here so they only trigger/increment ONCE
 				this.finalTally++;
 			}, this);
 		}
 
-		// Traps
+		// Spikes
 		this.trapGroup = this.physics.add.group({ key: 'spikeT' });
-		let traps = map.createFromObjects('Objects', 'Spike', { key: 'spikeT' });
+		const traps = map.createFromObjects('Objects', 'Spike', { key: 'spikeT' });
 		for (var j = 0; j < traps.length; j++) {
 			this.trapGroup.add(traps[j]);
 			this.physics.add.existing(traps[j]);
+			traps[j].body.setImmovable(true);
+			traps[j].body.setSize(22, 22).setOffset(6, 6);
+			traps[j].setScale(3);
+			traps[j].setDepth(1);
+			traps[j].on('animationcomplete-spikeTrapOn', function (animation, frame, gameObject) {
+				this.spikeTrap.play();
+				this.player.takeDamage();
+			}, this);
+
 		}
-		this.trapGroup.children.each(function (spikeTrap) {
-			spikeTrap.body.setSize(22, 22).setOffset(6, 6);
-		}, this);
+		// Boulders
 		this.boulderGroup = this.physics.add.group({ key: 'boul' });
 		let boulder = map.createFromObjects('Objects', 'Boulder', { key: 'boul' });
 		for (var k = 0; k < boulder.length; k++) {
@@ -159,6 +167,7 @@ class GameScene extends Phaser.Scene {
 		this.physics.add.collider(this.player, walls);
 		this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.playOrb, null, this);
 		this.physics.add.collider(this.player, this.slimeGroup.getChildren(), this.player.takeDamage, null, this.player);
+		this.physics.add.collider(this.pillarGroup.getChildren(), this.slimeGroup.getChildren());
 		this.physics.add.overlap(this.player, this.trapGroup.getChildren(), triggerSpikes, null, this); // Want overlap
 		this.physics.add.collider(this.player, this.boulderGroup.getChildren(), this.player.takeDamage, null, this.player);
 
@@ -176,36 +185,25 @@ class GameScene extends Phaser.Scene {
 		this.physics.add.collider(walls, this.slimeGroup.getChildren(), slimeMove, null, this);
 		this.physics.add.collider(enemyColl, this.slimeGroup.getChildren()); // Contains the slimes
 		this.physics.add.collider(wallTop, this.slimeGroup.getChildren(), slimeMove, null, this); // Contains the slimes
-		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) {
+		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) { // Slime kickoff
 			child.body.setVelocityX(-300); // ACTUALLY WORKS YES, Appears to be a one time method call
 			child.setScale(2);
 		});
-		Phaser.Actions.Call(this.trapGroup.getChildren(), function (child) {
-			child.body.setImmovable(true);
-			child.setScale(3);
-			child.setDepth(1);// Spikes
-		});
-		Phaser.Actions.Call(this.boulderGroup.getChildren(), function (child) {
+		Phaser.Actions.Call(this.boulderGroup.getChildren(), function (child) { // Boulder kickoff
 			child.setScale(2.65); // this.boulderRoll.play();
 			child.body.setVelocityY(400);
 		});
 		function letsRoll (player, boulder) {
-			// boulder.anims.play('boulder_roll');
 			this.boulderGroup.children.iterate(function (child) {
 				child.body.setImmovable(true);
 				if (child.body.touching.down || child.body.blocked.down) {
 					child.body.setVelocityY(-400);
+					child.anims.play('boulUp');
 				} else if (child.body.touching.up || child.body.blocked.up) {
 					child.body.setVelocityY(400);
+					child.anims.play('boulDown');
 				}
 			});
-			/* if (boulder.body.touching.right || boulder.body.blocked.right ||
-				boulder.body.touching.left || boulder.body.blocked.left) {
-				if (!this.boulderDeath.isPlaying) { this.boulderDeath.play(); }
-				// boulder.anims.play('boulder_death');
-				boulder.visible = false;
-				boulder.body.destroy();
-			} */
 		}
 
 		function slimeMove () { // Is fine on the group since they all behave the same
@@ -228,23 +226,37 @@ class GameScene extends Phaser.Scene {
 		}
 
 		function triggerSpikes (player, spike) {
-			spike.play('spikeTrapOn');
-			spike.play('spikeTrapOff');
-			this.spikeTrap.play();
-			this.player.takeDamage();
+			if (!spike.anims.isPlaying) { //No anims playing so play the spike anim
+				spike.play('spikeTrapOn');
+				spike.play('spikeTrapOff');
+			}
 		}
 	} // End create func
 
 	update (time, delta) {
 		this.input.update();
 		this.player.update(time, delta);
-		if (this.finalTally >= 18) {
+		if (this.finalTally >= 15) { // Final orb trigger
 			if (this.finalOrb.x - this.player.body.x < 350 && this.finalOrb.x - this.player.body.x > -350) {
 				if (this.finalOrb.y - this.player.body.y < 450 && this.finalOrb.y - this.player.body.y > -450) {
 					if (!this.finalOrb.anims.isPlaying) {
 						this.playFinalOrb();
 					}
 				}
+			}
+		}
+
+		if (this.finalTally === 15) { // Have all orbs activated
+			for (let i = 0; i < this.lightsArray.length; i++) {
+				this.lightsArray[i].visible = true; // Make all layers visible if we have all orbs
+			}
+		} else if (this.finalTally === 3) { // Level 1 complete
+			for (let i = 0; i < this.lightsArray.length; i++) {
+				this.lightsArray[i].visible = false; // Make all layers invisible, light way to next level
+			}
+		} else if (this.finalTally === 8) { // Level 2 complete
+			for (let i = 0; i < this.lightsArray.length; i++) {
+				this.lightsArray[i].visible = false; // Make all layers invisible, light way to next level
 			}
 		}
 	}
@@ -297,11 +309,11 @@ class GameScene extends Phaser.Scene {
 			fill: '#FFFFFF'
 		}).setOrigin(0.5, 0.5).setDepth(100);
 		this.cameras.main.fade(5000, 0, 0, 0, false);
-
 		this.cameras.main.on('camerafadeoutcomplete', function () {
 			this.end();
 		}, this);
 	}
+
 	end () {
 		this.scene.restart();
 	}
@@ -315,7 +327,6 @@ class GameScene extends Phaser.Scene {
 			}
 		}
 		pillar.anims.play('light_orb_activated', true);
-		this.pillarUp.play();
 	}
 }
 // Ensure this is a globally accessible class

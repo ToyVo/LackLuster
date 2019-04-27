@@ -13,12 +13,11 @@ class StartScene extends Phaser.Scene {
 		this.load.image('LL_tiled_tiles', 'assets/sprites/LL_tiled_tiles.png');
 		this.load.image('LL_tiled_light_tiles', 'assets/sprites/LL_tiled_light_tiles.png');
 		this.load.tilemapTiledJSON('map', 'assets/json/LL_base_map.json');
-		this.load.image('LL_pillar_01_6x', 'assets/sprites/LL_pillar_01_6x.png');
+		// End Tiled Assets
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.image('sky', 'assets/skies/space3.png');
+		// this.load.image('sky', 'assets/skies/space3.png');
 		this.load.image('Tile', 'assets/sprites/Trap.png');
 		this.load.image('boul', 'assets/sprites/boulder.png');
-		this.load.image('pillarCollide', 'assets/sprites/LL_pillar_example_01.png');
 		this.load.image('health_orb', 'assets/sprites/health_orb.png');
 
 		/* Player AKA THICC SNACC */
@@ -30,26 +29,25 @@ class StartScene extends Phaser.Scene {
 		this.load.spritesheet('player_walk_back_sheet', 'assets/player/player_walk_back.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
 		this.load.spritesheet('player_walk_left_sheet', 'assets/player/player_walk_left.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
 		this.load.spritesheet('player_walk_right_sheet', 'assets/player/player_walk_right.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
-
-		/* Spritesheets Below */
-		this.load.spritesheet('frameTest', 'assets/spritesheets/LL_4frame_tester.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32, spacing: 1 });
-		this.load.spritesheet('spikeT', 'assets/spritesheets/Spike.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('light_orb', 'assets/spritesheets/light_ORB.png', { frameWidth: 32, frameHeight: 64 });
 		this.load.spritesheet('player_dash_anim_down', 'assets/spritesheets/Dash_Down.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
 		this.load.spritesheet('player_dash_anim_up', 'assets/spritesheets/Dash_Up.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
 		this.load.spritesheet('player_dash_anim_left', 'assets/spritesheets/Dash_Left.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
 		this.load.spritesheet('player_dash_anim_right', 'assets/spritesheets/Dash_Right.png', { frameWidth: 14, frameHeight: 24, margin: 1, spacing: 2 });
+
+		/* Misc Spritesheets Below */
+		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32, spacing: 1 });
+		this.load.spritesheet('spikeT', 'assets/spritesheets/Spike.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('light_orb', 'assets/spritesheets/light_ORB.png', { frameWidth: 32, frameHeight: 64 });
 		this.load.spritesheet('sparkle', 'assets/spritesheets/sparkle.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('final_orb_activation_sheet', 'assets/spritesheets/Orb_Activation.png', { frameWidth: 96, frameHeight: 128 });
 		this.load.spritesheet('final_orb_idle_sheet', 'assets/spritesheets/Orb_Idle.png', { frameWidth: 96, frameHeight: 128 });
+		this.load.spritesheet('boulderUp', 'assets/spritesheets/Boulder_Upwards.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('boulderDown', 'assets/spritesheets/Boulder_Downwards.png', { frameWidth: 32, frameHeight: 32 });
 
 		/* Audio */
 		this.load.audio('dash', 'assets/audio/dash.wav');
 		this.load.audio('playerH', 'assets/audio/slimeHurt.wav');
 		this.load.audio('mainTheme', 'assets/audio/mainTheme.wav');
-		this.load.audio('BoulderD', 'assets/audio/BoulderD.wav');
-		this.load.audio('BoulderRoll', 'assets/audio/boulderRoll.wav');
 		this.load.audio('spike', 'assets/audio/spike.wav');
 		this.load.audio('playerD', 'assets/audio/pDeath.wav');
 		this.load.audio('walk', 'assets/audio/footsteps.wav');
