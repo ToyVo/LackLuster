@@ -9,21 +9,21 @@ class GameScene extends Phaser.Scene {
 
 	// Run after all loading (queued in preload) is finished
 	create () { // map
-		this.finalTally = 17;
+		this.finalTally = 0;
 		const map = this.make.tilemap({ key: 'map' });
-		let tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
-		let tileLightSetImg = map.addTilesetImage('LL_tiled_light_tiles', 'LL_tiled_light_tiles');
-		let grass = map.createStaticLayer(0, tileSetImg, 0, 0);
-		let tiles = map.createStaticLayer(1, [tileSetImg, tileLightSetImg], 0, 0);
-		let walls = map.createStaticLayer(2, tileSetImg, 0, 0);
-		let wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(12);
-		let enemyColl = map.createStaticLayer(4, tileSetImg);
-		//Light layers below
+		const tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
+		const tileLightSetImg = map.addTilesetImage('LL_tiled_light_tiles', 'LL_tiled_light_tiles');
+		const grass = map.createStaticLayer(0, tileSetImg, 0, 0);
+		const tiles = map.createStaticLayer(1, [tileSetImg, tileLightSetImg], 0, 0);
+		const walls = map.createStaticLayer(2, tileSetImg, 0, 0);
+		const wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(12);
+		const enemyColl = map.createStaticLayer(4, tileSetImg);
+		// Light layers below
 		const lightLayerStart = map.createStaticLayer(5, [tileSetImg, tileLightSetImg]);
 		const lightLayer1 = map.createStaticLayer(6, [tileSetImg, tileLightSetImg]);
 		const lightLayer2 = map.createStaticLayer(7, [tileSetImg, tileLightSetImg]);
 		const lightLayer3 = map.createStaticLayer(8, [tileSetImg, tileLightSetImg]);
-		/*const lightLayer4 = map.createStaticLayer(9, [tileSetImg, tileLightSetImg]);
+		/* const lightLayer4 = map.createStaticLayer(9, [tileSetImg, tileLightSetImg]);
 		const lightLayer5 = map.createStaticLayer(10, [tileSetImg, tileLightSetImg]);
 		const lightLayer6 = map.createStaticLayer(11, [tileSetImg, tileLightSetImg]);
 		const lightLayer7 = map.createStaticLayer(12, [tileSetImg, tileLightSetImg]);
@@ -37,12 +37,12 @@ class GameScene extends Phaser.Scene {
 		const lightLayer15 = map.createStaticLayer(20, [tileSetImg, tileLightSetImg]);
 		const lightLayer16 = map.createStaticLayer(21, [tileSetImg, tileLightSetImg]);
 		const lightLayer17 = map.createStaticLayer(22, [tileSetImg, tileLightSetImg]);
-		const lightLayer18 = map.createStaticLayer(23, [tileSetImg, tileLightSetImg]);*/
-		lightLayerStart.visible = false; //Start
+		const lightLayer18 = map.createStaticLayer(23, [tileSetImg, tileLightSetImg]); */
+		lightLayerStart.visible = false; // Start
 		lightLayer1.visible = false;
 		lightLayer2.visible = false;
 		lightLayer3.visible = false;
-		/*lightLayer4.visible = false;
+		/* lightLayer4.visible = false;
 		lightLayer5.visible = false;
 		lightLayer6.visible = false;
 		lightLayer7.visible = false;
@@ -56,13 +56,13 @@ class GameScene extends Phaser.Scene {
 		lightLayer15.visible = false;
 		lightLayer16.visible = false;
 		lightLayer17.visible = false;
-		lightLayer18.visible = false;*/
+		lightLayer18.visible = false; */
 		this.lightsArray = [lightLayerStart, lightLayer1, lightLayer2, lightLayer3];
-		/*this.lightsArray = [lightLayerStart, lightLayer1, lightLayer2, lightLayer3,
+		/* this.lightsArray = [lightLayerStart, lightLayer1, lightLayer2, lightLayer3,
 			lightLayer4, lightLayer5, lightLayer6, lightLayer7, lightLayer8, lightLayer9,
 			lightLayer10, lightLayer11, lightLayer12, lightLayer13, lightLayer14, lightLayer15,
-			lightLayer16, lightLayer17, lightLayer18];*/
-		
+			lightLayer16, lightLayer17, lightLayer18]; */
+
 		walls.setCollisionByProperty({ collides: true });
 		enemyColl.setCollisionByProperty({ collides: true });
 		grass.setCollisionByProperty({ collides: true });
@@ -71,18 +71,19 @@ class GameScene extends Phaser.Scene {
 		walls.setTileLocationCallback(325, 263, 5, 15, this.triggerLevelThreeMusic, this);
 		walls.setTileLocationCallback(180, 195, 145, 150, this.triggerMusic, this);// 190-340y, 175-320x covers the hub area
 		walls.setTileLocationCallback(249, 375, 5, 5, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
-		const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 		const fSpawnPoint = map.findObject('Objects', obj => obj.name === 'fSpawnPoint');
+		this.spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
+
 		// Camera
 		this.cameras.main.setBackgroundColor('#536b5d');
 		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true, true, true, true);
 		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels, true);
 
 		// Player
-		this.player = new Player(this, spawnPoint.x, spawnPoint.y, 'player_front');
+		this.player = new Player(this, this.spawnPoint.x, this.spawnPoint.y, 'player_front');
 		this.cameras.main.startFollow(this.player, false, 0.5, 0.5);
 
-		/*    this.sparkles = this.physics.add.sprite(spawnPoint.x + 10, spawnPoint.y + 10, 'sparkle').setScale(50, 45).setImmovable();
+		/*    this.sparkles = this.physics.add.sprite(this.spawnPoint.x + 10, this.spawnPoint.y + 10, 'sparkle').setScale(50, 45).setImmovable();
 		this.sparkles.alpha = 0.3;
 		this.sparkles.anims.play('sparkles');  */
 		// Pause Game
@@ -97,6 +98,13 @@ class GameScene extends Phaser.Scene {
 			this.scene.run('PauseScene');
 			this.scene.bringToTop('PauseScene');
 			this.scene.pause('GameScene');
+		}, this);
+
+		this.events.on('resume', function (sys, data) {
+			if (data === 1) {
+				this.player.setPosition(this.spawnPoint.x, this.spawnPoint.y);
+				this.player.health = 3;
+			}
 		}, this);
 
 		// Bring the debug draw layer to the top
@@ -129,12 +137,16 @@ class GameScene extends Phaser.Scene {
 			}, this);
 		}
 
+		// Traps
 		this.trapGroup = this.physics.add.group({ key: 'spikeT' });
 		let traps = map.createFromObjects('Objects', 'Spike', { key: 'spikeT' });
 		for (var j = 0; j < traps.length; j++) {
 			this.trapGroup.add(traps[j]);
 			this.physics.add.existing(traps[j]);
 		}
+		this.trapGroup.children.each(function (spikeTrap) {
+			spikeTrap.body.setSize(22, 22).setOffset(6, 6);
+		}, this);
 		this.boulderGroup = this.physics.add.group({ key: 'boul' });
 		let boulder = map.createFromObjects('Objects', 'Boulder', { key: 'boul' });
 		for (var k = 0; k < boulder.length; k++) {
@@ -249,7 +261,6 @@ class GameScene extends Phaser.Scene {
 	triggerStart () {
 		this.lightsArray[0].visible = true;
 	}
-
 
 	triggerLevelOneMusic () {
 		if (!this.levelOne.isPlaying) {
