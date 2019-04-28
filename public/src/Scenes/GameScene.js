@@ -9,7 +9,9 @@ class GameScene extends Phaser.Scene {
 
 	// Run after all loading (queued in preload) is finished
 	create () { // map
-		this.finalTally = 2;
+		this.finalTally = 0;
+		this.level2BlockPlayer = true;
+		this.level3BlockPlayer = true;
 		const map = this.make.tilemap({ key: 'map' });
 		const tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
 		const tileLightSetImg = map.addTilesetImage('LL_tiled_light_tiles', 'LL_tiled_light_tiles');
@@ -23,7 +25,7 @@ class GameScene extends Phaser.Scene {
 		const lightLayer1 = map.createStaticLayer(6, [tileSetImg, tileLightSetImg]);
 		const lightLayer2 = map.createStaticLayer(7, [tileSetImg, tileLightSetImg]);
 		const lightLayer3 = map.createStaticLayer(8, [tileSetImg, tileLightSetImg]);
-		/* const lightLayer4 = map.createStaticLayer(9, [tileSetImg, tileLightSetImg]);
+		const lightLayer4 = map.createStaticLayer(9, [tileSetImg, tileLightSetImg]);
 		const lightLayer5 = map.createStaticLayer(10, [tileSetImg, tileLightSetImg]);
 		const lightLayer6 = map.createStaticLayer(11, [tileSetImg, tileLightSetImg]);
 		const lightLayer7 = map.createStaticLayer(12, [tileSetImg, tileLightSetImg]);
@@ -36,13 +38,12 @@ class GameScene extends Phaser.Scene {
 		const lightLayer14 = map.createStaticLayer(19, [tileSetImg, tileLightSetImg]);
 		const lightLayer15 = map.createStaticLayer(20, [tileSetImg, tileLightSetImg]);
 		const lightLayer16 = map.createStaticLayer(21, [tileSetImg, tileLightSetImg]);
-		const lightLayer17 = map.createStaticLayer(22, [tileSetImg, tileLightSetImg]);
-		const lightLayer18 = map.createStaticLayer(23, [tileSetImg, tileLightSetImg]); */
+		const lightLayer17 = map.createStaticLayer(22, [tileSetImg, tileLightSetImg]);// Layer 23
 		lightLayerStart.visible = false; // Start
 		lightLayer1.visible = false;
 		lightLayer2.visible = false;
 		lightLayer3.visible = false;
-		/* lightLayer4.visible = false;
+		lightLayer4.visible = false;
 		lightLayer5.visible = false;
 		lightLayer6.visible = false;
 		lightLayer7.visible = false;
@@ -56,16 +57,15 @@ class GameScene extends Phaser.Scene {
 		lightLayer15.visible = false;
 		lightLayer16.visible = false;
 		lightLayer17.visible = false;
-		lightLayer18.visible = false; */
-		this.lightsArray = [lightLayerStart, lightLayer1, lightLayer2, lightLayer3];
-		/* this.lightsArray = [lightLayerStart, lightLayer1, lightLayer2, lightLayer3,
+		this.lightsArray = [lightLayerStart, lightLayer1, lightLayer2, lightLayer3,
 			lightLayer4, lightLayer5, lightLayer6, lightLayer7, lightLayer8, lightLayer9,
 			lightLayer10, lightLayer11, lightLayer12, lightLayer13, lightLayer14, lightLayer15,
-			lightLayer16, lightLayer17, lightLayer18]; */
+			lightLayer16, lightLayer17];
 
 		walls.setCollisionByProperty({ collides: true });
 		enemyColl.setCollisionByProperty({ collides: true });
-		grass.setCollisionByProperty({ collides: true });
+		lightLayer16.setCollisionByProperty({ collides: true });
+		lightLayer17.setCollisionByProperty({ collides: true });
 		walls.setTileLocationCallback(249, 186, 15, 5, this.triggerLevelOneMusic, this);
 		walls.setTileLocationCallback(170, 263, 5, 15, this.triggerLevelTwoMusic, this);
 		walls.setTileLocationCallback(325, 263, 5, 15, this.triggerLevelThreeMusic, this);
@@ -128,7 +128,7 @@ class GameScene extends Phaser.Scene {
 		for (var l = 0; l < this.pSpawn.length; l++) {
 			this.pillarGroup.add(this.pSpawn[l]);
 			this.physics.add.existing(this.pSpawn[l]);
-			this.pSpawn[l].setScale(3);
+			this.pSpawn[l].setScale(10);
 			this.pSpawn[l].body.setImmovable();
 			this.pSpawn[l].setSize(32, 30);
 			this.pSpawn[l].body.setOffset(0, 30);
@@ -152,7 +152,6 @@ class GameScene extends Phaser.Scene {
 				this.spikeTrap.play();
 				this.player.takeDamage();
 			}, this);
-
 		}
 		// Boulders
 		this.boulderGroup = this.physics.add.group({ key: 'boul' });
@@ -163,14 +162,6 @@ class GameScene extends Phaser.Scene {
 			boulder[k].setDepth(11);
 		}
 
-		// Player Collisions
-		this.physics.add.collider(this.player, walls);
-		this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.playOrb, null, this);
-		this.physics.add.collider(this.player, this.slimeGroup.getChildren(), this.player.takeDamage, null, this.player);
-		this.physics.add.collider(this.pillarGroup.getChildren(), this.slimeGroup.getChildren());
-		this.physics.add.overlap(this.player, this.trapGroup.getChildren(), triggerSpikes, null, this); // Want overlap
-		this.physics.add.collider(this.player, this.boulderGroup.getChildren(), this.player.takeDamage, null, this.player);
-
 		// Final Orb
 		this.finalOrb = this.physics.add.sprite(fSpawnPoint.x, fSpawnPoint.y, 'final_orb_activation_sheet').setScale(3).setImmovable();
 		this.finalOrb.setSize(96, 96).setOffset(0, 32);
@@ -178,6 +169,16 @@ class GameScene extends Phaser.Scene {
 		this.finalOrb.on('animationcomplete', function (animation, frame, gameObject) {
 			this.finalOrb.anims.play('final_orb_idle_anim');
 		}, this);
+
+		// Player Collisions
+		this.physics.add.collider(this.player, walls);
+		this.physics.add.collider(this.player, lightLayer16).name = 'Level2Blocker';
+		this.physics.add.collider(this.player, lightLayer17).name = 'Level3Blocker';
+		this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.playOrb, null, this);
+		this.physics.add.collider(this.player, this.slimeGroup.getChildren(), this.player.takeDamage, null, this.player);
+		this.physics.add.collider(this.pillarGroup.getChildren(), this.slimeGroup.getChildren());
+		this.physics.add.overlap(this.player, this.trapGroup.getChildren(), triggerSpikes, null, this); // Want overlap
+		this.physics.add.collider(this.player, this.boulderGroup.getChildren(), this.player.takeDamage, null, this.player);
 
 		// Other Collisions
 		this.physics.add.collider(this.boulderGroup.getChildren(), walls, letsRoll, null, this);
@@ -226,7 +227,7 @@ class GameScene extends Phaser.Scene {
 		}
 
 		function triggerSpikes (player, spike) {
-			if (!spike.anims.isPlaying) { //No anims playing so play the spike anim
+			if (!spike.anims.isPlaying) { // No anims playing so play the spike anim
 				spike.play('spikeTrapOn');
 				spike.play('spikeTrapOff');
 			}
@@ -254,10 +255,20 @@ class GameScene extends Phaser.Scene {
 			for (let i = 0; i < this.lightsArray.length; i++) {
 				this.lightsArray[i].visible = false; // Make all layers invisible, light way to next level
 			}
+			this.physics.world.colliders.remove(this.physics.world.colliders.getActive().find(function (i) {
+				return i.name === 'Level2Blocker';
+			}));
+			this.lightsArray[0].visible = true;
+			this.lightsArray[16].visible = true; // Level 1 complete layer
 		} else if (this.finalTally === 8) { // Level 2 complete
 			for (let i = 0; i < this.lightsArray.length; i++) {
 				this.lightsArray[i].visible = false; // Make all layers invisible, light way to next level
 			}
+			this.physics.world.colliders.remove(this.physics.world.colliders.getActive().find(function (i) {
+				return i.name === 'Level3Blocker';
+			}));
+			this.lightsArray[16].visible = true;
+			this.lightsArray[17].visible = true;
 		}
 	}
 
@@ -323,7 +334,7 @@ class GameScene extends Phaser.Scene {
 			if (this.pSpawn[o] === pillar) { // The pillar we touch is equiv to the pillar in the group..
 				// In here we want to get this pillar number and use it to activate a particular Tiled layer
 				// Probs setup an array with all the layers and access it using the same o we get
-				this.lightsArray[o + 1].visible = true;
+				this.lightsArray[o + 1].visible = true; // Offset 1 since our 1st element is the Start Light
 			}
 		}
 		pillar.anims.play('light_orb_activated', true);

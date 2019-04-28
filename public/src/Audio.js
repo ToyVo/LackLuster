@@ -25,12 +25,6 @@ function setupSound (scene) {
 		volume: 0.6, rate: 2.75, loop: false
 	});
 
-	scene.boulderDeath = scene.sound.add('BoulderD', {
-		volume: 0.85, rate: 1, loop: false
-	});
-	scene.boulderRoll = scene.sound.add('BoulderRoll', {
-		volume: 0.85, rate: 2.5, loop: false
-	});
 	scene.spikeTrap = scene.sound.add('spike', {
 		volume: 0.3, rate: 1, loop: false
 	});
