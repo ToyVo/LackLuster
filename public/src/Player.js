@@ -175,9 +175,8 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		this.rollCooldown -= delta;
-
 		if (input.space && this.rollCooldown <= 0) {
-			this.body.setAcceleration(this.body.acceleration.x * 100, this.body.acceleration.y * 100);
+			this.body.setAcceleration(this.body.acceleration.x * 150, this.body.acceleration.y * 150);
 			this.body.setDrag(1500, 1500);
 			this.rollCooldown = 500;
 			this.dashDash.play();
@@ -232,6 +231,9 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		if (this.health <= 0) {
+			this.body.setAcceleration(0, 0);
+			this.body.velocity.x = 0;
+			this.body.velocity.y = 0;
 			this.playerDeath.play();
 			this.scene.scene.run('GameOver');
 			this.scene.scene.bringToTop('GameOver');

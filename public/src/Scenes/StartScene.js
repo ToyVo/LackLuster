@@ -52,9 +52,9 @@ class StartScene extends Phaser.Scene {
 		this.load.audio('playerD', 'assets/audio/pDeath.wav');
 		this.load.audio('walk', 'assets/audio/footsteps.wav');
 		this.load.audio('powerUp', 'assets/audio/pillarCollide.wav');
-		this.load.audio('levelOne', 'assets/audio/Level1.wav');
+		this.load.audio('levelOne', 'assets/audio/Level3.wav'); // Intentional swap
 		this.load.audio('levelTwo', 'assets/audio/Level2.wav');
-		this.load.audio('levelThree', 'assets/audio/Level3.wav');
+		this.load.audio('levelThree', 'assets/audio/Level1.wav');
 	}
 
 	create () {

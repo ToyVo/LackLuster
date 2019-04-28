@@ -103,9 +103,6 @@ class GameScene extends Phaser.Scene {
 		this.events.on('resume', function (sys, data) {
 			if (data === 1) {
 				this.player.setPosition(this.spawnPoint.x, this.spawnPoint.y);
-				this.player.body.setVelocityX(-10);
-				this.player.body.setVelocityY(-10);
-
 				this.player.health = 6;
 			}
 		}, this);
@@ -241,7 +238,11 @@ class GameScene extends Phaser.Scene {
 	update (time, delta) {
 		this.input.update();
 		this.player.update(time, delta);
-		if (this.finalTally >= 15) { // Final orb trigger
+		switch (this.finalTally) {
+		case 15:
+			for (let i = 0; i < this.lightsArray.length; i++) {
+				this.lightsArray[i].visible = true; // Make all layers visible if we have all orbs
+			}
 			if (this.finalOrb.x - this.player.body.x < 350 && this.finalOrb.x - this.player.body.x > -350) {
 				if (this.finalOrb.y - this.player.body.y < 450 && this.finalOrb.y - this.player.body.y > -450) {
 					if (!this.finalOrb.anims.isPlaying) {
@@ -249,22 +250,9 @@ class GameScene extends Phaser.Scene {
 					}
 				}
 			}
-		}
+			break;
 
-		if (this.finalTally === 15) { // Have all orbs activated
-			for (let i = 0; i < this.lightsArray.length; i++) {
-				this.lightsArray[i].visible = true; // Make all layers visible if we have all orbs
-			}
-		} else if (this.finalTally === 3) { // Level 1 complete
-			for (let i = 0; i < this.lightsArray.length; i++) {
-				this.lightsArray[i].visible = false; // Make all layers invisible, light way to next level
-			}
-			this.physics.world.colliders.remove(this.physics.world.colliders.getActive().find(function (i) {
-				return i.name === 'Level2Blocker';
-			}));
-			this.lightsArray[0].visible = true;
-			this.lightsArray[16].visible = true; // Level 1 complete layer
-		} else if (this.finalTally === 8) { // Level 2 complete
+		case 8:
 			for (let i = 0; i < this.lightsArray.length; i++) {
 				this.lightsArray[i].visible = false; // Make all layers invisible, light way to next level
 			}
@@ -273,6 +261,17 @@ class GameScene extends Phaser.Scene {
 			}));
 			this.lightsArray[16].visible = true;
 			this.lightsArray[17].visible = true;
+			break;
+		case 3:
+			for (let i = 0; i < this.lightsArray.length; i++) {
+				this.lightsArray[i].visible = false; // Make all layers invisible, light way to next level
+			}
+			this.physics.world.colliders.remove(this.physics.world.colliders.getActive().find(function (i) {
+				return i.name === 'Level2Blocker';
+			}));
+			this.lightsArray[0].visible = true;
+			this.lightsArray[16].visible = true; // Level 1 complete layer
+			break;
 		}
 	}
 
