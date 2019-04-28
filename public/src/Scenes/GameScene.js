@@ -70,7 +70,7 @@ class GameScene extends Phaser.Scene {
 		walls.setTileLocationCallback(170, 263, 5, 15, this.triggerLevelTwoMusic, this);
 		walls.setTileLocationCallback(325, 263, 5, 15, this.triggerLevelThreeMusic, this);
 		walls.setTileLocationCallback(180, 195, 145, 150, this.triggerMusic, this);// 190-340y, 175-320x covers the hub area
-		walls.setTileLocationCallback(249, 380, 5, 5, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
+		walls.setTileLocationCallback(249, 370, 5, 15, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
 		const fSpawnPoint = map.findObject('Objects', obj => obj.name === 'fSpawnPoint');
 		this.spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
@@ -103,7 +103,10 @@ class GameScene extends Phaser.Scene {
 		this.events.on('resume', function (sys, data) {
 			if (data === 1) {
 				this.player.setPosition(this.spawnPoint.x, this.spawnPoint.y);
-				this.player.health = 3;
+				this.player.body.setVelocityX(-10);
+				this.player.body.setVelocityY(-10);
+
+				this.player.health = 6;
 			}
 		}, this);
 
@@ -128,7 +131,7 @@ class GameScene extends Phaser.Scene {
 		for (var l = 0; l < this.pSpawn.length; l++) {
 			this.pillarGroup.add(this.pSpawn[l]);
 			this.physics.add.existing(this.pSpawn[l]);
-			this.pSpawn[l].setScale(10);
+			this.pSpawn[l].setScale(3);
 			this.pSpawn[l].body.setImmovable();
 			this.pSpawn[l].setSize(32, 30);
 			this.pSpawn[l].body.setOffset(0, 30);
@@ -164,7 +167,7 @@ class GameScene extends Phaser.Scene {
 
 		// Final Orb
 		this.finalOrb = this.physics.add.sprite(fSpawnPoint.x, fSpawnPoint.y, 'final_orb_activation_sheet').setScale(3).setImmovable();
-		this.finalOrb.setSize(96, 96).setOffset(0, 32);
+		this.finalOrb.setSize(93, 96).setOffset(0, 32);
 		this.physics.add.collider(this.player, this.finalOrb, null, null, this);
 		this.finalOrb.on('animationcomplete', function (animation, frame, gameObject) {
 			this.finalOrb.anims.play('final_orb_idle_anim');
@@ -185,6 +188,7 @@ class GameScene extends Phaser.Scene {
 		this.physics.add.collider(this.boulderGroup.getChildren(), wallTop, letsRoll, null, this);
 		this.physics.add.collider(walls, this.slimeGroup.getChildren(), slimeMove, null, this);
 		this.physics.add.collider(enemyColl, this.slimeGroup.getChildren()); // Contains the slimes
+		this.physics.add.collider(this.slimeGroup.getChildren(), this.slimeGroup.getChildren()); // Contains the slime
 		this.physics.add.collider(wallTop, this.slimeGroup.getChildren(), slimeMove, null, this); // Contains the slimes
 		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) { // Slime kickoff
 			child.body.setVelocityX(-300); // ACTUALLY WORKS YES, Appears to be a one time method call

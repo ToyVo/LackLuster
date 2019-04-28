@@ -42,7 +42,7 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.body.setMaxSpeed(700);
 
 		this.damageCooldown = 0;
-		this.health = 300;
+		this.health = 6;
 
 		this.rollCooldown = 50;
 
@@ -192,17 +192,17 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.healthLeft.x = this.body.x - 10;
 		this.healthLeft.y = this.body.y - 60;
 		switch (this.health) {
-		case 3:
+		case 6:
 			this.healthCenter.visible = true;
 			this.healthRight.visible = true;
 			this.healthLeft.visible = true;
 			break;
-		case 2:
+		case 4:
 			this.healthCenter.visible = true;
 			this.healthRight.visible = false;
 			this.healthLeft.visible = true;
 			break;
-		case 1:
+		case 2:
 			this.healthCenter.visible = false;
 			this.healthRight.visible = false;
 			this.healthLeft.visible = true;
