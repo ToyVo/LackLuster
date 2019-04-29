@@ -15,7 +15,7 @@ class StartScene extends Phaser.Scene {
 		this.load.tilemapTiledJSON('map', 'assets/json/LL_final_map.json');
 		// End Tiled Assets
 		this.load.spritesheet('slime_black_walking', 'assets/spritesheets/slime_walking_black.png', { frameWidth: 32, frameHeight: 32 });
-		// this.load.image('sky', 'assets/skies/space3.png');
+		this.load.image('Blocker', 'assets/sprites/LL_Blocker.png');
 		this.load.image('Tile', 'assets/sprites/Trap.png');
 		this.load.image('boul', 'assets/sprites/boulder.png');
 		this.load.image('health_orb', 'assets/sprites/health_orb.png');

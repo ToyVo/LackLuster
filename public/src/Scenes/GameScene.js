@@ -72,6 +72,10 @@ class GameScene extends Phaser.Scene {
 		walls.setTileLocationCallback(180, 195, 145, 150, this.triggerMusic, this);// 190-340y, 175-320x covers the hub area
 		walls.setTileLocationCallback(249, 370, 5, 15, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
 		const fSpawnPoint = map.findObject('Objects', obj => obj.name === 'fSpawnPoint');
+		this.level2BlockPos = map.findObject('Objects', obj => obj.name === 'Level2Block');
+		this.level2Blocker = this.physics.add.sprite(this.level2BlockPos.x + 50, this.level2BlockPos.y + 40, 'Blocker').setScale(5).setImmovable();
+		this.level3BlockPos = map.findObject('Objects', obj => obj.name === 'Level3Block');
+		this.level3Blocker = this.physics.add.sprite(this.level3BlockPos.x + 50, this.level3BlockPos.y + 40, 'Blocker').setScale(5).setImmovable();
 		this.spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
 		// Camera
@@ -256,6 +260,8 @@ class GameScene extends Phaser.Scene {
 			for (let i = 0; i < this.lightsArray.length; i++) {
 				this.lightsArray[i].visible = false; // Make all layers invisible, light way to next level
 			}
+			this.level3Blocker.setVisible(false);
+			this.level3Blocker.destroy();
 			this.physics.world.colliders.remove(this.physics.world.colliders.getActive().find(function (i) {
 				return i.name === 'Level3Blocker';
 			}));
@@ -269,6 +275,8 @@ class GameScene extends Phaser.Scene {
 			this.physics.world.colliders.remove(this.physics.world.colliders.getActive().find(function (i) {
 				return i.name === 'Level2Blocker';
 			}));
+			this.level2Blocker.setVisible(false);
+			this.level2Blocker.destroy();
 			this.lightsArray[0].visible = true;
 			this.lightsArray[16].visible = true; // Level 1 complete layer
 			break;
