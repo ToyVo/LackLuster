@@ -37,13 +37,9 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.dashDash = game.sound.add('dash', {
 			volume: 0.3, rate: 1, loop: false
 		});
-
-		this.acceleration = 600;
-		this.body.setMaxSpeed(700);
-
 		this.damageCooldown = 0;
 		this.health = 6;
-
+		this.body.setMaxSpeed(600);
 		this.rollCooldown = 50;
 
 		this.healthCenter = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4).setDepth(100);
@@ -57,8 +53,10 @@ class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	update (time, delta) {
-		this.body.setAcceleration(0, 0);
-		this.body.setDrag(3000, 3000);
+		this.acceleration = 9000;
+
+		this.body.setAcceleration(0);
+		this.body.setDrag(3500);
 
 		// key inputs
 		let keys = {
@@ -176,8 +174,9 @@ class Player extends Phaser.GameObjects.Sprite {
 
 		this.rollCooldown -= delta;
 		if (input.space && this.rollCooldown <= 0) {
-			this.body.setAcceleration(this.body.acceleration.x * 150, this.body.acceleration.y * 150);
-			this.body.setDrag(1500, 1500);
+			this.body.setMaxSpeed(600);
+			this.body.setAcceleration(this.body.acceleration.x * 650, this.body.acceleration.y * 650);
+			this.body.setDrag(5000);
 			this.rollCooldown = 500;
 			this.dashDash.play();
 			this.anims.play(this.lastDashAnim);
@@ -192,19 +191,31 @@ class Player extends Phaser.GameObjects.Sprite {
 		this.healthLeft.y = this.body.y - 60;
 		switch (this.health) {
 		case 6:
+			this.healthCenter.tint = 0xffffff;
 			this.healthCenter.visible = true;
 			this.healthRight.visible = true;
+			this.healthRight.tint = 0xffffff;
 			this.healthLeft.visible = true;
+			this.healthLeft.tint = 0xffffff;
+			break;
+		case 5:
+			this.healthRight.tint = 800 * 0xffffff;
 			break;
 		case 4:
 			this.healthCenter.visible = true;
 			this.healthRight.visible = false;
 			this.healthLeft.visible = true;
 			break;
+		case 3:
+			this.healthCenter.tint = 800 * 0xffffff;
+			break;
 		case 2:
 			this.healthCenter.visible = false;
 			this.healthRight.visible = false;
 			this.healthLeft.visible = true;
+			break;
+		case 1:
+			this.healthLeft.tint = 800 * 0xffffff;
 			break;
 		case 0:
 			this.healthCenter.visible = false;
@@ -217,7 +228,7 @@ class Player extends Phaser.GameObjects.Sprite {
 	takeDamage () {
 		this.tint = 0xffffff;// Will reset player color from damage
 		// the context of this function is on player, please don't switch it back to being the scene so that we have to do this.player on everything
-		this.body.setAcceleration(this.body.acceleration.x * -100, this.body.acceleration.y * -100);
+		this.body.setAcceleration(this.body.acceleration.x * -150, this.body.acceleration.y * -150);
 		if (!this.playerHurt.isPlaying === true) {
 			this.playerHurt.play();
 		}
@@ -231,14 +242,11 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		if (this.health <= 0) {
-			this.body.setAcceleration(0, 0);
-			this.body.velocity.x = 0;
-			this.body.velocity.y = 0;
+			this.body.setMass(5000);
 			this.playerDeath.play();
 			this.scene.scene.run('GameOver');
 			this.scene.scene.bringToTop('GameOver');
 			this.scene.scene.pause('GameScene');
-			this.scene.scene.pause('Level1');
 		}
 		this.tint = 0xffffff;// Will reset player color from damage
 	}

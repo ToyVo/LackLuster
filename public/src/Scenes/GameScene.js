@@ -107,6 +107,7 @@ class GameScene extends Phaser.Scene {
 		this.events.on('resume', function (sys, data) {
 			if (data === 1) {
 				this.player.setPosition(this.spawnPoint.x, this.spawnPoint.y);
+				this.acceleration = 0;
 				this.player.health = 6;
 			}
 		}, this);
@@ -133,6 +134,7 @@ class GameScene extends Phaser.Scene {
 			this.pillarGroup.add(this.pSpawn[l]);
 			this.physics.add.existing(this.pSpawn[l]);
 			this.pSpawn[l].setScale(3);
+			this.pSpawn[l].setDepth(11);
 			this.pSpawn[l].body.setImmovable();
 			this.pSpawn[l].setSize(32, 30);
 			this.pSpawn[l].body.setOffset(0, 30);
@@ -166,6 +168,16 @@ class GameScene extends Phaser.Scene {
 			boulder[k].setDepth(11);
 		}
 
+		// Webs
+		this.webGroup = this.physics.add.group({ key: 'web' });
+		let web = map.createFromObjects('Objects', 'Web', { key: 'web' });
+		for (var p = 0; p < web.length; p++) {
+			this.webGroup.add(web[p]);
+			this.physics.add.existing(web[p]);
+			web[p].body.setImmovable(true);
+			web[p].setScale(3);
+		}
+
 		// Final Orb
 		this.finalOrb = this.physics.add.sprite(fSpawnPoint.x, fSpawnPoint.y, 'final_orb_activation_sheet').setScale(3).setImmovable();
 		this.finalOrb.setSize(93, 96).setOffset(0, 32);
@@ -176,9 +188,11 @@ class GameScene extends Phaser.Scene {
 
 		// Player Collisions
 		this.physics.add.collider(this.player, walls);
-		this.physics.add.collider(this.player, lightLayer16).name = 'Level2Blocker';
-		this.physics.add.collider(this.player, lightLayer17).name = 'Level3Blocker';
+		(this.physics.add.collider(this.player, lightLayer16)).name = 'Level2Blocker';
+		(this.physics.add.collider(this.player, lightLayer17)).name = 'Level3Blocker';
 		this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.playOrb, null, this);
+		this.physics.add.overlap(this.player, this.webGroup.getChildren(), this.webCollide, null, this);
+		this.physics.add.overlap(this.player, grass, this.resetPlayerSpeed, null, this);
 		this.physics.add.collider(this.player, this.slimeGroup.getChildren(), this.player.takeDamage, null, this.player);
 		this.physics.add.collider(this.pillarGroup.getChildren(), this.slimeGroup.getChildren());
 		this.physics.add.overlap(this.player, this.trapGroup.getChildren(), triggerSpikes, null, this); // Want overlap
@@ -244,9 +258,6 @@ class GameScene extends Phaser.Scene {
 		this.player.update(time, delta);
 		switch (this.finalTally) {
 		case 15:
-			for (let i = 0; i < this.lightsArray.length; i++) {
-				this.lightsArray[i].visible = true; // Make all layers visible if we have all orbs
-			}
 			if (this.finalOrb.x - this.player.body.x < 350 && this.finalOrb.x - this.player.body.x > -350) {
 				if (this.finalOrb.y - this.player.body.y < 450 && this.finalOrb.y - this.player.body.y > -450) {
 					if (!this.finalOrb.anims.isPlaying) {
@@ -255,29 +266,20 @@ class GameScene extends Phaser.Scene {
 				}
 			}
 			break;
-
 		case 8:
-			for (let i = 0; i < this.lightsArray.length; i++) {
-				this.lightsArray[i].visible = false; // Make all layers invisible, light way to next level
-			}
 			this.level3Blocker.setVisible(false);
 			this.level3Blocker.destroy();
 			this.physics.world.colliders.remove(this.physics.world.colliders.getActive().find(function (i) {
 				return i.name === 'Level3Blocker';
 			}));
-			this.lightsArray[16].visible = true;
 			this.lightsArray[17].visible = true;
 			break;
 		case 3:
-			for (let i = 0; i < this.lightsArray.length; i++) {
-				this.lightsArray[i].visible = false; // Make all layers invisible, light way to next level
-			}
+			this.level2Blocker.setVisible(false);
+			this.level2Blocker.destroy();
 			this.physics.world.colliders.remove(this.physics.world.colliders.getActive().find(function (i) {
 				return i.name === 'Level2Blocker';
 			}));
-			this.level2Blocker.setVisible(false);
-			this.level2Blocker.destroy();
-			this.lightsArray[0].visible = true;
 			this.lightsArray[16].visible = true; // Level 1 complete layer
 			break;
 		}
@@ -349,6 +351,10 @@ class GameScene extends Phaser.Scene {
 			}
 		}
 		pillar.anims.play('light_orb_activated', true);
+	}
+
+	webCollide () {
+		this.player.body.setMaxSpeed(100);
 	}
 }
 // Ensure this is a globally accessible class
