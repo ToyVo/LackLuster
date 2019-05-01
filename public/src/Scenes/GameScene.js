@@ -106,8 +106,8 @@ class GameScene extends Phaser.Scene {
 
 		this.events.on('resume', function (sys, data) {
 			if (data === 1) {
+				this.input.keyboard.resetKeys();
 				this.player.setPosition(this.spawnPoint.x, this.spawnPoint.y);
-				this.acceleration = 0;
 				this.player.health = 6;
 			}
 		}, this);
@@ -192,7 +192,6 @@ class GameScene extends Phaser.Scene {
 		(this.physics.add.collider(this.player, lightLayer17)).name = 'Level3Blocker';
 		this.physics.add.collider(this.player, this.pillarGroup.getChildren(), this.playOrb, null, this);
 		this.physics.add.overlap(this.player, this.webGroup.getChildren(), this.webCollide, null, this);
-		this.physics.add.overlap(this.player, grass, this.resetPlayerSpeed, null, this);
 		this.physics.add.collider(this.player, this.slimeGroup.getChildren(), this.player.takeDamage, null, this.player);
 		this.physics.add.collider(this.pillarGroup.getChildren(), this.slimeGroup.getChildren());
 		this.physics.add.overlap(this.player, this.trapGroup.getChildren(), triggerSpikes, null, this); // Want overlap
@@ -354,7 +353,7 @@ class GameScene extends Phaser.Scene {
 	}
 
 	webCollide () {
-		this.player.body.setMaxSpeed(100);
+		this.player.velocity = 55;
 	}
 }
 // Ensure this is a globally accessible class

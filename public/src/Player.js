@@ -39,7 +39,8 @@ class Player extends Phaser.GameObjects.Sprite {
 		});
 		this.damageCooldown = 0;
 		this.health = 6;
-		this.body.setMaxSpeed(600);
+
+		this.velocity = 600;
 		this.rollCooldown = 50;
 
 		this.healthCenter = this.scene.add.sprite(x, y, 'health_orb').setScale(4, 4).setDepth(100);
@@ -53,10 +54,9 @@ class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	update (time, delta) {
-		this.acceleration = 9000;
-
+		// this.velocity = 600;
+		this.body.setVelocity(0);
 		this.body.setAcceleration(0);
-		this.body.setDrag(3500);
 
 		// key inputs
 		let keys = {
@@ -100,13 +100,13 @@ class Player extends Phaser.GameObjects.Sprite {
 			if (!this.footsteps.isPlaying) {
 				this.footsteps.play();
 			}
-			this.body.setAccelerationX(-this.acceleration);
+			this.body.setVelocityX(-this.velocity);
 			this.lastDirection = 'left';
 		} else if (input.right) {
 			if (!this.footsteps.isPlaying) {
 				this.footsteps.play();
 			}
-			this.body.setAccelerationX(this.acceleration);
+			this.body.setVelocityX(this.velocity);
 			this.lastDirection = 'right';
 		}
 
@@ -114,13 +114,13 @@ class Player extends Phaser.GameObjects.Sprite {
 			if (!this.footsteps.isPlaying) {
 				this.footsteps.play();
 			}
-			this.body.setAccelerationY(-this.acceleration);
+			this.body.setVelocityY(-this.velocity);
 			this.lastDirection = 'up';
 		} else if (input.down) {
 			if (!this.footsteps.isPlaying) {
 				this.footsteps.play();
 			}
-			this.body.setAccelerationY(this.acceleration);
+			this.body.setVelocityY(this.velocity);
 			this.lastDirection = 'down';
 		}
 
@@ -173,16 +173,23 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		this.rollCooldown -= delta;
-		if (input.space && this.rollCooldown <= 0) {
-			this.body.setMaxSpeed(600);
-			this.body.setAcceleration(this.body.acceleration.x * 650, this.body.acceleration.y * 650);
-			this.body.setDrag(5000);
+		if (input.space && this.rollCooldown <= 0 && (!this.body.blocked.up && !this.body.blocked.down &&
+			!this.body.blocked.left && !this.body.blocked.right && !this.body.touching.up &&
+			!this.body.touching.down && !this.body.touching.left && !this.body.touching.right)) {
+			this.velocity = 600;
+			this.body.setVelocity((this.body.velocity.x) * 5, this.body.velocity.y * 5);
 			this.rollCooldown = 500;
 			this.dashDash.play();
 			this.anims.play(this.lastDashAnim);
 		}
 
 		this.damageCooldown -= delta;
+		if (this.damageCooldown > 500) {
+			this.velocity = -850;// Will simulate knockback to player
+		}
+		if (this.damageCooldown <= 500) {
+			this.velocity = 600; // Will reset move to normal
+		}
 		this.healthCenter.x = this.body.x + 35;
 		this.healthCenter.y = this.body.y - 100;
 		this.healthRight.x = this.body.x + 80;
@@ -228,11 +235,10 @@ class Player extends Phaser.GameObjects.Sprite {
 	takeDamage () {
 		this.tint = 0xffffff;// Will reset player color from damage
 		// the context of this function is on player, please don't switch it back to being the scene so that we have to do this.player on everything
-		this.body.setAcceleration(this.body.acceleration.x * -150, this.body.acceleration.y * -150);
-		if (!this.playerHurt.isPlaying === true) {
-			this.playerHurt.play();
-		}
 		if (this.damageCooldown < 0) {
+			if (!this.playerHurt.isPlaying === true) {
+				this.playerHurt.play();
+			}
 			this.scene.cameras.main.shake(50, 0.005);
 			this.health--;// We need to do this.player.body as the context of this changes below
 			this.damageCooldown = 1000;
@@ -242,7 +248,6 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		if (this.health <= 0) {
-			this.body.setMass(5000);
 			this.playerDeath.play();
 			this.scene.scene.run('GameOver');
 			this.scene.scene.bringToTop('GameOver');
