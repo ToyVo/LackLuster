@@ -66,16 +66,16 @@ class GameScene extends Phaser.Scene {
 		enemyColl.setCollisionByProperty({ collides: true });
 		lightLayer16.setCollisionByProperty({ collides: true });
 		lightLayer17.setCollisionByProperty({ collides: true });
-		walls.setTileLocationCallback(249, 186, 15, 5, this.triggerLevelOneMusic, this);
-		walls.setTileLocationCallback(170, 263, 5, 15, this.triggerLevelTwoMusic, this);
-		walls.setTileLocationCallback(325, 263, 5, 15, this.triggerLevelThreeMusic, this);
-		walls.setTileLocationCallback(180, 195, 145, 150, this.triggerMusic, this);// 190-340y, 175-320x covers the hub area
-		walls.setTileLocationCallback(249, 370, 5, 15, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
-		const fSpawnPoint = map.findObject('Objects', obj => obj.name === 'fSpawnPoint');
+		walls.setTileLocationCallback(240, 175, 15, 5, this.triggerLevelOneMusic, this);
+		walls.setTileLocationCallback(165, 250, 5, 15, this.triggerLevelTwoMusic, this);
+		walls.setTileLocationCallback(320, 250, 5, 15, this.triggerLevelThreeMusic, this);
+		walls.setTileLocationCallback(170, 180, 145, 150, this.triggerMusic, this);// 170-310y, 175-320x covers the hub area
+		walls.setTileLocationCallback(240, 360, 5, 15, this.triggerStart, this);// 190-340y, 175-320x covers the hub area
+		this.fSpawnPoint = map.findObject('Objects', obj => obj.name === 'fSpawnPoint');
 		this.level2BlockPos = map.findObject('Objects', obj => obj.name === 'Level2Block');
-		this.level2Blocker = this.physics.add.sprite(this.level2BlockPos.x + 50, this.level2BlockPos.y + 40, 'Blocker').setScale(5).setImmovable();
+		this.level2Blocker = this.physics.add.sprite(this.level2BlockPos.x + 50, this.level2BlockPos.y + 40, 'Blocker').setScale(5).setImmovable().setSize(65, 500);
 		this.level3BlockPos = map.findObject('Objects', obj => obj.name === 'Level3Block');
-		this.level3Blocker = this.physics.add.sprite(this.level3BlockPos.x + 50, this.level3BlockPos.y + 40, 'Blocker').setScale(5).setImmovable();
+		this.level3Blocker = this.physics.add.sprite(this.level3BlockPos.x + 50, this.level3BlockPos.y + 40, 'Blocker').setScale(5).setImmovable().setSize(65, 500);
 		this.spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
 
 		// Camera
@@ -86,10 +86,6 @@ class GameScene extends Phaser.Scene {
 		// Player
 		this.player = new Player(this, this.spawnPoint.x, this.spawnPoint.y, 'player_front');
 		this.cameras.main.startFollow(this.player, false, 0.5, 0.5);
-
-		/*    this.sparkles = this.physics.add.sprite(this.spawnPoint.x + 10, this.spawnPoint.y + 10, 'sparkle').setScale(50, 45).setImmovable();
-		this.sparkles.alpha = 0.3;
-		this.sparkles.anims.play('sparkles');  */
 		// Pause Game
 		this.input.gamepad.on('up', function (pad, button, value) {
 			if (button.index === 1) {
@@ -119,18 +115,20 @@ class GameScene extends Phaser.Scene {
 
 		// Enemy
 		this.slimeGroup = this.physics.add.group({ key: 'slime_black_walking' });
-		let enemySpawn = map.createFromObjects('Objects', 'EnemySpawn', { key: 'slime_black_walking' });
-		for (var i = 0; i < enemySpawn.length; i++) {
+		const enemySpawn = map.createFromObjects('Objects', 'EnemySpawn', { key: 'slime_black_walking' });
+		for (let i = 0; i < enemySpawn.length; i++) {
 			this.slimeGroup.add(enemySpawn[i]);
 			this.physics.add.existing(enemySpawn[i]);
 			enemySpawn[i].anims.play('slimeAnim');
 			enemySpawn[i].setDepth(5);
+			enemySpawn[i].body.setVelocityX(-300); // ACTUALLY WORKS YES, Appears to be a one time method call
+			enemySpawn[i].setScale(2);
 		}
 
 		// light orbs
 		this.pillarGroup = this.physics.add.group({ key: 'light_orb' });
 		this.pSpawn = map.createFromObjects('Objects', 'PillarSpawn', { key: 'light_orb' });
-		for (var l = 0; l < this.pSpawn.length; l++) {
+		for (let l = 0; l < this.pSpawn.length; l++) {
 			this.pillarGroup.add(this.pSpawn[l]);
 			this.physics.add.existing(this.pSpawn[l]);
 			this.pSpawn[l].setScale(3);
@@ -147,7 +145,7 @@ class GameScene extends Phaser.Scene {
 		// Spikes
 		this.trapGroup = this.physics.add.group({ key: 'spikeT' });
 		const traps = map.createFromObjects('Objects', 'Spike', { key: 'spikeT' });
-		for (var j = 0; j < traps.length; j++) {
+		for (let j = 0; j < traps.length; j++) {
 			this.trapGroup.add(traps[j]);
 			this.physics.add.existing(traps[j]);
 			traps[j].body.setImmovable(true);
@@ -161,17 +159,19 @@ class GameScene extends Phaser.Scene {
 		}
 		// Boulders
 		this.boulderGroup = this.physics.add.group({ key: 'boul' });
-		let boulder = map.createFromObjects('Objects', 'Boulder', { key: 'boul' });
-		for (var k = 0; k < boulder.length; k++) {
+		const boulder = map.createFromObjects('Objects', 'Boulder', { key: 'boul' });
+		for (let k = 0; k < boulder.length; k++) {
 			this.boulderGroup.add(boulder[k]);
 			this.physics.add.existing(boulder[k]);
 			boulder[k].setDepth(11);
+			boulder[k].setScale(2.65);
+			boulder[k].body.setVelocityY(400);
 		}
 
 		// Webs
 		this.webGroup = this.physics.add.group({ key: 'web' });
-		let web = map.createFromObjects('Objects', 'Web', { key: 'web' });
-		for (var p = 0; p < web.length; p++) {
+		const web = map.createFromObjects('Objects', 'Web', { key: 'web' });
+		for (let p = 0; p < web.length; p++) {
 			this.webGroup.add(web[p]);
 			this.physics.add.existing(web[p]);
 			web[p].body.setImmovable(true);
@@ -179,7 +179,7 @@ class GameScene extends Phaser.Scene {
 		}
 
 		// Final Orb
-		this.finalOrb = this.physics.add.sprite(fSpawnPoint.x, fSpawnPoint.y, 'final_orb_activation_sheet').setScale(3).setImmovable();
+		this.finalOrb = this.physics.add.sprite(this.fSpawnPoint.x, this.fSpawnPoint.y, 'final_orb_activation_sheet').setScale(3).setImmovable();
 		this.finalOrb.setSize(93, 96).setOffset(0, 32);
 		this.physics.add.collider(this.player, this.finalOrb, null, null, this);
 		this.finalOrb.on('animationcomplete', function (animation, frame, gameObject) {
@@ -204,14 +204,7 @@ class GameScene extends Phaser.Scene {
 		this.physics.add.collider(enemyColl, this.slimeGroup.getChildren()); // Contains the slimes
 		this.physics.add.collider(this.slimeGroup.getChildren(), this.slimeGroup.getChildren()); // Contains the slime
 		this.physics.add.collider(wallTop, this.slimeGroup.getChildren(), slimeMove, null, this); // Contains the slimes
-		Phaser.Actions.Call(this.slimeGroup.getChildren(), function (child) { // Slime kickoff
-			child.body.setVelocityX(-300); // ACTUALLY WORKS YES, Appears to be a one time method call
-			child.setScale(2);
-		});
-		Phaser.Actions.Call(this.boulderGroup.getChildren(), function (child) { // Boulder kickoff
-			child.setScale(2.65); // this.boulderRoll.play();
-			child.body.setVelocityY(400);
-		});
+
 		function letsRoll (player, boulder) {
 			this.boulderGroup.children.iterate(function (child) {
 				child.body.setImmovable(true);
@@ -325,6 +318,9 @@ class GameScene extends Phaser.Scene {
 	}
 
 	playFinalOrb () {
+		this.sparkles = this.physics.add.sprite(this.fSpawnPoint.x + 10, this.fSpawnPoint.y + 10, 'sparkle').setScale(40, 45).setImmovable();
+		this.sparkles.alpha = 0.3;
+		this.sparkles.anims.play('sparkles');
 		this.finalOrb.anims.play('final_orb_activation_anim');
 		let title = this.add.text(7980, 8000, 'Thanks for playing!', {
 			fontFamily: 'font1',
@@ -353,7 +349,7 @@ class GameScene extends Phaser.Scene {
 	}
 
 	webCollide () {
-		this.player.velocity = 55;
+		this.player.velocity = 105;
 	}
 }
 // Ensure this is a globally accessible class

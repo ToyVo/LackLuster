@@ -178,7 +178,7 @@ class Player extends Phaser.GameObjects.Sprite {
 			!this.body.touching.down && !this.body.touching.left && !this.body.touching.right)) {
 			this.velocity = 600;
 			this.body.setVelocity((this.body.velocity.x) * 5, this.body.velocity.y * 5);
-			this.rollCooldown = 500;
+			this.rollCooldown = 1300;
 			this.dashDash.play();
 			this.anims.play(this.lastDashAnim);
 		}
