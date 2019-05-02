@@ -108,9 +108,7 @@ class Player extends Phaser.GameObjects.Sprite {
 			}
 			this.body.setVelocityX(this.velocity);
 			this.lastDirection = 'right';
-		}
-
-		if (input.up) {
+		} else if (input.up) {
 			if (!this.footsteps.isPlaying) {
 				this.footsteps.play();
 			}
@@ -173,19 +171,18 @@ class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		this.rollCooldown -= delta;
-		if (input.space && this.rollCooldown <= 0 && (!this.body.blocked.up && !this.body.blocked.down &&
-			!this.body.blocked.left && !this.body.blocked.right && !this.body.touching.up &&
-			!this.body.touching.down && !this.body.touching.left && !this.body.touching.right)) {
+		if (this.body.blocked.none && this.body.touching.none &&
+			this.body.wasTouching.none && input.space && this.rollCooldown <= 0) {
 			this.velocity = 600;
-			this.body.setVelocity((this.body.velocity.x) * 5, this.body.velocity.y * 5);
-			this.rollCooldown = 1300;
+			this.body.setVelocity((this.body.velocity.x) * 3, this.body.velocity.y * 3);
+			this.rollCooldown = 1500;
 			this.dashDash.play();
 			this.anims.play(this.lastDashAnim);
 		}
 
 		this.damageCooldown -= delta;
 		if (this.damageCooldown > 500) {
-			this.velocity = -850;// Will simulate knockback to player
+			this.velocity = -750;// Will simulate knockback to player
 		}
 		if (this.damageCooldown <= 500) {
 			this.velocity = 600; // Will reset move to normal
