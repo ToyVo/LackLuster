@@ -69,7 +69,7 @@ class StartScene extends Phaser.Scene {
 		background.fillRect(0, 0, gameWidth, gameHeight);
 
 		// Title
-		let title = this.add.text(gameWidth / 2, gameHeight / 4, 'Lack Luster', {
+		let title = this.add.text(gameWidth / 2, gameHeight / 4, 'LACK LUSTER', {
 			fontFamily: 'font1',
 			fontSize: '80px',
 			fill: '#FFFFFF'
