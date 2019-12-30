@@ -1,29 +1,32 @@
 {
-  "name": "lack_luster",
-  "version": "1.0.0",
-  "description": "a passifist game made in gdd 325 at uw stout",
-  "author": "Collin Diekvoss <diekvossc4994@my.uwstout.edu>, Andrew Frideres <frideresa6522@my.uwstout.edu>, Joshua Haakana <haakanaj8066@my.uwstout.edu>, Lex Klusman <klusmana1346@my.uwstout.edu>",
-  "main": "public/index.html",
-  "repository": "UWStout/GDD325pm_001",
-  "scripts": {
-    "start": "npm-run-all -s buildindex server",
-    "dev": "npm-run-all -s cpdevindex server",
-    "buildindex": "node buildIndex prod",
-    "cpdevindex": "node buildIndex dev",
-    "server": "browser-sync start -s public -w -f public/**/* -b chrome",
-    "test": "eslint ./public/src/**/**.js"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "browser-sync": "^2.24.7",
-    "eslint": "^5.5.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-promise": "^4.0.0",
-    "eslint-plugin-standard": "^4.0.0",
-    "insert-line": "^1.1.0",
-    "linenumber": "^1.0.0",
-    "npm-run-all": "^4.1.5"
-  }
+    "name": "lack_luster",
+    "version": "1.0.0",
+    "description": "a passifist game made in gdd 325 at uw stout",
+    "author": "Collin Diekvoss <diekvossc4994@my.uwstout.edu>, Andrew Frideres <frideresa6522@my.uwstout.edu>, Joshua Haakana <haakanaj8066@my.uwstout.edu>, Lex Klusman <klusmana1346@my.uwstout.edu>",
+    "main": "index.js",
+    "repository": "ToyVo/LackLuster",
+    "scripts": {
+        "start": "npm run dev",
+        "dev": "webpack",
+        "prod": "webpack --config webpack.production.config.js",
+        "lint": "eslint src/** --fix"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "phaser": "^3.21.0"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^2.13.0",
+        "@typescript-eslint/parser": "^2.13.0",
+        "copy-webpack-plugin": "^5.0.4",
+        "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.8.0",
+        "eslint-plugin-prettier": "^3.1.2",
+        "prettier": "^1.19.1",
+        "ts-loader": "^6.2.1",
+        "typescript": "^3.7.4",
+        "webpack": "^4.41.4",
+        "webpack-cli": "^3.3.10",
+        "webpack-dev-server": "^3.10.1"
+    }
 }
