@@ -11,7 +11,7 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
  */
 export class MainMenuScene extends Phaser.Scene {
     private blinkTimer = 0;
-    private anyButton: Phaser.GameObjects.Text;
+    private anyButton!: Phaser.GameObjects.Text;
 
     constructor() {
         super(sceneConfig);

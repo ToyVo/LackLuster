@@ -5,15 +5,5 @@ import { GameScene } from './GameScene';
 import { PauseScene } from './PauseScene';
 import { BootScene } from './BootScene';
 import { MainMenuScene } from './MainMenuScene';
-import { GameSceneExample } from './GameSceneExample';
 
-export default [
-    ControlsScene,
-    CreditsScene,
-    GameOver,
-    GameScene,
-    PauseScene,
-    BootScene,
-    MainMenuScene,
-    GameSceneExample,
-];
+export default [BootScene, MainMenuScene, ControlsScene, CreditsScene, GameScene, PauseScene, GameOver];

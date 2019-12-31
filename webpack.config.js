@@ -1,6 +1,7 @@
-import * as path from 'path';
-import * as webpack from 'webpack';
-import * as CopyWebpackPlugin from 'copy-webpack-plugin';
+/* eslint-disable @typescript-eslint/no-var-requires */
+const path = require('path');
+const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: {

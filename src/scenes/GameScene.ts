@@ -8,45 +8,19 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 };
 
 export class GameScene extends Phaser.Scene {
-    private player: Player;
-    private finalOrb: Phaser.GameObjects.Sprite;
+    private player!: Player;
+    private finalOrb!: Phaser.Physics.Arcade.Sprite;
+    private lightsArray!: Array<Phaser.Tilemaps.StaticTilemapLayer>;
+    private fSpawnPoint!: Phaser.GameObjects.Sprite;
+    private level3Blocker!: Phaser.Physics.Arcade.Sprite;
+    private level2Blocker!: Phaser.Physics.Arcade.Sprite;
     private finalTally = 0;
-    private lightsArray: Array<Phaser.Tilemaps.StaticTilemapLayer>;
-    private mainThemeSound = this.sound.add('mainTheme', {
-        volume: 0.4,
-        rate: 1,
-        loop: true,
-    });
-
-    private levelOneSound = this.sound.add('levelOne', {
-        volume: 0.7,
-        rate: 0.8,
-        loop: true,
-    });
-
-    private levelTwoSound = this.sound.add('levelTwo', {
-        volume: 0.5,
-        rate: 2,
-        loop: true,
-    });
-
-    private levelThreeSound = this.sound.add('levelThree', {
-        volume: 0.4,
-        rate: 0.53,
-        loop: true,
-    });
-
-    private powerUp = this.sound.add('powerUp', {
-        volume: 0.6,
-        rate: 2.75,
-        loop: false,
-    });
-
-    private spike = this.sound.add('spike', {
-        volume: 0.3,
-        rate: 1,
-        loop: false,
-    });
+    private mainThemeSound!: Phaser.Sound.BaseSound;
+    private levelOneSound!: Phaser.Sound.BaseSound;
+    private levelTwoSound!: Phaser.Sound.BaseSound;
+    private levelThreeSound!: Phaser.Sound.BaseSound;
+    private powerUp!: Phaser.Sound.BaseSound;
+    private spike!: Phaser.Sound.BaseSound;
 
     constructor() {
         super(sceneConfig);
@@ -54,17 +28,51 @@ export class GameScene extends Phaser.Scene {
 
     preload(): void {
         setupAnimations(this);
+
+        this.mainThemeSound = this.sound.add('mainTheme', {
+            volume: 0.4,
+            rate: 1,
+            loop: true,
+        });
+
+        this.levelOneSound = this.sound.add('levelOne', {
+            volume: 0.7,
+            rate: 0.8,
+            loop: true,
+        });
+
+        this.levelTwoSound = this.sound.add('levelTwo', {
+            volume: 0.5,
+            rate: 2,
+            loop: true,
+        });
+
+        this.levelThreeSound = this.sound.add('levelThree', {
+            volume: 0.4,
+            rate: 0.53,
+            loop: true,
+        });
+
+        this.powerUp = this.sound.add('powerUp', {
+            volume: 0.6,
+            rate: 2.75,
+            loop: false,
+        });
+
+        this.spike = this.sound.add('spike', {
+            volume: 0.3,
+            rate: 1,
+            loop: false,
+        });
     }
 
     create(): void {
         // map
-        const level2BlockPlayer = true;
-        const level3BlockPlayer = true;
         const map = this.make.tilemap({ key: 'map' });
         const tileSetImg = map.addTilesetImage('LL_tiled_tiles', 'LL_tiled_tiles');
         const tileLightSetImg = map.addTilesetImage('LL_tiled_light_tiles', 'LL_tiled_light_tiles');
-        const grass = map.createStaticLayer(0, tileSetImg, 0, 0);
-        const tiles = map.createStaticLayer(1, [tileSetImg, tileLightSetImg], 0, 0);
+        map.createStaticLayer(0, tileSetImg, 0, 0);
+        map.createStaticLayer(1, [tileSetImg, tileLightSetImg], 0, 0);
         const walls = map.createStaticLayer(2, tileSetImg, 0, 0);
         const wallTop = map.createStaticLayer(3, tileSetImg, 0, 0).setDepth(12);
         const enemyColl = map.createStaticLayer(4, tileSetImg);
@@ -150,20 +158,26 @@ export class GameScene extends Phaser.Scene {
         walls.setTileLocationCallback(240, 360, 5, 15, () => {
             this.lightsArray[0].visible = true;
         });
-        const fSpawnPoint = map.findObject('Objects', obj => obj.name === 'fSpawnPoint');
-        const level2BlockPos = map.findObject('Objects', obj => obj.name === 'Level2Block');
-        const level2Blocker = this.physics.add
+        this.fSpawnPoint = map.findObject('Objects', obj => obj.name === 'fSpawnPoint') as Phaser.GameObjects.Sprite;
+        const level2BlockPos = map.findObject(
+            'Objects',
+            obj => obj.name === 'Level2Block',
+        ) as Phaser.GameObjects.Sprite;
+        this.level2Blocker = this.physics.add
             .sprite(level2BlockPos.x + 50, level2BlockPos.y + 40, 'Blocker')
             .setScale(5)
             .setImmovable()
             .setSize(65, 500);
-        const level3BlockPos = map.findObject('Objects', obj => obj.name === 'Level3Block');
-        const level3Blocker = this.physics.add
+        const level3BlockPos = map.findObject(
+            'Objects',
+            obj => obj.name === 'Level3Block',
+        ) as Phaser.GameObjects.Sprite;
+        this.level3Blocker = this.physics.add
             .sprite(level3BlockPos.x + 50, level3BlockPos.y + 40, 'Blocker')
             .setScale(5)
             .setImmovable()
             .setSize(65, 500);
-        const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn');
+        const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn') as Phaser.GameObjects.Sprite;
 
         // Camera
         this.cameras.main.setBackgroundColor('#536b5d');
@@ -187,7 +201,7 @@ export class GameScene extends Phaser.Scene {
             this.scene.pause('GameScene');
         });
 
-        this.events.on('resume', (sys, data) => {
+        this.events.on('resume', (_sys: number, data: number) => {
             if (data === 1) {
                 this.input.keyboard.resetKeys();
                 this.player.setPosition(spawnPoint.x, spawnPoint.y);
@@ -203,7 +217,8 @@ export class GameScene extends Phaser.Scene {
             this.physics.add.existing(slime);
             slime.anims.play('slimeAnim');
             slime.setDepth(5);
-            slime.body = new Phaser.Physics.Arcade.Body(this.physics.world, slime).setVelocity(-300);
+            const body = slime.body as Phaser.Physics.Arcade.Body;
+            body.setVelocity(-300);
             slime.setScale(2);
         }
 
@@ -216,11 +231,10 @@ export class GameScene extends Phaser.Scene {
             pillar.setScale(3);
             pillar.setDepth(11);
             pillar.setSize(32, 30);
-            pillar.body = new Phaser.Physics.Arcade.Body(this.physics.world, pillar)
-                .setImmovable(true)
-                .setOffset(0, 30);
+            const body = pillar.body as Phaser.Physics.Arcade.Body;
+            body.setImmovable(true).setOffset(0, 30);
             pillar.on('animationstart', () => {
-                this.pillarUp.play();
+                this.powerUp.play();
                 this.finalTally++;
             });
         }
@@ -231,26 +245,27 @@ export class GameScene extends Phaser.Scene {
         for (const trap of traps) {
             trapGroup.add(trap);
             this.physics.add.existing(trap);
-            trap.body = new Phaser.Physics.Arcade.Body(this.physics.world, trap)
-                .setImmovable(true)
+            const body = trap.body as Phaser.Physics.Arcade.Body;
+            body.setImmovable(true)
                 .setSize(22, 22)
                 .setOffset(6, 6);
             trap.setScale(3);
             trap.setDepth(1);
             trap.on('animationcomplete-spikeTrapOn', () => {
-                spikeTrap.play();
+                this.spike.play();
                 this.player.takeDamage();
             });
         }
         // Boulders
-        const boulderGroup = this.physics.add.group({ key: 'boul' });
+        const boulderGroup: Phaser.Physics.Arcade.Group = this.physics.add.group({ key: 'boul' });
         const boulder = map.createFromObjects('Objects', 'Boulder', { key: 'boul' });
         for (const boul of boulder) {
             boulderGroup.add(boul);
             this.physics.add.existing(boul);
             boul.setDepth(11);
             boul.setScale(2.65);
-            boul.body = new Phaser.Physics.Arcade.Body(this.physics.world, boul).setVelocity(0, 400);
+            const body = boul.body as Phaser.Physics.Arcade.Body;
+            body.setVelocity(0, 400);
         }
 
         // Webs
@@ -259,13 +274,14 @@ export class GameScene extends Phaser.Scene {
         for (const iweb of web) {
             webGroup.add(iweb);
             this.physics.add.existing(iweb);
-            iweb.body = new Phaser.Physics.Arcade.Body(this.physics.world, iweb).setImmovable(true);
+            const body = iweb.body as Phaser.Physics.Arcade.Body;
+            body.setImmovable(true);
             iweb.setScale(3);
         }
 
         // Final Orb
         this.finalOrb = this.physics.add
-            .sprite(fSpawnPoint.x, fSpawnPoint.y, 'final_orb_activation_sheet')
+            .sprite(this.fSpawnPoint.x, this.fSpawnPoint.y, 'final_orb_activation_sheet')
             .setScale(3)
             .setImmovable();
         this.finalOrb.setSize(93, 96).setOffset(0, 32);
@@ -277,7 +293,8 @@ export class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.player, walls);
         this.physics.add.collider(this.player, lightLayer16).name = 'Level2Blocker';
         this.physics.add.collider(this.player, lightLayer17).name = 'Level3Blocker';
-        this.physics.add.collider(this.player, pillarGroup.getChildren(), pillar => {
+        this.physics.add.collider(this.player, pillarGroup.getChildren(), p => {
+            const pillar = p as Phaser.GameObjects.Sprite;
             for (let o = 0; o < pSpawn.length; o++) {
                 if (pSpawn[o] === pillar) {
                     // The pillar we touch is equiv to the pillar in the group..
@@ -293,76 +310,20 @@ export class GameScene extends Phaser.Scene {
         });
         this.physics.add.collider(this.player, slimeGroup.getChildren(), this.player.takeDamage);
         this.physics.add.collider(pillarGroup.getChildren(), slimeGroup.getChildren());
-        this.physics.add.overlap(this.player, trapGroup.getChildren(), spike => {
+        this.physics.add.overlap(this.player, trapGroup.getChildren(), s => {
+            const spike = s as Phaser.GameObjects.Sprite;
             if (!spike.anims.isPlaying) {
                 spike.play('spikeTrapOn');
                 spike.play('spikeTrapOff');
             }
         });
         this.physics.add.collider(this.player, boulderGroup.getChildren(), this.player.takeDamage);
-
-        this.physics.add.collider(boulderGroup.getChildren(), walls, () => {
-            boulderGroup.children.iterate(child => {
-                child.body.setImmovable(true);
-                if (child.body.touching.down || child.body.blocked.down) {
-                    child.body.setVelocityY(-400);
-                    child.anims.play('boulUp');
-                } else if (child.body.touching.up || child.body.blocked.up) {
-                    child.body.setVelocityY(400);
-                    child.anims.play('boulDown');
-                }
-            });
-        });
-        this.physics.add.collider(boulderGroup.getChildren(), wallTop, () => {
-            boulderGroup.children.iterate(child => {
-                child.body.setImmovable(true);
-                if (child.body.touching.down || child.body.blocked.down) {
-                    child.body.setVelocityY(-400);
-                    child.anims.play('boulUp');
-                } else if (child.body.touching.up || child.body.blocked.up) {
-                    child.body.setVelocityY(400);
-                    child.anims.play('boulDown');
-                }
-            });
-        });
-        this.physics.add.collider(walls, slimeGroup.getChildren(), () => {
-            this.slimeGroup.children.iterate(child => {
-                child.body.setImmovable(true);
-                if (child.body.touching.right || child.body.blocked.right) {
-                    child.body.velocity.y = 300;
-                    child.body.velocity.x = 0; // turn down
-                } else if (child.body.touching.left || child.body.blocked.left) {
-                    child.body.velocity.y = -300; // turn up
-                    child.body.velocity.x = 0;
-                } else if (child.body.touching.up || child.body.blocked.up) {
-                    child.body.velocity.y = 0;
-                    child.body.velocity.x = 300; // turn right
-                } else if (child.body.touching.down || child.body.blocked.down) {
-                    child.body.velocity.y = 0;
-                    child.body.velocity.x = -300; // turn left
-                }
-            });
-        });
+        this.physics.add.collider(boulderGroup.getChildren(), walls, this.boulderCallback(boulderGroup));
+        this.physics.add.collider(boulderGroup.getChildren(), wallTop, this.boulderCallback(boulderGroup));
+        this.physics.add.collider(walls, slimeGroup.getChildren(), this.slimeCallback(slimeGroup));
+        this.physics.add.collider(wallTop, slimeGroup.getChildren(), this.slimeCallback(slimeGroup));
         this.physics.add.collider(enemyColl, slimeGroup.getChildren());
         this.physics.add.collider(slimeGroup.getChildren(), slimeGroup.getChildren());
-        this.physics.add.collider(wallTop, slimeGroup.getChildren(), () => {
-            this.slimeGroup.children.iterate(child => {
-                child.body.setImmovable(true);
-                if (child.body.touching.right || child.body.blocked.right) {
-                    child.body.velocity.y = 300;
-                    child.body.velocity.x = 0; // turn down
-                } else if (child.body.touching.left || child.body.blocked.left) {
-                    child.body.velocity.y = -300; // turn up
-                    child.body.velocity.x = 0;
-                } else if (child.body.touching.up || child.body.blocked.up) {
-                    child.body.velocity.y = 0;
-                    child.body.velocity.x = 300; // turn right
-                } else if (child.body.touching.down || child.body.blocked.down) {
-                    child.body.velocity.y = 0;
-                    child.body.velocity.x = -300; // turn left
-                }
-            });
-        });
     }
 
     update(time: number, delta: number): void {
@@ -373,7 +334,7 @@ export class GameScene extends Phaser.Scene {
                     if (this.finalOrb.y - this.player.body.y < 450 && this.finalOrb.y - this.player.body.y > -450) {
                         if (!this.finalOrb.anims.isPlaying) {
                             const sparkles = this.physics.add
-                                .sprite(fSpawnPoint.x + 10, fSpawnPoint.y + 10, 'sparkle')
+                                .sprite(this.fSpawnPoint.x + 10, this.fSpawnPoint.y + 10, 'sparkle')
                                 .setScale(40, 45)
                                 .setImmovable();
                             sparkles.alpha = 0.3;
@@ -401,7 +362,7 @@ export class GameScene extends Phaser.Scene {
                 this.physics.world.colliders.remove(
                     this.physics.world.colliders.getActive().find(i => {
                         return i.name === 'Level3Blocker';
-                    }),
+                    }) as Phaser.Physics.Arcade.Collider,
                 );
                 this.lightsArray[17].visible = true;
                 break;
@@ -411,10 +372,49 @@ export class GameScene extends Phaser.Scene {
                 this.physics.world.colliders.remove(
                     this.physics.world.colliders.getActive().find(i => {
                         return i.name === 'Level2Blocker';
-                    }),
+                    }) as Phaser.Physics.Arcade.Collider,
                 );
                 this.lightsArray[16].visible = true;
                 break;
         }
+    }
+
+    boulderCallback(boulderGroup: Phaser.Physics.Arcade.Group) {
+        return (): void => {
+            boulderGroup.children.iterate(c => {
+                const child = c as Phaser.GameObjects.Sprite;
+                const body = child.body as Phaser.Physics.Arcade.Body;
+                body.setImmovable(true);
+                if (body.touching.down || body.blocked.down) {
+                    body.setVelocityY(-400);
+                    child.anims.play('boulUp');
+                } else if (body.touching.up || body.blocked.up) {
+                    body.setVelocityY(400);
+                    child.anims.play('boulDown');
+                }
+            });
+        };
+    }
+
+    slimeCallback(slimeGroup: Phaser.Physics.Arcade.Group) {
+        return (): void => {
+            slimeGroup.children.iterate(child => {
+                const body = child.body as Phaser.Physics.Arcade.Body;
+                body.setImmovable(true);
+                if (body.touching.right || body.blocked.right) {
+                    body.velocity.y = 300;
+                    body.velocity.x = 0; // turn down
+                } else if (body.touching.left || body.blocked.left) {
+                    body.velocity.y = -300; // turn up
+                    body.velocity.x = 0;
+                } else if (body.touching.up || body.blocked.up) {
+                    body.velocity.y = 0;
+                    body.velocity.x = 300; // turn right
+                } else if (body.touching.down || body.blocked.down) {
+                    body.velocity.y = 0;
+                    body.velocity.x = -300; // turn left
+                }
+            });
+        };
     }
 }

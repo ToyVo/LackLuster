@@ -12,7 +12,7 @@ export class PauseScene extends Phaser.Scene {
     }
 
     create(): void {
-        const esc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
         const gameHeight = getGameHeight(this);
         const gameWidth = getGameWidth(this);

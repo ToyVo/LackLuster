@@ -48,7 +48,7 @@ export class GameOver extends Phaser.Scene {
             .on('pointerup', () => {
                 // Ideally here we would have a checkpoint we could load or a way to detect
                 // And run different scenes based off progression
-                this.scene.resume('GameScene', 1);
+                this.scene.resume('GameScene', { tes: 1 });
                 this.scene.stop('GameOver');
             });
 

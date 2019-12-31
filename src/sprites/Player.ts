@@ -1,9 +1,10 @@
 import { game } from '../main';
+import * as Phaser from 'phaser';
 
 /**
  * Main player class used in game
  */
-export class Player extends Phaser.GameObjects.Sprite {
+export class Player extends Phaser.Physics.Arcade.Sprite {
     private playerHurt: Phaser.Sound.BaseSound;
     private playerDeath: Phaser.Sound.BaseSound;
     private footsteps: Phaser.Sound.BaseSound;
@@ -13,14 +14,11 @@ export class Player extends Phaser.GameObjects.Sprite {
     private healthLeft: Phaser.GameObjects.Sprite;
     private healthRight: Phaser.GameObjects.Sprite;
 
-    public body: Phaser.Physics.Arcade.Body;
-
     private damageCoolDown = 0;
     public health = 6;
     private rollCoolDown = 50;
     public velocity = 600;
     private lastDirection = 'down';
-    private lastTexture = 'player_front';
     private lastAnim = 'player_walk_front_anim';
     private lastDashAnim = 'playerDashDown';
 
@@ -33,11 +31,11 @@ export class Player extends Phaser.GameObjects.Sprite {
         this.anims.play('player_walk_front_anim');
 
         scene.physics.world.enable(this);
-        this.body = new Phaser.Physics.Arcade.Body(scene.physics.world, this);
-        this.body.setCollideWorldBounds(true);
-        this.body.onWorldBounds = true;
-        this.body.setSize(14, 10); // Adjusting y value on the collider
-        this.body.setOffset(0, 14);
+        const body = this.body as Phaser.Physics.Arcade.Body;
+        body.setCollideWorldBounds(true);
+        body.onWorldBounds = true;
+        body.setSize(14, 10); // Adjusting y value on the collider
+        body.setOffset(0, 14);
 
         this.healthCenter = scene.add
             .sprite(x, y, 'health_orb')
@@ -75,9 +73,10 @@ export class Player extends Phaser.GameObjects.Sprite {
     }
 
     update(_time: number, delta: number): void {
+        const body = this.body as Phaser.Physics.Arcade.Body;
         // this.velocity = 600;
-        this.body.setVelocity(0, 0);
-        this.body.setAcceleration(0, 0);
+        body.setVelocity(0, 0);
+        body.setAcceleration(0, 0);
 
         // key inputs
         const keys = {
@@ -121,25 +120,25 @@ export class Player extends Phaser.GameObjects.Sprite {
             if (!this.footsteps.isPlaying) {
                 this.footsteps.play();
             }
-            this.body.setVelocityX(-this.velocity);
+            body.setVelocityX(-this.velocity);
             this.lastDirection = 'left';
         } else if (input.right) {
             if (!this.footsteps.isPlaying) {
                 this.footsteps.play();
             }
-            this.body.setVelocityX(this.velocity);
+            body.setVelocityX(this.velocity);
             this.lastDirection = 'right';
         } else if (input.up) {
             if (!this.footsteps.isPlaying) {
                 this.footsteps.play();
             }
-            this.body.setVelocityY(-this.velocity);
+            body.setVelocityY(-this.velocity);
             this.lastDirection = 'up';
         } else if (input.down) {
             if (!this.footsteps.isPlaying) {
                 this.footsteps.play();
             }
-            this.body.setVelocityY(this.velocity);
+            body.setVelocityY(this.velocity);
             this.lastDirection = 'down';
         }
 
@@ -188,21 +187,14 @@ export class Player extends Phaser.GameObjects.Sprite {
                     break;
             }
             if (texture != undefined) {
-                this.lastTexture = texture;
                 this.setTexture(texture);
             }
         }
 
         this.rollCoolDown -= delta;
-        if (
-            this.body.blocked.none &&
-            this.body.touching.none &&
-            this.body.wasTouching.none &&
-            input.space &&
-            this.rollCoolDown <= 0
-        ) {
+        if (body.blocked.none && body.touching.none && body.wasTouching.none && input.space && this.rollCoolDown <= 0) {
             this.velocity = 600;
-            this.body.setVelocity(this.body.velocity.x * 3, this.body.velocity.y * 3);
+            body.setVelocity(body.velocity.x * 3, body.velocity.y * 3);
             this.rollCoolDown = 1500;
             this.dashDash.play();
             this.anims.play(this.lastDashAnim);
@@ -215,12 +207,12 @@ export class Player extends Phaser.GameObjects.Sprite {
         if (this.damageCoolDown <= 500) {
             this.velocity = 600; // Will reset move to normal
         }
-        this.healthCenter.x = this.body.x + 35;
-        this.healthCenter.y = this.body.y - 100;
-        this.healthRight.x = this.body.x + 80;
-        this.healthRight.y = this.body.y - 60;
-        this.healthLeft.x = this.body.x - 10;
-        this.healthLeft.y = this.body.y - 60;
+        this.healthCenter.x = body.x + 35;
+        this.healthCenter.y = body.y - 100;
+        this.healthRight.x = body.x + 80;
+        this.healthRight.y = body.y - 60;
+        this.healthLeft.x = body.x - 10;
+        this.healthLeft.y = body.y - 60;
         switch (this.health) {
             case 6:
                 this.healthCenter.tint = 0xffffff;
