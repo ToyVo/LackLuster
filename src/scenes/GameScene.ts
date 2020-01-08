@@ -1,10 +1,11 @@
 import { setupAnimations } from '../Animations';
 import { Player } from '../sprites/Player';
+import { SceneNames } from './index';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
     visible: false,
-    key: 'Game',
+    key: 'GameScene',
 };
 
 export class GameScene extends Phaser.Scene {
@@ -190,15 +191,15 @@ export class GameScene extends Phaser.Scene {
         // Pause Game
         this.input.gamepad.on('up', (button: Phaser.Input.Gamepad.Button) => {
             if (button.index === 1) {
-                this.scene.run('PauseScene');
-                this.scene.bringToTop('PauseScene');
-                this.scene.pause('GameScene');
+                this.scene.run(SceneNames.pause);
+                this.scene.bringToTop(SceneNames.pause);
+                this.scene.pause(SceneNames.gameScene);
             }
         });
         this.input.keyboard.on('keyup-ESC', () => {
-            this.scene.run('PauseScene');
-            this.scene.bringToTop('PauseScene');
-            this.scene.pause('GameScene');
+            this.scene.run(SceneNames.pause);
+            this.scene.bringToTop(SceneNames.pause);
+            this.scene.pause(SceneNames.gameScene);
         });
 
         this.events.on('resume', (_sys: number, data: number) => {

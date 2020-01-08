@@ -1,9 +1,10 @@
 import { getGameHeight, getGameWidth } from '../helpers';
+import { SceneNames } from './index';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
     visible: false,
-    key: 'Controls',
+    key: 'ControlsScene',
 };
 
 export class ControlsScene extends Phaser.Scene {
@@ -29,8 +30,8 @@ export class ControlsScene extends Phaser.Scene {
 
         backButton
             .on('pointerup', () => {
-                this.scene.start('StartScene');
-                this.scene.stop('ControlsScene');
+                this.scene.start(SceneNames.mainMenu);
+                this.scene.stop(SceneNames.controls);
             })
             .on('pointerover', () => {
                 backButton.tint = Math.random() * 0xffffff;

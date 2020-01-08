@@ -1,32 +1,32 @@
 {
-    "name": "lack_luster",
-    "version": "1.0.0",
-    "description": "a passifist game made in gdd 325 at uw stout",
-    "author": "Collin Diekvoss <diekvossc4994@my.uwstout.edu>, Andrew Frideres <frideresa6522@my.uwstout.edu>, Joshua Haakana <haakanaj8066@my.uwstout.edu>, Lex Klusman <klusmana1346@my.uwstout.edu>",
-    "main": "index.js",
-    "repository": "ToyVo/LackLuster",
-    "scripts": {
-      "start": "npm run dev",
-      "dev": "webpack-dev-server",
-      "prod": "webpack --config webpack.production.config.js",
-      "lint": "eslint src/** --fix"
-    },
-    "license": "MIT",
-    "dependencies": {
-        "phaser": "^3.21.0"
-    },
-    "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^2.13.0",
-        "@typescript-eslint/parser": "^2.13.0",
-        "copy-webpack-plugin": "^5.0.4",
-        "eslint": "^6.8.0",
-        "eslint-config-prettier": "^6.8.0",
-        "eslint-plugin-prettier": "^3.1.2",
-        "prettier": "^1.19.1",
-        "ts-loader": "^6.2.1",
-        "typescript": "^3.7.4",
-        "webpack": "^4.41.4",
-        "webpack-cli": "^3.3.10",
-        "webpack-dev-server": "^3.10.1"
-    }
+  "name": "lack_luster",
+  "version": "1.0.0",
+  "description": "a passifist game made in gdd 325 at uw stout",
+  "author": "Collin Diekvoss <diekvossc4994@my.uwstout.edu>, Andrew Frideres <frideresa6522@my.uwstout.edu>, Joshua Haakana <haakanaj8066@my.uwstout.edu>, Lex Klusman <klusmana1346@my.uwstout.edu>",
+  "main": "index.js",
+  "repository": "ToyVo/LackLuster",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "webpack-dev-server",
+    "prod": "webpack --config webpack.production.config.js",
+    "lint": "eslint src/** --fix"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "phaser": "^3.21.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.13.0",
+    "@typescript-eslint/parser": "^2.13.0",
+    "copy-webpack-plugin": "^5.0.4",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
+  }
 }

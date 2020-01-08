@@ -1,23 +1,22 @@
 import { game } from '../main';
 import * as Phaser from 'phaser';
+import { SceneNames } from '../scenes';
 
 /**
  * Main player class used in game
  */
 export class Player extends Phaser.Physics.Arcade.Sprite {
+    public health = 6;
+    public velocity = 600;
     private playerHurt: Phaser.Sound.BaseSound;
     private playerDeath: Phaser.Sound.BaseSound;
     private footsteps: Phaser.Sound.BaseSound;
     private dashDash: Phaser.Sound.BaseSound;
-
     private healthCenter: Phaser.GameObjects.Sprite;
     private healthLeft: Phaser.GameObjects.Sprite;
     private healthRight: Phaser.GameObjects.Sprite;
-
     private damageCoolDown = 0;
-    public health = 6;
     private rollCoolDown = 50;
-    public velocity = 600;
     private lastDirection = 'down';
     private lastAnim = 'player_walk_front_anim';
     private lastDashAnim = 'playerDashDown';
@@ -268,9 +267,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         if (this.health <= 0) {
             this.playerDeath.play();
-            this.scene.scene.run('GameOver');
-            this.scene.scene.bringToTop('GameOver');
-            this.scene.scene.pause('GameScene');
+            this.scene.scene.run(SceneNames.gameOver);
+            this.scene.scene.bringToTop(SceneNames.gameOver);
+            this.scene.scene.pause(SceneNames.gameScene);
         }
         this.tint = 0xffffff; // Will reset player color from damage
     }

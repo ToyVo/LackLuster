@@ -1,9 +1,10 @@
 import { getGameHeight, getGameWidth } from '../helpers';
+import { SceneNames } from './index';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
     visible: false,
-    key: 'Pause',
+    key: 'PauseScene',
 };
 
 export class PauseScene extends Phaser.Scene {
@@ -30,8 +31,8 @@ export class PauseScene extends Phaser.Scene {
             .setDepth(1);
         resume
             .on('pointerup', () => {
-                this.scene.resume('GameScene');
-                this.scene.stop('PauseScene');
+                this.scene.resume(SceneNames.gameScene);
+                this.scene.stop(SceneNames.pause);
             })
             .on('pointerover', () => {
                 resume.tint = Math.random() * 0xffffff;
@@ -49,8 +50,8 @@ export class PauseScene extends Phaser.Scene {
             .setOrigin(0.5, 0.5)
             .setDepth(1);
         quit.on('pointerup', () => {
-            this.scene.start('StartScene');
-            this.scene.stop('GameScene');
+            this.scene.start(SceneNames.mainMenu);
+            this.scene.stop(SceneNames.gameScene);
         })
             .on('pointerover', () => {
                 quit.tint = Math.random() * 0xffffff;
@@ -85,20 +86,20 @@ export class PauseScene extends Phaser.Scene {
         this.input.gamepad
             .on('up', (button: Phaser.Input.Gamepad.Button) => {
                 if (button.index === 0) {
-                    this.scene.resume('GameScene');
-                    this.scene.stop('PauseScene');
+                    this.scene.resume(SceneNames.gameScene);
+                    this.scene.stop(SceneNames.pause);
                 }
             })
             .on('up', (button: Phaser.Input.Gamepad.Button) => {
                 if (button.index === 1) {
-                    this.scene.start('StartScene');
-                    this.scene.stop('GameScene');
+                    this.scene.start(SceneNames.mainMenu);
+                    this.scene.stop(SceneNames.gameScene);
                 }
             });
 
         this.input.keyboard.on('keyup-ESC', () => {
-            this.scene.resume('GameScene');
-            this.scene.stop('PauseScene');
+            this.scene.resume(SceneNames.gameScene);
+            this.scene.stop(SceneNames.pause);
         });
     }
 }

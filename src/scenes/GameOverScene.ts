@@ -1,12 +1,13 @@
 import { getGameHeight, getGameWidth } from '../helpers';
+import { SceneNames } from './index';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
     visible: false,
-    key: 'GameOver',
+    key: 'GameOverScene',
 };
 
-export class GameOver extends Phaser.Scene {
+export class GameOverScene extends Phaser.Scene {
     constructor() {
         super(sceneConfig);
     }
@@ -48,13 +49,13 @@ export class GameOver extends Phaser.Scene {
             .on('pointerup', () => {
                 // Ideally here we would have a checkpoint we could load or a way to detect
                 // And run different scenes based off progression
-                this.scene.resume('GameScene', { tes: 1 });
-                this.scene.stop('GameOver');
+                this.scene.resume(SceneNames.gameScene, { retry: true });
+                this.scene.stop(SceneNames.gameOver);
             });
 
         this.input.gamepad.on('up', () => {
-            this.scene.resume('GameScene', { retry: true });
-            this.scene.stop('GameOver');
+            this.scene.resume(SceneNames.gameScene, { retry: true });
+            this.scene.stop(SceneNames.gameOver);
         });
     }
 }

@@ -1,9 +1,10 @@
 import { getGameHeight, getGameWidth } from '../helpers';
+import { SceneNames } from './index';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
     visible: false,
-    key: 'MainMenu',
+    key: 'MainMenuScene',
 };
 
 /**
@@ -46,8 +47,8 @@ export class MainMenuScene extends Phaser.Scene {
 
         start
             .on('pointerup', () => {
-                this.scene.resume('GameScene');
-                this.scene.stop('StartScene');
+                this.scene.resume(SceneNames.gameScene);
+                this.scene.stop(SceneNames.mainMenu);
             })
             .on('pointerover', () => {
                 start.tint = Math.random() * 0xffffff;
@@ -67,8 +68,8 @@ export class MainMenuScene extends Phaser.Scene {
             .setDepth(1);
         credits
             .on('pointerup', () => {
-                this.scene.run('Credits');
-                this.scene.stop('StartScreen');
+                this.scene.run(SceneNames.credits);
+                this.scene.stop(SceneNames.mainMenu);
             })
             .on('pointerover', () => {
                 credits.tint = Math.random() * 0xffffff;
@@ -88,8 +89,8 @@ export class MainMenuScene extends Phaser.Scene {
             .setDepth(1);
         controls
             .on('pointerup', () => {
-                this.scene.run('ControlsScene');
-                this.scene.stop('StartScreen');
+                this.scene.run(SceneNames.controls);
+                this.scene.stop(SceneNames.mainMenu);
             })
             .on('pointerover', () => {
                 controls.tint = Math.random() * 0xffffff;
@@ -130,13 +131,13 @@ export class MainMenuScene extends Phaser.Scene {
             .setOrigin(0.5, 0.5);
 
         this.input.gamepad.on('up', () => {
-            this.scene.resume('GameScene');
-            this.scene.stop('StartScreen');
+            this.scene.resume(SceneNames.gameScene);
+            this.scene.stop(SceneNames.mainMenu);
         });
 
-        this.scene.run('GameScene');
-        this.scene.bringToTop('StartScene');
-        this.scene.pause('GameScene');
+        this.scene.run(SceneNames.gameScene);
+        this.scene.bringToTop(SceneNames.mainMenu);
+        this.scene.pause(SceneNames.gameScene);
     }
 
     public update(_time: number, delta: number): void {

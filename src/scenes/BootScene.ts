@@ -1,9 +1,10 @@
 import { getGameHeight, getGameWidth } from '../helpers';
+import { SceneNames } from './index';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
     visible: false,
-    key: 'Boot',
+    key: 'BootScene',
 };
 
 /**
@@ -47,7 +48,7 @@ export class BootScene extends Phaser.Scene {
             percentText.setText(`${percent}%`);
         });
 
-        this.load.on('fileprogress', (file: any) => {
+        this.load.on('fileprogress', (file: { key: string }) => {
             assetText.setText(file.key);
         });
 
@@ -58,7 +59,7 @@ export class BootScene extends Phaser.Scene {
             progressBar.destroy();
             progressBarContainer.destroy();
 
-            this.scene.start('MainMenu');
+            this.scene.start(SceneNames.mainMenu);
         });
 
         this.loadAssets();
