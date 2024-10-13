@@ -1,8 +1,0 @@
-{
-  "files.insertFinalNewline": true,
-  "editor.detectIndentation": false,
-  "editor.tabSize": 4,
-  "editor.insertSpaces": false,
-  "eslint.autoFixOnSave": true,
-  "files.eol": "\n"
-}

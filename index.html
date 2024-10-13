@@ -1,111 +1,45 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Lack Luster</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="MobileOptimized" content="320">
-    <meta http-equiv="cleartype" content="on">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="theme-color" content="black">
-    <link rel="manifest" href="manifest.json" />
-    <link rel="icon" href="assets/Icons/DesktopIcon_192.png" sizes="192x192" />
-    <link rel="icon" href="assets/Icons/DesktopIcon_256.png" sizes="256x256" />
-    <link rel="icon" href="assets/Icons/DesktopIcon_512.png" sizes="512x512" />
-    <link rel="stylesheet" href="style.css" />
-
-    <style>
-        html,
-        body {
-          margin: 0;
-          padding: 0;
-          image-rendering: optimizeSpeed;              /* Older versions of FF */
-          image-rendering: -moz-crisp-edges;           /* FF 6.0+ */
-          image-rendering: -webkit-optimize-contrast;  /* Webkit (non standard naming) */
-          image-rendering: -o-crisp-edges;             /* OS X & Windows Opera (12.02+) */
-          image-rendering: crisp-edges;                /* Possible future browsers. */
-          -ms-interpolation-mode: nearest-neighbor;    /* IE (non standard naming) */
-          image-rendering: pixelated;                  /* Chrome 41 */
-        }
-	</style>
-	<style media='screen' type='text/css'>
-		@font-face {
-		  font-family: font1;
-		  src: url('assets/Font/Pixeled.ttf');
-		  font-weight:400;
-		  font-weight:normal;
-		}
-  </style>
-</head>
-
-<body style="background-color: black;">
-	<div style="font-family:font1; position:absolute; left:-1000px; visibility:hidden;">.</div>
-  <div id="content" style="display: block; width: 100%;"></div>
-
-  <!-- The Modal -->
-  <div id="myModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <p>Add to home screen?</p>
-      <button onclick="offlinePrompt()">Install</button>
-    </div>
-  </div>
-
-  <!-- Register the Service Worker for PWA support -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js', { scope: './' })
-          .then((reg) => {
-            console.log(`Worker registered with scope '${reg.scope}'`)
-          }, (err) => {
-            console.log(`Worker registration failed: ${err}`)
-          })
-      })
-    }
-    // Create a custom installation prompt
-    let deferredPrompt
-    window.addEventListener('beforeinstallprompt', function (e) {
-      console.log('beforeinstallprompt triggered')
-      e.preventDefault()
-      deferredPrompt = e
-      modal.style.display = 'block'
-    })
-    // Get the modal
-    var modal = document.getElementById('myModal')
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName('close')[0]
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = 'none'
-      }
-    }
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() { modal.style.display = 'none' }
-    function offlinePrompt() { deferredPrompt.prompt() }
-  </script>
-
-  <!-- LIBS GO HERE -->
-  <!-- PLUGINS GO HERE -->
-
-  <!-- DEV GOES HERE -->
-
-	<!-- Your game's JavaScript files -->
-	<script src="src/Animations.js"></script>
-	<script src="src/Audio.js"></script>
-  <script src="src/Scenes/GameOver.js"></script>
-  <script src="src/Scenes/PauseScene.js"></script>
-  <script src="src/Player.js"></script>
-  <script src="src/config.js"></script>
-  <script src="src/utils.js"></script>
-	<script src="src/Scenes/GameScene.js"></script>
-	<script src="src/Scenes/ControlsScene.js"></script>
-	<script src="src/Scenes/CreditsScene.js"></script>
-  <script src="src/Scenes/StartScene.js"></script>
-  <script src="src/main.js"></script>
-</body>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta http-equiv="cleartype" content="on" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="black" />
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <link
+      rel="icon"
+      href="./src/assets/icons/LackLuster_196px.png"
+      sizes="196x196"
+    />
+    <link
+      rel="icon"
+      href="./src/assets/icons/LackLuster_256px.png"
+      sizes="256x256"
+    />
+    <link
+      rel="icon"
+      href="./src/assets/icons/LackLuster_512px.png"
+      sizes="512x512"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="./src/assets/icons/LackLuster_196px.png"
+    />
+    <link
+      rel="mask-icon"
+      href="./src/assets/icons/LackLuster_196px.png"
+      color="#FFFFFF"
+    />
+  </head>
+  <body>
+    <div id="phaser-game" style="display: block; width: 100%"></div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
 </html>

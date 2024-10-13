@@ -1,0 +1,35 @@
+@font-face {
+  font-family: "Pixeled";
+  src: local("Pixeled-Regular"), url("./assets/Font/Pixeled.ttf");
+  font-weight: 400;
+  font-weight: normal;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  image-rendering: optimizeSpeed;
+  /* Older versions of FF */
+  image-rendering: -moz-crisp-edges;
+  /* FF 6.0+ */
+  image-rendering: -webkit-optimize-contrast;
+  /* Webkit (non standatd naming) */
+  image-rendering: -o-crisp-edges;
+  /* OS X & Windows Opers (12.02+) */
+  image-rendering: crisp-edges;
+  /* Possible future browsers. */
+  -ms-interpolation-mode: nearest-neighbor;
+  /* IE (non standard naming) */
+  image-rendering: pixelated;
+  /* Chrome 41 */
+}
+
+body {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: #242424;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}

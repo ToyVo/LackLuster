@@ -1,29 +1,34 @@
 {
-  "name": "lack_luster",
-  "version": "1.0.0",
-  "description": "a passifist game made in gdd 325 at uw stout",
   "author": "Collin Diekvoss <diekvossc4994@my.uwstout.edu>, Andrew Frideres <frideresa6522@my.uwstout.edu>, Joshua Haakana <haakanaj8066@my.uwstout.edu>, Lex Klusman <klusmana1346@my.uwstout.edu>",
-  "main": "public/index.html",
+  "description": "a passifist game made in gdd 325 at uw stout",
+  "license": "Apache-2.0",
+  "main": "index.html",
+  "name": "lack_luster",
   "repository": "UWStout/GDD325pm_001",
+  "type": "module",
+  "version": "1.0.0",
   "scripts": {
-    "start": "npm-run-all -s buildindex server",
-    "dev": "npm-run-all -s cpdevindex server",
-    "buildindex": "node buildIndex prod",
-    "cpdevindex": "node buildIndex dev",
-    "server": "browser-sync start -s public -w -f public/**/* -b chrome",
-    "test": "eslint ./public/src/**/**.js"
+    "dev": "NODE_ENV=development vite",
+    "build": "NODE_OPTIONS=--max_old_space_size=16384 NODE_ENV=production vite build",
+    "build:dev": "NODE_OPTIONS=--max_old_space_size=16384 NODE_ENV=development vite build",
+    "preview": "npm run build && vite preview",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier ./src/**/*.{css,js} ./*.{js,json,html} --write",
+    "deploy": "npm run build && gh-pages -d dist"
   },
-  "license": "MIT",
+  "dependencies": {
+    "phaser": "3.16.1",
+    "phaser-plugin-debug-draw": "1.0.2",
+    "phaser-plugin-update": "1.0.1"
+  },
   "devDependencies": {
-    "browser-sync": "^2.24.7",
-    "eslint": "^5.5.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-promise": "^4.0.0",
-    "eslint-plugin-standard": "^4.0.0",
-    "insert-line": "^1.1.0",
-    "linenumber": "^1.0.0",
-    "npm-run-all": "^4.1.5"
+    "@eslint/js": "^9.12.0",
+    "eslint": "^9.12.0",
+    "eslint-config-prettier": "^9.1.0",
+    "gh-pages": "^6.2.0",
+    "globals": "^15.11.0",
+    "prettier": "^3.3.3",
+    "vite": "^5.4.8"
   }
 }
