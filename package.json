@@ -3,6 +3,9 @@
   "description": "a passifist game made in gdd 325 at uw stout",
   "license": "Apache-2.0",
   "main": "index.html",
+  "files": [
+    "dist"
+  ],
   "name": "lack_luster",
   "repository": "UWStout/GDD325pm_001",
   "type": "module",
