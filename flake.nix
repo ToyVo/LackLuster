@@ -39,7 +39,7 @@
         let
           packageJson = builtins.fromJSON (builtins.readFile ./package.json);
           rev = self.shortRev or self.dirtyShortRev or "dirty";
-          hash = "sha256-/QlJ2HISW5pdbRVlyr+rB65Bv40QA/3+zbx8PxW3vVc=";
+          hash = "sha256-MiVuHbTcWlrLY6YjkWaZTpjOLi9iFa4Lh460eMx8Ymw=";
         in
         {
           packages.default = pkgs.buildNpmPackage {
