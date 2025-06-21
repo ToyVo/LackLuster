@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   mode: process.env.NODE_ENV,
   logLevel: "info",
-  base: "/LackLuster",
+  base: "/",
   build: {
     // phaser isn't compatible with base64 encoded images
     assetsInlineLimit: 0,
